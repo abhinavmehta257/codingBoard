@@ -1,0 +1,29 @@
+{
+  "name": "codingroom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec \"npm test \"",
+    "dev": "nodemon server/server.js"
+  },
+  "engines": {
+    "node": "v12.16.2"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "moment": "^2.27.0",
+    "socket.io": "^2.3.0",
+    "twilio": "^3.49.4",
+    "twilio-video": "^2.7.2"
+  },
+  "devDependencies": {
+    "expect": "^26.4.2",
+    "mocha": "^8.1.2"
+  }
+}

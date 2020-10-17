@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Coding Room</title>
+	<link rel="stylesheet" href="css/styles.css">
+	<link href="https://fonts.googleapis.com/css2?family=Kufam:ital@1&display=swap" rel="stylesheet">
+</head>
+<body style="text-align: center;color: white; font-size:70px" class="landingPage">
+	<img width="200px" height="170px"src="images/codingRoomLogo.png">
+	<h1>Coding Room</h1>
+	<div class="home__form">
+
+		<button id="joinRoom" class="join" onclick="redirectToJoin()"><img src="images/plus-square-regular@2x.png" width="30px" height="30px"></button>
+		
+		<button id="createRoom" class="create" onclick="redirectToCreate()"><img width="30px" height="20px"src="images/video-solid@2x.png"></button><br>
+		<span class="join">Join Room</span><span class="create">Create Room</span> 
+	</div>
+	<script>
+		function redirectToJoin(){
+			window.location.href ="/joinRoom.html";
+			console.log("btn clicked");
+		}
+		function redirectToCreate(){
+			window.location.href ="/createRoom.html";
+			console.log("btn clicked");
+		}
+	</script>
+</body>
+</html>

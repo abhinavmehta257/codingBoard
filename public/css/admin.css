@@ -1,0 +1,21 @@
+
+#invite{
+    display: block !important;
+}
+li button{
+    margin-right: 5px;
+    display: inline !important;
+    float: right !important;
+}
+.send-btn{
+    display: inline !important;
+}
+.camera{
+    display: inline !important;
+}
+.shareScreen{
+    display: inline !important;
+}
+.raiseHand{
+    display: none !important;
+}
