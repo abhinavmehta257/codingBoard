@@ -207,7 +207,6 @@ socket.on("gotCode", function(data){
           rulers: [80, 120]
         });
         newEditor.setValue(decode(newCode));
-        w
         editorData = {editorId, newEditor};
         editors.push(editorData);
         });
