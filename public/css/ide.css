@@ -93,7 +93,7 @@ body {
 }
 
 #site-content {
-    height: calc(100% - 45px - 40px);
+    height: calc(100% - 20px - 40px);
 }
 
 #site-modal .header {
@@ -105,7 +105,7 @@ body {
     bottom: 0;
     font-family: "Droid Sans Mono", monospace, monospace, "Droid Sans Fallback";
     font-size: 13px;
-    height: 40px;
+    height: 20px;
     padding-left: 16px;
     padding-right: 16px;
     position: fixed;

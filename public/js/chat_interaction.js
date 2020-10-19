@@ -91,8 +91,12 @@ function copy(txt){
   alert("room link copied")
 }
 
-function addNewFile(){
-    newFile = `newFile${filenumber}`;
+function addNewFile(isPrompt = false, name = ""){
+    if(name == ''){
+        newFile = `newFile${filenumber}`;
+    }else{
+        newFile = name;
+    }
     var newItemConfig = {
         title: `${newFile}`,
         type: 'component',
@@ -103,7 +107,11 @@ function addNewFile(){
         }
       };
       editorId = `${newFile}`;
+      try {
         layout.registerComponent(`${newFile}`, function(container, state){
+            if(isPrompt){
+                container.getElement().html(`<button class="send-btn admin" style="float:right; padding:2px !important" onclick='sendCode()'>Send Prompt<button>`);
+            }
           let newEditor = monaco.editor.create(container.getElement()[0], {
               automaticLayout: true,
               theme: "vs-dark",
@@ -124,6 +132,11 @@ function addNewFile(){
 
           layout.root.contentItems[0].contentItems[0].addChild( newItemConfig );
           filenumber++;
+      } catch (error) {
+        //   console.log(error);
+          showError("Error","The file name is alredy exist. Try different file name");
+      }
+        
 }
 
 function micToggle(){
@@ -166,7 +179,7 @@ function fullscreenToggle(){
     if(document.fullscreenElement || document.webkitFullscreenElement){
         document.exitFullscreen();
     }else{
-        document.getElementById('localTrack').requestFullscreen().catch(console.log);
+        document.documentElement.requestFullscreen().catch(console.log);
     }
 }
 

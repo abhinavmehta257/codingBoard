@@ -107,7 +107,7 @@
         </script>
 
         <script id="participent-template" type="text/template">
-           {{User.name}} {{^User.isAdmin}}<button class="getCode admin" id="{{{User.id}}}" title= "GetCode" onclick = "getCode(this)"><\></button><button class="removeUser admin" id="{{{User.id}}}" onclick='removeUser(this)' style="background:red;" title= "Remove User" >=></button>{{/User.isAdmin}}{{#User.isAdmin}}(Host){{/User.isAdmin}}
+           {{User.name}} {{^User.isAdmin}}<button class="getCode admin" id="{{{User.id}}}" title= "GetCode" onclick = "getCode(this)"><\></button>{{/User.isAdmin}}{{#User.isAdmin}}(Host){{/User.isAdmin}}
         </script>
 
       </div>
@@ -126,9 +126,10 @@
             <div class="ui dropdown item site-links on-hover">
                 File <i class="dropdown icon"></i>
                 <div class="menu">
-                    <a class="item" onclick="addNewFile()"><i class="file code icon"></i> New File</a>
+                    <a class="item" onclick="addNewFile(false, prompt('File Name'))"><i class="file code icon"></i> New File</a>
                     <!-- <div class="item" onclick="save()"><i class="save icon"></i> Save (Ctrl + S)</div> -->
                     <div class="item" onclick="downloadSource()"><i class="download icon"></i> Download</div>
+                    <div class="item" onclick="addNewFile(true)"><i class="file code icon"></i> Send Prompt</div>
                     <!-- <div class="item"><i class="share icon"></i> Share</div> -->
                     <!-- <div id="insert-template-btn" class="item"><i class="file code outline icon"></i> Insert template
                         for current language</div> -->
@@ -287,12 +288,15 @@
  <nav id="context-menu" class="context-menu">
     <ul class="context-menu__items">
       <li class="context-menu__item">
-        <a href="#" class="context-menu__link" data-action="MakeAdmin">Make Host</a>
+        <a href="#" class="context-menu__link" data-action="makeAdmin">Make host</a>
+        <a href="#" class="context-menu__link" data-action="removeUser">Remove user</a>
       </li>
     </ul>
   </nav>
 
-
+<div id="site-footer">
+   <span id="status-line"></span>
+</div>
     
     <div>
         <input id="cb" type="text" hidden>

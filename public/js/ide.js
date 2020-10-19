@@ -182,6 +182,7 @@ function showError(title, content) {
     $("#site-modal #title").html(title);
     $("#site-modal .content").html(content);
     $("#site-modal").modal("show");
+
 }
 
 function handleError(jqXHR, textStatus, errorThrown) {
@@ -249,10 +250,21 @@ function handleResult(data) {
     $runBtn.removeClass("loading");
 }
 
-
 function downloadSource() {
     var value = parseInt($selectLanguage.val());
-    download(sourceEditor.getValue(), fileNames[value], "text/plain");
+    activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+    activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
+    if(activeEditor[0]){
+        var sourceValue = activeEditor[0].newEditor.getValue();
+        var fileName = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+    }else{
+       var sourceValue = sourceEditor.getValue();
+       var fileName = fileNames[value]
+    }
+
+    
+
+    download(sourceValue, fileName, "text/plain");
 }
 
 function loadSavedSource() {

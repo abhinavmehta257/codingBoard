@@ -13,8 +13,8 @@ function shareScreen(){
 }
 
 //remove user
-function removeUser(btn){
-    userId = btn.id;
+function removeUser(id){
+    userId = id;
     senderId = socket.id;
     // console.log(userId);
     data = {userId, senderId}
@@ -31,15 +31,15 @@ function getCode(btn){
     socket.emit("getCode",data)
 }
 
-function sendCode(btn){
+function sendCode(btn = null){
+  if(btn!= null){
     var to = btn.id;
-    // console.log(to);
     to.trim();
+  }else{
+    to = "all";
+  }
+    
   var from = socket.id;
-  // console.log(to);
-  
-  // activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
-  // activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
   activeEditorCode = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().container.getElement()[0].getElementsByClassName("view-lines")[0].innerText;
 
   // console.log(activeEditorCode);
@@ -78,6 +78,6 @@ function makeAdmin(id){
   socket.emit("makeAdmin",{id});
     socket.emit("muteVideo");
     socket.emit("muteAudio");
-    $('.admin').hide();
+    $('.admin').remove();
    
 }

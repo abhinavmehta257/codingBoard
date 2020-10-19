@@ -2,13 +2,11 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const {createAccessToken} = require("./utils/generateAccessToken");
 const {generateMessage} = require('./utils/message');
 const {isRealString} = require('./utils/isRealString');
 const {Users} = require('./utils/users');
 const {Rooms} = require('./utils/rooms');
 dotenv = require('dotenv').config();
-const client = require('twilio')(dotenv.parsed.TWILIO_ACCOUNT_SID, dotenv.parsed.TWILIO_AUTH_TOKEN);
 
 
 const publicPath = path.join(__dirname, '/../public');
@@ -64,10 +62,6 @@ io.on('connection', (socket) => {
         users.removeUser(socket.id);
         users.addUser(socket.id, params.name, params.roomId, params.isAdmin);
 
-        token = createAccessToken(params.name, params.roomId);
-        roomData = {token, params}
-        // console.log(roomData);
-        socket.emit("AccessToken",roomData);
 
         io.to(params.roomId).emit('updateUsersList', users.getUserList(params.roomId));
         if(params.isAdmin){
@@ -94,7 +88,11 @@ io.on('connection', (socket) => {
 
   socket.on("sendCode",(codeData)=>{
     user = users.getUser(codeData.from)
-    io.sockets.sockets[codeData.to].emit("gotCode",{codeData,user});
+    if(codeData.to == "all"){
+      socket.broadcast.emit("gotCode",{codeData,user});
+    }else{
+      io.sockets.sockets[codeData.to].emit("gotCode",{codeData,user});
+    }
     // console.log("server got code",codeData);
   })
 
@@ -115,7 +113,7 @@ io.on('connection', (socket) => {
     if(isAdmin){
       let user = users.getUser(data.userId);
       // console.log(user);
-      if(user){
+      if(user && !user.isAdmin){
         console.log(`user ${data.senderId} does have permission to remove user`);
         io.to(user.roomId).emit('updateUsersList', users.getUserList(user.roomId));
         io.sockets.sockets[user.id].disconnect();
@@ -131,8 +129,6 @@ io.on('connection', (socket) => {
     // console.log(users.getRoomAdmin(user.roomId));
     io.sockets.sockets[users.getRoomAdmin(user.roomId).id].emit("handRaised",name);
   })
-
-
 
   socket.on("muteAudio",()=>{
       socket.emit("muteAudio");
@@ -175,15 +171,12 @@ io.on('connection', (socket) => {
     
   })
 
-
   socket.on('disconnect', () => {
     let user = users.removeUser(socket.id);
     try{
       if(users.getUserList(user.roomId).length ==0){
         roomList.removeRoom(user.roomId);
-        client.video.rooms(user.roomId)
-                    .fetch()
-                    .then(room => console.log(room.uniqueName + " is completed"));
+       
       }else{
         if(user.isAdmin){
           newAdmin = users.getUserList(user.roomId)[0];
@@ -195,17 +188,7 @@ io.on('connection', (socket) => {
           io.to(user.roomId).emit('updateUsersList', users.getUserList(user.roomId));
           
         }
-        client.video.rooms(user.roomId)
-                    .fetch()
-                    .then(room => {
-                      room.on('disconnected', room => {
-                      // Detach the local media elements
-                      room.localParticipant.tracks.forEach(publication => {
-                        const attachedElements = publication.track.detach();
-                        attachedElements.forEach(element => element.remove());
-                      });
-                    })
-                    room.disconnect()});
+        
       }
       
       
@@ -214,17 +197,7 @@ io.on('connection', (socket) => {
       socket.emit('connectionError',{error:"connection Error"});
       users.removeUser(socket.id);
       var roomId = users.getRoomId(socket.id).roomId;
-      client.video.rooms(roomId)
-                    .fetch()
-                    .then(room => {
-                      room.on('disconnected', room => {
-                      // Detach the local media elements
-                      room.localParticipant.tracks.forEach(publication => {
-                        const attachedElements = publication.track.detach();
-                        attachedElements.forEach(element => element.remove());
-                      });
-                    })
-                    room.disconnect()});
+      
       socket.disconnect();
     }
     

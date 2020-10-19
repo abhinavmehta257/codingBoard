@@ -1,7 +1,6 @@
 let socket = io();
-// window.roomId;
 window.editors = [];
-let i=1;
+let editorNumber=1;
 let numberOfChat = 0;
 
 //function used
@@ -77,7 +76,8 @@ socket.on('connect', function() {
     // console.log(params);
     socket.emit('join', params, function(err) {
       if(err){
-        alert(err);
+        // alert(err);
+        showError("Error", err)
         window.location.href = '/';
       }else {
         // console.log('No Error');
@@ -86,14 +86,16 @@ socket.on('connect', function() {
   })
   // console.log(socket.id);
   socket.on('connectionError', function(error){
-    alert("connection error occured please reconnect");
+    showError("Connection Error", "connection error occured please reconnect");
     window.location.href = '/';
   })
 });
 
 socket.on('disconnect', function() {
-  alert('disconnected from server.');
+  showError('Disconnect', 'You are disconnected from server.');
+  // alert('disconnected from server.');
   window.location.href = '/';
+  
 });
 
 socket.on('updateUsersList', function (users) {
@@ -171,14 +173,14 @@ socket.on("giveCode",function(data){
     to,from,codeString
   }
   socket.emit("sendCode",codeData);
-  console.log("user send code: ",codeData);
+  // console.log("user send code: ",codeData);
 })
 
 socket.on("gotCode", function(data){
   // check mocha docs for getting data from jquery element
   newCode = data.codeData.codeString;
   
-  editorId = `editor${i++}`;
+  editorId = `editor${editorNumber++}`;
   
   var newItemConfig = {
     title: `${data.user.name}`,
@@ -187,17 +189,12 @@ socket.on("gotCode", function(data){
     isClosable: true,
     componentState: { 
         readOnly : false
-    }
+    }                                       
   };
   
-
-  // if(layout.root.contentItems[0].getComponentsByName( editorId )[0]){
-  //   console.log(layout.root.contentItems[0].getComponentsByName( editorId )[0]);
-  //   console.log("editor alredy exist");
-  // }else{
     layout.registerComponent(`${editorId}`, function(container, state){
-        studentId = data.user.id;
-        container.getElement().html(`<button class="send-btn" style="float:right; padding:2px !important" id="${studentId}" onclick='sendCode(this)'>Send Code<button>`);
+        
+        container.getElement().html(`<button class="send-btn" style="float:right; padding:2px !important" id="${data.user.id}" onclick='sendCode(this)'>Send Code<button>`);
       let newEditor = monaco.editor.create(container.getElement()[0], {
           automaticLayout: true,
           theme: "vs-dark",
@@ -210,23 +207,16 @@ socket.on("gotCode", function(data){
           rulers: [80, 120]
         });
         newEditor.setValue(decode(newCode));
-        
+        w
         editorData = {editorId, newEditor};
         editors.push(editorData);
         });
       
       layout.root.contentItems[0].contentItems[0].addChild( newItemConfig );
-    // }
 })
 
-function raiseHand(){
-  socketID = socket.id;
-  socket.emit("raiseHand",socketID)
-}
-
-window.onload = function (){
-  document.getElementById("localTrack").addEventListener("dblclick",()=>{
+window.addEventListener('click', function (evt) {
+  if (evt.detail === 3) {
     fullscreenToggle();
+  }
 });
-}
-

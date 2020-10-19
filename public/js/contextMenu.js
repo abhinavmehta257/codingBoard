@@ -212,9 +212,28 @@
      */
     function menuItemListener( link ) {
       console.log( "Task ID - " + taskItemInContext.getAttribute("data-id") + ", Task action - " + link.getAttribute("data-action"));
-      if(link.getAttribute("data-action") == 'MakeAdmin'){
-          makeAdmin(taskItemInContext.getAttribute("data-id"));
+      let selectedMenu = link.getAttribute("data-action");
+      let selectedUserId = taskItemInContext.getAttribute("data-id");
+
+      // if(link.getAttribute("data-action") == 'MakeAdmin'){
+          
+      // }
+
+      switch (selectedMenu) {
+        case "makeAdmin":
+          makeAdmin(selectedUserId);
+          break;
+        case "removeUser":
+          removeUser(selectedUserId);
+          break;
+        case "addPrompt":
+          addNewFile(true);
+          break;
       }
+
+
+
+
       toggleMenuOff();
     }
   
