@@ -49,7 +49,6 @@ class Users {
     let admin = userlist.filter((user) => user.isAdmin === true)[0];
 
     return admin;
-
   }
 
   removeUser(id) {

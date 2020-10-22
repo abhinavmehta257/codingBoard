@@ -16,7 +16,7 @@ button,button:hover{border:none;color:#fff;padding:10px}.chat__messages,.chat__s
     -webkit-box-shadow: 5px 0px 4px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 5px 0px 4px 0px rgba(0,0,0,0.75);
     box-shadow: 5px 0px 4px 0px rgba(0,0,0,0.75);
-    z-index: 3;
+    z-index: 4;
 }
 #chat-collapser{
     position: absolute;
@@ -57,7 +57,7 @@ button,button:hover{border:none;color:#fff;padding:10px}.chat__messages,.chat__s
     left: -320px;
     display:flex;
     flex-direction:column;
-    z-index: 2;
+    z-index: 3;
     color:white;
 }
 
@@ -146,7 +146,7 @@ background:#121212;
     display: none;
 } */
 
-.chat__sidebar input{
+.chat__sidebar input, #studentAssignments input{
     border: none;
     padding: 5px;
     flex-grow: 1;
@@ -234,16 +234,7 @@ background:#121212;
     margin: 0;
     padding: 0;
   }
-/*   
-  .context-menu__item {
-    display: block;
-    margin-bottom: 4px;
-  }
-  
-  .context-menu__item:last-child {
-    margin-bottom: 0;
-  } */
-  
+
   .context-menu__link {
     display: block;
     padding: 4px 12px;
@@ -255,7 +246,16 @@ background:#121212;
     color: #fff;
     background-color: #0066aa;
   }
-
-  .admin{
+  .send-btn{
+    display: none;
+  }
+  .admin, .send-prompt, .send-assignment{
       display: none;
   }
+  .assignment-btn{
+      display: none;
+  }
+  #studentAssignments{
+      display: none;
+  }
+  

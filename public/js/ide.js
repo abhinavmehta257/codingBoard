@@ -194,7 +194,10 @@ function handleRunError(jqXHR, textStatus, errorThrown) {
     $runBtn.removeClass("loading");
 }
 
-function handleResult(data) {
+function handleResult(data, assignment =false) {
+    if(assignment){
+        submitAssignment(data);
+    }
     timeEnd = performance.now();
     console.log("It took " + (timeEnd - timeStart) + " ms to get submission result.");
 
@@ -327,7 +330,7 @@ function loadSavedSource() {
     }
 }
 
-function run() {
+function run(assignment = false) {
     if (sourceEditor.getValue().trim() === "") {
         showError("Error", "Source code can't be empty!");
         return;
@@ -390,9 +393,9 @@ function run() {
             success: function (data, textStatus, jqXHR) {
                 console.log(`Your submission token is: ${data.token}`);
                 if (wait == true) {
-                    handleResult(data);
+                    handleResult(data,assignment);
                 } else {
-                    setTimeout(fetchSubmission.bind(null, data.token), check_timeout);
+                    setTimeout(fetchSubmission.bind(null, data.token,assignment), check_timeout);
                 }
             },
             error: handleRunError
@@ -430,7 +433,7 @@ function run() {
     }
 }
 
-function fetchSubmission(submission_token) {
+function fetchSubmission(submission_token,assignment = false) {
     $.ajax({
         url: apiUrl + "/submissions/" + submission_token + "?base64_encoded=true",
         type: "GET",
@@ -441,10 +444,10 @@ function fetchSubmission(submission_token) {
         async: true,
         success: function (data, textStatus, jqXHR) {
             if (data.status.id <= 2) { // In Queue or Processing
-                setTimeout(fetchSubmission.bind(null, submission_token), check_timeout);
+                setTimeout(fetchSubmission.bind(null, submission_token,assignment), check_timeout);
                 return;
             }
-            handleResult(data);
+            handleResult(data,assignment);
         },
         error: handleRunError
     });
@@ -466,15 +469,17 @@ function insertTemplate() {
 //set room language
 
 function loadRandomLanguage() {
-    var values = [];
-    for (var i = 0; i < $selectLanguage[0].options.length; ++i) {
-        values.push($selectLanguage[0].options[i].value);
-    }
-    $selectLanguage.dropdown("set selected", values[Math.floor(Math.random() * $selectLanguage[0].length)]);
+    
+    // let searchQuery = window.location.search.substring(1);
+    // let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
+    $selectLanguage.dropdown("set selected",params.lang );
     apiUrl = resolveApiUrl($selectLanguage.val());
     insertTemplate();
 }
 
+window.onload = function(){
+    loadRandomLanguage();
+}
 function resizeEditor(layoutInfo) {
     if (editorMode != "normal") {
         var statusLineHeight = $("#editor-status-line").height();

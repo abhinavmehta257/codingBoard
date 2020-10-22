@@ -76,7 +76,9 @@ const invite_btn = document.querySelector('#invite')
 
  invite_btn.addEventListener('click', function(){
         console.log('invie btn clicked');
-        link = `${window.location.origin}/joinRoom.html?roomId=${window.roomId}`;
+        let searchQuery = window.location.search.substring(1);
+        let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
+        link = `${window.location.origin}/joinRoom.html?roomId=${params.roomId}&lang=${params.lang}`;
         copy(link);  
     });
 
@@ -92,7 +94,7 @@ function copy(txt){
 }
 
 function addNewFile(isPrompt = false, name = ""){
-    if(name == ''){
+    if(name == '' || name == null){
         newFile = `newFile${filenumber}`;
     }else{
         newFile = name;
@@ -126,6 +128,7 @@ function addNewFile(isPrompt = false, name = ""){
             newEditor.setValue("");
             editorData = {editorId, newEditor};
             editors.push(editorData);
+            monaco.editor.setModelLanguage(newEditor.getModel(), $selectLanguage.find(":selected").attr("mode"));
             });
           
             
@@ -173,6 +176,14 @@ $(document).ready(function(){
         console.log($(this).text().toLowerCase().indexOf(value) > -1);
       });
     });
+    $("#participant_earch_assignment").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#studentAssignmentsList li").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+  
+          console.log($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+      });
 }); 
 
 function fullscreenToggle(){

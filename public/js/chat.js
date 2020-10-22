@@ -1,8 +1,12 @@
+
+
 let socket = io();
 window.editors = [];
 let editorNumber=1;
 let numberOfChat = 0;
-
+let searchQuery = window.location.search.substring(1);
+let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
+  console.log(params);
 //function used
 function scrollToBottom() {
   let messages = document.querySelector('#messages').lastElementChild;
@@ -45,8 +49,7 @@ function getDate() {
  
   h = h<10?"0"+h:h;
  var replacement = h + ":" + m;
-  /* if you want to add seconds
-  replacement += ":"+s;  */
+
   replacement += " " + dd;
 
   return replacement;
@@ -54,37 +57,33 @@ function getDate() {
 
 socket.on('connect', function() {
   console.log("shocket connected");
-  let params;
-  socket.on('newmember',function (newmemberData){
-    params = newmemberData;
+  // socket.on('newmember',function (newmemberData){
+  //   params = newmemberData;
     
-    if( newmemberData && !params.isAdmin){
-      params.isAdmin = false;
-      isAdmin = false;
-    }
-    if(newmemberData && params.isAdmin){
-      adminScript = $.getScript('/js/adminWindow.js', function() {
-        console.log("Admin script loaded");
-      });
-      adminScript.id = 'adminWindow';
-      // adminScript = document.createElement("script");
-      // adminScript.setAttribute("src","/js/adminWindow.js");
-      // adminScript.setAttribute("id","adminScript");
-      // console.log(adminScript);
-      roomId = params.roomId;
-    }
-    // console.log(params);
+  //   if( newmemberData && !params.isAdmin){
+  //     params.isAdmin = false;
+  //     isAdmin = false;
+  //   }
+  //   if(newmemberData && params.isAdmin){
+  //     adminScript = $.getScript('/js/adminWindow.js', function() {
+  //       console.log("Admin script loaded");
+  //     });
+  //     adminScript.id = 'adminWindow';
+     
+  //     roomId = params.roomId;
+  //   }
+  
     socket.emit('join', params, function(err) {
       if(err){
-        // alert(err);
-        showError("Error", err)
+
+        alert(err)
         window.location.href = '/';
       }else {
-        // console.log('No Error');
+
       }
     });
-  })
-  // console.log(socket.id);
+  // })
+
   socket.on('connectionError', function(error){
     showError("Connection Error", "connection error occured please reconnect");
     window.location.href = '/';
@@ -104,7 +103,8 @@ socket.on('updateUsersList', function (users) {
   users.forEach(function (user) {
     const template = document.querySelector('#participent-template').innerHTML;
     const newUserTemplate = Mustache.render(template,{
-      User:user
+      User:user,
+      func:'getCode(this)'
     })
     let li = document.createElement('li');
     li.innerHTML = newUserTemplate;
@@ -115,7 +115,7 @@ socket.on('updateUsersList', function (users) {
   let usersList = document.querySelector('#users');
   usersList.innerHTML = "";
   usersList.appendChild(ol);
-})
+});
 
 socket.on('newMessage', function(message) {
   numberOfChat++;
@@ -172,18 +172,23 @@ socket.on("giveCode",function(data){
   codeData = {
     to,from,codeString
   }
-  socket.emit("sendCode",codeData);
+  socket.emit("sendCode",codeData,function(message){
+    alert(message);
+  });
   // console.log("user send code: ",codeData);
 })
 
 socket.on("gotCode", function(data){
   // check mocha docs for getting data from jquery element
   newCode = data.codeData.codeString;
-  
   editorId = `editor${editorNumber++}`;
-  
+  if(data.codeData.assignment){
+    title = "Assignment";
+  }else{
+    title = data.user.name;
+  }
   var newItemConfig = {
-    title: `${data.user.name}`,
+    title: `${title}`,
     type: 'component',
     componentName: `${editorId}`,
     isClosable: true,
@@ -193,8 +198,13 @@ socket.on("gotCode", function(data){
   };
   
     layout.registerComponent(`${editorId}`, function(container, state){
-        
-        container.getElement().html(`<button class="send-btn" style="float:right; padding:2px !important" id="${data.user.id}" onclick='sendCode(this)'>Send Code<button>`);
+       
+      
+        container.getElement().html(`<button class="send-btn admin" style="float:right; padding:2px !important" id="${data.user.id}" onclick='sendCode(this)'>Send Code<button>`);
+      if(data.codeData.assignment){
+        container.getElement().html(`<button class="assignmentSubmitButton" style="float:right; padding:2px !important" id="${data.user.id}" onclick='run(true)'>Submit Code<button>`);
+      }
+      
       let newEditor = monaco.editor.create(container.getElement()[0], {
           automaticLayout: true,
           theme: "vs-dark",
@@ -209,10 +219,42 @@ socket.on("gotCode", function(data){
         newEditor.setValue(decode(newCode));
         editorData = {editorId, newEditor};
         editors.push(editorData);
+        monaco.editor.setModelLanguage(newEditor.getModel(), $selectLanguage.find(":selected").attr("mode"));
         });
-      
+        
       layout.root.contentItems[0].contentItems[0].addChild( newItemConfig );
 })
+
+function raiseHand(btn){
+  socketID = socket.id;
+  socket.emit("raiseHand",socketID);
+  $(this).slideUp();
+}
+// .substring(s.indexOf('/*'), s.indexOf('*/'))
+function submitAssignment(data){
+  if(confirm("Do you want to submite the assignment")){
+    to = "admin";
+  to.trim();
+  from = socket.id;
+  resultString = encode(decode(data.stdout).trim());
+  activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName;
+    activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
+    if(activeEditor[0]){
+      var codeString = encode(activeEditor[0].newEditor.getValue());
+   }else{
+     var codeString = encode(sourceEditor.getValue());
+   }
+   
+  // alert("code demanded by admin");
+  resultData = {
+    to,from,resultString,codeString
+  }
+  socket.emit("submitAssignment",resultData);
+  alert("assignment submitted");
+  console.log("data send", resultData);
+  }
+}
+
 
 window.addEventListener('click', function (evt) {
   if (evt.detail === 3) {

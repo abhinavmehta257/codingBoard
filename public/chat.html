@@ -107,7 +107,7 @@
         </script>
 
         <script id="participent-template" type="text/template">
-           {{User.name}} {{^User.isAdmin}}<button class="getCode admin" id="{{{User.id}}}" title= "GetCode" onclick = "getCode(this)"><\></button>{{/User.isAdmin}}{{#User.isAdmin}}(Host){{/User.isAdmin}}
+        {{User.name}} {{^User.isAdmin}}<button class="getCode admin" id="{{{User.id}}}" title= "GetCode" onclick="{{func}}"><\></button>{{/User.isAdmin}}{{#User.isAdmin}}(Host){{/User.isAdmin}}
         </script>
 
       </div>
@@ -129,7 +129,8 @@
                     <a class="item" onclick="addNewFile(false, prompt('File Name'))"><i class="file code icon"></i> New File</a>
                     <!-- <div class="item" onclick="save()"><i class="save icon"></i> Save (Ctrl + S)</div> -->
                     <div class="item" onclick="downloadSource()"><i class="download icon"></i> Download</div>
-                    <div class="item" onclick="addNewFile(true)"><i class="file code icon"></i> Send Prompt</div>
+                    <div class="item admin send-prompt" onclick="addNewFile(true)"><i class="file code icon "></i> Send Prompt</div>
+                    <div class="item admin send-assignment" onclick="openAssignmentPopup()"><i class="file code icon "></i> Send Assignment</div>
                     <!-- <div class="item"><i class="share icon"></i> Share</div> -->
                     <!-- <div id="insert-template-btn" class="item"><i class="file code outline icon"></i> Insert template
                         for current language</div> -->
@@ -293,9 +294,16 @@
       </li>
     </ul>
   </nav>
-
+  <div onclick="assignmentToggle()" id="assignment-btn"><h4>Assignment</h4>
+</div>
 <div id="site-footer">
+    <button style="border-radius: 3px; padding: 2px"class="raiseHand" onclick="raiseHand(this)">Raise Hand</button>
    <span id="status-line"></span>
+</div>
+<div id="studentAssignments">
+    <div onclick="assignmentToggle()" style="cursor: pointer;"><button style="float: left;" onclick="downloadAssignments()">Download</button><h4 style="margin-top: 0;">Assignments</h4></div><span class="close">&times;</span>
+    <input id="participant_earch_assignment" type="text" placeholder="Search participant..">
+    <div id="studentAssignmentsList"></div>
 </div>
     
     <div>

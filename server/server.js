@@ -10,6 +10,7 @@ dotenv = require('dotenv').config();
 
 
 const publicPath = path.join(__dirname, '/../public');
+const chatPath = path.join(__dirname, '/../public/chat.html');
 const port = process.env.PORT || 3000
 let app = express();
 let server = http.createServer(app);
@@ -17,6 +18,7 @@ let io = socketIO(server);
 let users = new Users();
 let roomList = new Rooms();
 app.use(express.static(publicPath));
+app.use("/codingboard",express.static(chatPath));
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded());
@@ -27,50 +29,65 @@ app.use(express.json());
 
 let newmember;
 // Access the parse results as request.body
-app.post('/chat.html', function(request, response){
-  // console.log(request.body);
-  newmember = request.body;
-  if(request.body.isAdmin == 'on' && !roomList.getRoom(newmember.roomId)){
-    newmember.isAdmin = true;
-    roomList.addRoom(newmember.roomId);
-  }
-  if(roomList.getRoom(newmember.roomId) && request.body.isAdmin == 'on'){
-    response.send("Room alredy exist");
-  }
-  if(roomList.getRoom(newmember.roomId) || newmember.isAdmin){
-    response.redirect("/chat.html");
-  }else{
-    response.send("room donot exist try again");
-  }
+// app.post('/codingboard', function(request, response){
+//   // console.log(request.body);
+//   newmember = request.body;
+//   if(request.body.isAdmin == 'on' && !roomList.getRoom(newmember.roomId)){
+//     newmember.isAdmin = true;
+//     roomList.addRoom(newmember.roomId);
+//   }
+//   if(roomList.getRoom(newmember.roomId) && request.body.isAdmin == 'on'){
+//     response.send("Room alredy exist");
+//   }
+//   if(roomList.getRoom(newmember.roomId) || newmember.isAdmin){
+//     response.redirect("/codingboard");
+//   }else{
+//     response.send("room donot exist try again");
+//   }
   
-}) 
+// });
+
+app.get("/codingboard", function(req,res){
+  console.log(req.params.name);
+})
 
 io.on('connection', (socket) => {
   // console.log("A new user just connected");
-  console.log("A new user just connected: ",newmember);
+  // console.log("A new user just connected: ",newmember);
 
-  socket.emit('newmember',newmember, ()=>{});
-  newmember = null;
+  // socket.emit('newmember',newmember, ()=>{});
+  // newmember = null;
   
   socket.on('join', (params, callback) => {
       try {
         if(!isRealString(params.name)){
           return callback('Name and room are required');
         }
+        if(params.isAdmin == 'on' && !roomList.getRoom(params.roomId)){
+          params.isAdmin = true;
+          roomList.addRoom(params.roomId);
+        }else if(roomList.getRoom(params.roomId) && params.isAdmin == 'on'){
+          return callback("Room alredy exist");
+        }else{
+          if(!roomList.getRoom(params.roomId)){
+          return callback("room donot exist try again");}
+        }
     
         socket.join(params.roomId);
         users.removeUser(socket.id);
         users.addUser(socket.id, params.name, params.roomId, params.isAdmin);
 
-
+        console.log("A new user just connected", socket.id);
         io.to(params.roomId).emit('updateUsersList', users.getUserList(params.roomId));
         if(params.isAdmin){
-        socket.emit('newMessage', generateMessage('Coding Room', `Welocome Admin😊`));
+          socket.emit("youAreNewAdmin",{ isAdmin : true });
+          socket.emit('newMessage', generateMessage('Coding Room', `Welocome Admin😊`));
         }else{
           socket.emit('newMessage', generateMessage('Admin', `Welocome 😊`));
         }
         
         callback();
+      
       } catch (error) {
         socket.emit('connectionError',{error:"connection Error"});
         users.removeUser(socket.id);
@@ -86,12 +103,19 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on("sendCode",(codeData)=>{
+  socket.on("sendCode",(codeData,callback)=>{
     user = users.getUser(codeData.from)
+    userTo= users.getUser(codeData.to)
     if(codeData.to == "all"){
-      socket.broadcast.emit("gotCode",{codeData,user});
+      if(user.isAdmin){
+        socket.broadcast.to(user.roomId).emit("gotCode",{codeData,user});
+        callback("code send to all");
+      }else{
+        callback("you don't have permission to send code to all");
+      }
     }else{
       io.sockets.sockets[codeData.to].emit("gotCode",{codeData,user});
+      callback("code send to "+userTo.name);
     }
     // console.log("server got code",codeData);
   })
@@ -159,6 +183,12 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on("submitAssignment",(resultData)=>{
+    user = users.getUser(resultData.from);
+    admin = users.getRoomAdmin(user.roomId);
+    io.sockets.sockets[admin.id].emit("gotAssignment",{resultData,user});
+  })
+
   socket.on("makeAdmin", (user)=>{
     newAdmin = users.getUser(user.id);
     if(newAdmin.isAdmin != true ){
@@ -174,6 +204,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     let user = users.removeUser(socket.id);
     try{
+    if(user){
       if(users.getUserList(user.roomId).length ==0){
         roomList.removeRoom(user.roomId);
        
@@ -190,7 +221,7 @@ io.on('connection', (socket) => {
         }
         
       }
-      
+    }
       
     }catch(err){
       console.log(err);
