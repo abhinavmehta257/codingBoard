@@ -6,7 +6,7 @@ $("<link/>", {
 }).appendTo("body");
 
 let assignmentResult = '';
-
+let studentAssignment;
 class assignments{
   constructor(){
     this.assignments = [];
@@ -187,7 +187,6 @@ function downloadAssignments(){
      file= file + `\n\n ${studentAssignment.assignments[i].user.name}'s CODE: \n ${decode(studentAssignment.assignments[i].resultData.codeString)}`;
     console.log(file);
     }
-  file.replaceAll(sub,"");
   download(file, "Students Assignments", "text/plain");
 }
 
