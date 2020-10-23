@@ -16,11 +16,16 @@ class assignments{
     let assignment = this.assignments.filter((assignment) => assignment.user.id == id)[0];
     return assignment;
   }
-
+ev
   addAssignment(assignment){
     let currentAssignment = this.getAssignment(assignment.user.id);
     if(currentAssignment){
       currentAssignment.resultData.codeString  = assignment.resultData.codeString;
+      if(assignment.resultData.resultString == assignmentResult){
+        currentAssignment.resultData.result = "right";
+      }else{
+        currentAssignment.resultData.result = "wrong";
+      }
     }else{
       this.assignments.push(assignment);
     }
@@ -30,9 +35,9 @@ class assignments{
 }
 // studentAssignment = new assignments();
 
-function shareScreen(){
-  socket.emit("shareScreen");
-}
+// function shareScreen(){
+//   socket.emit("shareScreen");
+// }
 
 //remove user
 function removeUser(id){
@@ -82,7 +87,12 @@ function sendCode(btn = null){
 
 }
 
-function openAssignmentPopup(){
+function openAssignmentPopup(reciver = false){
+  if(reciver == false){
+    reciver = 'all';
+  }else{
+    reciver = `'${reciver}'`;
+  }
   assignmentPopup = document.createElement("div");
   assignmentPopup.id = "assignmentPopup";
 		assignmentPopup.innerHTML = `<div id="assignmentPopupBackground">
@@ -94,28 +104,30 @@ function openAssignmentPopup(){
 			<textarea id="assignmentAnswer" rows="5" cols="40" placeholder="Answer for Assignment...."></textarea><br>
 			<label>Sample Inputs(Optional)</label><br>
 			<textarea id="assignmentInput" rows="5" cols="40" placeholder="Sample inputs for Assignment...."></textarea><br>
-			<button id="sendAssignment" onclick="sendAssignment()">Send Assignmet</button>
+			<button id="sendAssignment" onclick="sendAssignment(${reciver})">Send Assignmet</button>
 			<button id="closeAssignmentPopup" onclick="closePopup()">Cancle</button>
 			</textarea>
 		</div>
-	</div>`
-	document.body.appendChild(assignmentPopup);
+	</div>`;
+  document.body.appendChild(assignmentPopup);
+  
 }
 
 function closePopup(){
   document.body.removeChild(document.getElementById("assignmentPopup"));
 }
 
-function sendAssignment(){
+function sendAssignment(reciver = 'all'){
 
   if(confirm("Download any previous assignment before moving forward, as it will delete them all")){
   question = $("#assignmentQuestion").val();
-  result =$("#assignmentAnswer").val();
+  result =$("#assignmentAnswer").val().trim();
   assignmentResult = encode(result);
   assignmentInput = $("#assignmentInput").val();
   codeString = encode(`/*Your Assignment is: \n${question} \nDESIRED ANSWER:\n ${result} \n**your output should match exactly otherwise it will consider WRONG**\nSAMPLE INPUTS FOR PROGEAM ARE:\n${assignmentInput}*/`);
   from = socket.id;
-  to = "all";
+  to = reciver;
+  // console.log(reciver);
   assignment = true//-------------------
   codeData = {
     to,from,codeString,assignment //------------------
@@ -124,7 +136,10 @@ function sendAssignment(){
     alert(msg);
     closePopup();
   });
-  studentAssignment = new assignments();
+  if(reciver =='all'){
+    studentAssignment = new assignments();
+  }
+  
 }
 
 }
@@ -158,7 +173,7 @@ function makeAdmin(id){
 }
 
 socket.on("gotAssignment",function(data){
-  console.log(data.resultData.resultString == assignmentResult,decode(data.resultData.resultString));
+  // console.log(data.resultData.resultString == assignmentResult,decode(data.resultData.resultString));
   let user = data.user;
   let resultData = data.resultData;
   if(assignmentResult !='' || assignmentResult==null){
@@ -185,7 +200,7 @@ function downloadAssignments(){
   file = `CLASS ASSIGNMENT`;
   for(var i=0; i<studentAssignment.assignments.length;i++){
      file= file + `\n\n ${studentAssignment.assignments[i].user.name}'s CODE: \n ${decode(studentAssignment.assignments[i].resultData.codeString)}`;
-    console.log(file);
+    // console.log(file);
     }
   download(file, "Students Assignments", "text/plain");
 }

@@ -226,8 +226,8 @@
         case "removeUser":
           removeUser(selectedUserId);
           break;
-        case "addPrompt":
-          addNewFile(true);
+        case "sendAssignment":
+          openAssignmentPopup(selectedUserId);
           break;
       }
 
