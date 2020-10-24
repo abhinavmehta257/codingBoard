@@ -15,8 +15,8 @@ const port = process.env.PORT || 3000
 let app = express();
 let server = http.createServer(app);
 let io = socketIO(server,{
-  pingInterval: 10000,
-  pingTimeout: 25000,
+  pingInterval: 25000,
+  pingTimeout: 15000,
   cookie: false
 });
 
@@ -61,9 +61,9 @@ io.on('connection', (socket) => {
           io.to(params.roomId).emit('updateUsersList', users.getUserList(params.roomId));
           if(params.isAdmin){
             socket.emit("youAreNewAdmin",{ isAdmin : true });
-            socket.emit('newMessage', generateMessage('Coding Room', `Welocome Admin😊`));
+            socket.emit('newMessage', generateMessage('Coding Room', `Welocome Admin😊`,'Admin'));
           }else{
-            socket.emit('newMessage', generateMessage('Admin', `Welocome 😊`));
+            socket.emit('newMessage', generateMessage('Admin', `Welocome 😊`,'all'));
           }
           
           callback();
@@ -112,9 +112,20 @@ io.on('connection', (socket) => {
       try{
         let user = users.getUser(socket.id);
 
-        if(user && isRealString(message.text)){
-            io.to(user.roomId).emit('newMessage', generateMessage(user.name, message.text));
+        if(message.to == 'all'){
+          if(user && isRealString(message.text)){
+            to='all';
+            io.to(user.roomId).emit('newMessage', generateMessage(user.name, message.text, to));
+          }
+        }else{
+          if(user && isRealString(message.text)){
+            to = "admin"
+            admin = users.getRoomAdmin(user.roomId);
+            io.to(admin.id).emit('newMessage', generateMessage(user.name, message.text, to));
+            io.to(socket.id).emit('newMessage', generateMessage(user.name, message.text, to));
+          }
         }
+        
         callback('This is the server:');
       }catch(err){
         console.log(err);
@@ -155,35 +166,6 @@ io.on('connection', (socket) => {
         }
     })
 
-    // socket.on("muteAudio",()=>{
-    //     socket.emit("muteAudio");
-    // });
-
-    // socket.on("muteVideo",()=>{
-    //   user = users.getUser(socket.id);
-    //   if(users.getRoomAdmin(user.roomId)){
-    //   socket.emit("muteVideo");
-    //   }
-    // });
-
-    // socket.on("unmuteAudio",()=>{
-    //   socket.emit("unmuteAudio");
-    // });
-
-    // socket.on("unmuteVideo",()=>{
-    //   user = users.getUser(socket.id);
-    //   if(users.getRoomAdmin(user.roomId)){
-    //   socket.emit("unmuteVideo");
-    //   }
-    // });
-
-    // socket.on("shareScreen",()=>{
-    //   user = users.getUser(socket.id);
-    //   if(users.getRoomAdmin(user.roomId)){
-    //   socket.emit("shareScreen");
-    //   }
-    // });
-
     socket.on("submitAssignment",(resultData)=>{
       try{
         user = users.getUser(resultData.from);
@@ -210,27 +192,32 @@ io.on('connection', (socket) => {
       
     })
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', (reason) => {
       let user = users.removeUser(socket.id);
       try{
-      if(user){
-        if(users.getUserList(user.roomId).length ==0){
-          roomList.removeRoom(user.roomId);
-        
+        if (reason === 'io server disconnect') {
+          socket.connect();
         }else{
-          if(user.isAdmin){
-            newAdmin = users.getUserList(user.roomId)[0];
-            newAdmin.isAdmin = true;
-            io.to(user.roomId).emit('updateUsersList', users.getUserList(user.roomId));
+          if(user){
+            if(users.getUserList(user.roomId).length ==0){
+              roomList.removeRoom(user.roomId);
             
-            io.to(newAdmin.id).emit('youAreNewAdmin', { isAdmin : true });
-          }else{
-            io.to(user.roomId).emit('updateUsersList', users.getUserList(user.roomId));
-            
+            }else{
+              if(user.isAdmin){
+                newAdmin = users.getUserList(user.roomId)[0];
+                newAdmin.isAdmin = true;
+                io.to(user.roomId).emit('updateUsersList', users.getUserList(user.roomId));
+                
+                io.to(newAdmin.id).emit('youAreNewAdmin', { isAdmin : true });
+              }else{
+                io.to(user.roomId).emit('updateUsersList', users.getUserList(user.roomId));
+                
+              }
+              
+            }
           }
-          
         }
-      }
+      
       }catch(err){
         console.log(err);
         socket.emit('connectionError',{error:"connection Error"});
@@ -240,7 +227,37 @@ io.on('connection', (socket) => {
         socket.disconnect();
       }
     });
-  
+    
+    socket.on('error', (error) => {
+      console.log("socket error: ",error,"user: ",users.getUser(socket.id));
+    });
+    socket.on('connect_error', (error) => {
+      console.log("Connection Error: ",error,"user: ",users.getUser(socket.id));
+    });
+    socket.on('connect_timeout', (timeout) => {
+      console.log("connection timeout: ",timeout,"user: ",users.getUser(socket.id));
+    });
+    socket.on('reconnect', (attemptNumber) => {
+      console.log("Reconnect: ", attemptNumber,"user: ",users.getUser(socket.id));
+    });
+    socket.on('reconnect_attempt', (attemptNumber) => {
+      console.log("reconnect attempt: ",attemptNumber,"user: ",users.getUser(socket.id));
+    });
+    socket.on('reconnecting', (attemptNumber) => {
+      console.log("reconnecting: ",attemptNumber,"user: ",users.getUser(socket.id));
+    });
+    socket.on('reconnect_error', (error) => {
+      console.log("Reconnect Error: ",error,"user: ",users.getUser(socket.id));
+    });
+    socket.on('reconnect_failed', () => {
+      console.log("failed to reconnect: ","user: ",users.getUser(socket.id));
+    });
+    // socket.on('ping', () => {
+    //   console.log("ping to user: ",users.getUser(socket.id));
+    // });
+    // socket.on('pong', (latency) => {
+    //   console.log("pong from user: ",users.getUser(socket.id),"latency: ",latency);
+    // });
 });    
 
 server.listen(port, ()=>{

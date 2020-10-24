@@ -126,6 +126,7 @@ socket.on('newMessage', function(message) {
   const newMessageTemplate = Mustache.render(template, {
     from: message.from,
     text: message.text,
+    to: message.to,
     createdAt: formattedTime
   });
 
@@ -140,7 +141,8 @@ document.querySelector('#submit-btn').addEventListener('click', function(e) {
   e.preventDefault();
 
   socket.emit("createMessage", {
-    text: document.querySelector('input[name="message"]').value
+    text: document.querySelector('input[name="message"]').value,
+    to: document.querySelector('#messageTo').value
   }, function() {
     document.querySelector('input[name="message"]').value = '';
   })

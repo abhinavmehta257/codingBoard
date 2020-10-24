@@ -110,3 +110,6 @@ textarea{
     border-radius: 10px;
     margin: auto auto;
 }
+.no-assignment{
+    color: rgb(0,0,0, .5);
+}

@@ -80,7 +80,14 @@
         <div class="chat">
           <div class="chat__main">
             <ol id="messages" class="chat__messages"></ol>
-      
+            <div id="to">
+                <label for="messageTo">To:</label>
+                <select name="to" id="messageTo">
+                    <option value="all">All</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            
             <div class="chat__footer">
               <form id="message-form">
                 <input name="message" type="text" placeholder="Message" autofocus autocomplete="off"/>
@@ -95,9 +102,9 @@
       
       <div class="template-scripts">
         <script id="message-template" type="text/template">
-          <li class="message">
+          <li class="message" style="font-size: 12px;">
             <div class="message__title">
-              <h4>{{from}}</h4>
+              <h6>{{from}}</h6><p>{{to}}</p>
               <span>{{createdAt}}</span>
             </div>
             <div class="message__body">
@@ -304,15 +311,13 @@
 <div id="studentAssignments">
     <button style="float: left;" onclick="downloadAssignments()">Download</button><div onclick="assignmentToggle()" style="cursor: pointer;"><h4 style="margin-top: 0;">Assignments</h4></div><span class="close">&times;</span>
     <input id="participant_earch_assignment" type="text" placeholder="Search participant..">
-    <div id="studentAssignmentsList"></div>
+    <div id="studentAssignmentsList"> <h1 class="no-assignment">No assignment to view</h1> </div>
 </div>
     
     <div>
         <input id="cb" type="text" hidden>
         <script id="chatInteraction" type="text/javascript" src="/js/chat_interaction.js"></script>
         <script id="chat" type="text/javascript" src="/js/chat.js"></script>
-        <script id="contextMenu" src="/js/contextMenu.js"></script>
-
       </div>
 </body>
 

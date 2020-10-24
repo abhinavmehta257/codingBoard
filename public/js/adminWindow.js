@@ -267,6 +267,9 @@ function showSubmittedAssignmentList(){
   studentAssignmentList.innerHTML = "";
   studentAssignmentList.appendChild(ol);
 }
+$.getScript('/js/contextMenu.js', function() {
+  console.log("context loaded");
+});
 
 let isAssignmentOpen = false;
 function assignmentToggle(){
