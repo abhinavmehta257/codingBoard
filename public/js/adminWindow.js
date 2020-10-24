@@ -33,13 +33,8 @@ ev
 
 
 }
-// studentAssignment = new assignments();
+studentAssignment = new assignments();
 
-// function shareScreen(){
-//   socket.emit("shareScreen");
-// }
-
-//remove user
 function removeUser(id){
     userId = id;
     senderId = socket.id;
@@ -122,7 +117,9 @@ function sendAssignment(reciver = 'all'){
   if(confirm("Download any previous assignment before moving forward, as it will delete them all")){
   question = $("#assignmentQuestion").val();
   result =$("#assignmentAnswer").val().trim();
-  assignmentResult = encode(result);
+  if(reciver == 'all'){
+    assignmentResult = encode(result);
+  }
   assignmentInput = $("#assignmentInput").val();
   codeString = encode(`/*Your Assignment is: \n${question} \nDESIRED ANSWER:\n ${result} \n**your output should match exactly otherwise it will consider WRONG**\nSAMPLE INPUTS FOR PROGEAM ARE:\n${assignmentInput}*/`);
   from = socket.id;
@@ -200,7 +197,6 @@ function downloadAssignments(){
   file = `CLASS ASSIGNMENT`;
   for(var i=0; i<studentAssignment.assignments.length;i++){
      file= file + `\n\n ${studentAssignment.assignments[i].user.name}'s CODE: \n ${decode(studentAssignment.assignments[i].resultData.codeString)}`;
-    // console.log(file);
     }
   download(file, "Students Assignments", "text/plain");
 }
@@ -248,7 +244,6 @@ function getAssignmentCode(btn){
 
 function showSubmittedAssignmentList(){
   let ol = document.createElement('ul');
-  user = assignment.user;
   // console.log(users);
   studentAssignment.assignments.forEach(function (assignment) {
     user = assignment.user;
