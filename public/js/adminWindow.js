@@ -280,6 +280,6 @@ function assignmentToggle(){
     isAssignmentOpen = true;
   }
 }
-$(".close").on('click', function(){
+$("#studentAssignments .close").on('click', function(){
   assignmentToggle();
 })

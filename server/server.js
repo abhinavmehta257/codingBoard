@@ -10,6 +10,8 @@ dotenv = require('dotenv').config();
 
 
 const publicPath = path.join(__dirname, '/../public');
+const homePath = path.join(__dirname, '/../homePage');
+const adminPath = path.join(__dirname, '/admin.html');
 const chatPath = path.join(__dirname, '/../public/chat.html');
 const port = process.env.PORT || 3000
 let app = express();
@@ -23,7 +25,10 @@ let io = socketIO(server,{
 let users = new Users();
 let roomList = new Rooms();
 app.use(express.static(publicPath));
+
 app.use("/codingboard",express.static(chatPath));
+app.use("/home",express.static(homePath));
+app.use("/adminPanal",express.static(adminPath));
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded());
@@ -34,7 +39,15 @@ app.use(express.json());
 app.get("/codingboard", function(req,res){
   console.log(req.params.name);
 })
+//admin
+app.post("/adminPanal",(req,res)=>{
+  if(req.body.name == "abhinav" && req.body.password == "vaishu@26912")
+  res.send({users, roomList});
+  else
+  res.send("You are not admin");
+})
 
+//ioconnection
 io.on('connection', (socket) => {
  
   

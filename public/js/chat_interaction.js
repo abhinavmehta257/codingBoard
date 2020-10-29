@@ -6,6 +6,17 @@ let isMicOn = true;
 let isCamOn = true;
 $("#Nochat").hide();
 
+window.onload = function(){
+    $("#site-content").on("click", function(){
+        if(participent_list_open){
+            participentListClose();
+        }
+        if(chat_open){
+            chatClose();
+        }
+    });
+}
+
 function participentListToggle(){
     if(participent_list_open){
         participentListClose();
