@@ -41,7 +41,7 @@ router.post("/register",async (req,res)=>{
     });
     try {
         await user.save(); 
-        res.render('login',{title:'Login',error:'Signup Success. Please login'});
+        res.render('register',{title:'register',error:'Signup Success. Please login'});
     } catch (error) {
         res.status(400).send(error); 
     }
