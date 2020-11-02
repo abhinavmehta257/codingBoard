@@ -1,0 +1,23 @@
+            <div class="header">
+                <h3>Upcomming Classes</h3>
+            </div>
+            <hr>
+
+            <table class="upcomming-classes">
+                <tr>
+                    <th>Topic</th>
+                    <th>Language</th>
+                    <Th>Date</Th>
+                    <th>Time</th>
+                    <th>Start</th>
+                </tr>
+                {{#each classes}}
+                <tr>
+                    <td>{{this.topic}}</td>
+                    <td>{{this.language}}</td>
+                    <td>{{this.date}}</td>
+                    <td>{{this.time}}</td>
+                    <td><a href="/codingboard/startclass" target="_blank">Start</a></td>
+                </tr>
+                {{/each}}
+            </table>    

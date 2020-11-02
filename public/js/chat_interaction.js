@@ -89,7 +89,7 @@ const invite_btn = document.querySelector('#invite')
         console.log('invie btn clicked');
         let searchQuery = window.location.search.substring(1);
         let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
-        link = `${window.location.origin}/joinRoom.html?roomId=${params.roomId}&lang=${params.lang}`;
+        link = `${window.location.origin}/codingboard/join?roomId=${params.roomId}&lang=${params.lang}`;
         copy(link);  
     });
 

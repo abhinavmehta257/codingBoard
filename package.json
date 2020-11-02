@@ -15,9 +15,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-handlebars": "^5.2.0",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
+    "mongoose": "^5.10.11",
     "socket.io": "^2.3.0",
     "twilio": "^3.49.4",
     "twilio-video": "^2.7.2"

@@ -2,7 +2,7 @@
 $("<link/>", {
     rel: "stylesheet",
     type: "text/css",
-    href: "/css/admin.css"
+    href: "./css/admin.css"
 }).appendTo("body");
 
 let assignmentResult = '';
@@ -141,7 +141,7 @@ function sendAssignment(reciver = 'all'){
 
 }
 
-const raiseHandSound = new sound("../Mallet.mp3");
+const raiseHandSound = new sound("./../Mallet.mp3");
 socket.on("handRaised", function(name){
 
   const template = document.querySelector('#snackbar-temp').innerHTML;
@@ -262,7 +262,7 @@ function showSubmittedAssignmentList(){
   studentAssignmentList.innerHTML = "";
   studentAssignmentList.appendChild(ol);
 }
-$.getScript('/js/contextMenu.js', function() {
+$.getScript('./js/contextMenu.js', function() {
   console.log("context loaded");
 });
 

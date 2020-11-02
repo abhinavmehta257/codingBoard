@@ -1,18 +1,25 @@
 const path = require('path');
 const http = require('http');
 const express = require('express');
+const ehbs = require('express-handlebars');
 const socketIO = require('socket.io');
+const mongoose = require('mongoose');
 const {generateMessage} = require('./utils/message');
 const {isRealString} = require('./utils/isRealString');
 const {Users} = require('./utils/users');
 const {Rooms} = require('./utils/rooms');
+const codingboard = require('../routes/codingboard');
+const authRoute = require('../routes/auth');
+const dashboard = require('../routes/dashboard');
+var cookieParser = require('cookie-parser');
+const User = require("../model/User");
+const {verifyAdmin} = require('../validToken');
+
+
+
 dotenv = require('dotenv').config();
 
-
-const publicPath = path.join(__dirname, '/../public');
 const homePath = path.join(__dirname, '/../homePage');
-const adminPath = path.join(__dirname, '/admin.html');
-const chatPath = path.join(__dirname, '/../public/chat.html');
 const port = process.env.PORT || 3000
 let app = express();
 let server = http.createServer(app);
@@ -24,11 +31,6 @@ let io = socketIO(server,{
 
 let users = new Users();
 let roomList = new Rooms();
-app.use(express.static(publicPath));
-
-app.use("/codingboard",express.static(chatPath));
-app.use("/home",express.static(homePath));
-app.use("/adminPanal",express.static(adminPath));
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded());
@@ -36,28 +38,54 @@ app.use(express.urlencoded());
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
 
-app.get("/codingboard", function(req,res){
-  console.log(req.params.name);
-})
-//admin
-app.post("/adminPanal",(req,res)=>{
-  if(req.body.name == "abhinav" && req.body.password == "vaishu@26912")
-  res.send({users, roomList});
-  else
-  res.send("You are not admin");
-})
+//home page
+app.use(express.static(homePath));
+
+//hbs images
+app.use(express.static('images')); 
+//cookie parser
+app.use(cookieParser());
+//express handlebars
+app.engine(
+  "handlebars",
+  ehbs({
+    extname: "hbs",
+    defaultLayout: 'main'
+  })
+);
+app.set('view engine', 'handlebars');
+
+//register and signin routes
+app.use("/",authRoute);
+//dashboars
+app.use("/dashboard", dashboard);
+
+//webapplication route
+app.use("/codingboard",codingboard);
+
+//connect to db;
+mongoose.connect(process.env.DB_CONNECT,{ useNewUrlParser: true },()=>{
+  console.log("db connected");
+});
 
 //ioconnection
-io.on('connection', (socket) => {
+io.on('connection',  (socket) => {
  
   
-    socket.on('join', (params, callback) => {
+    socket.on('join', async (data, callback) => {
+      params = data.params;
         try {
+          
           if(!isRealString(params.name)){
             return callback('Name and room are required');
           }
           if(params.isAdmin == 'on' && !roomList.getRoom(params.roomId)){
             params.isAdmin = true;
+            // console.log(params.roomId);
+            verifyAdmin(data.authToken);
+            const user = await User.findOne({roomId:params.roomId});
+            // console.log(user);
+            if(!user) return callback("Room Doesn't exist");
             roomList.addRoom(params.roomId);
           }else if(roomList.getRoom(params.roomId) && params.isAdmin == 'on'){
             return callback("Room alredy exist");

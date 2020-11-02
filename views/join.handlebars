@@ -1,0 +1,27 @@
+<div class="signup-form">
+	<h1>Coding <span>Room</span></h1>
+    <form id="login-form" action="./room">
+		<h2>Join room</h2>
+		<hr>
+        <div class="form-group">
+        	<input type="text" class="form-control" name="name" placeholder="name" required="required">
+        </div>
+		<div class="form-group">
+            <input type="text" class="form-control" name="roomId" placeholder="RoomId" required="required">
+        </div>
+		<div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+        </div>
+        <p id="error">{{error}}</p>
+    </form>
+	<div class="hint-text">Don't have an account? <a href="/register">Signup here</a></div>
+</div>
+<script>
+     let searchQuery = window.location.search.substring(1);
+      if(searchQuery){
+        let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
+        document.querySelector('input[name="roomId"]').value = params.roomId;
+      }else{
+        console.log("no querie");
+      }
+</script>

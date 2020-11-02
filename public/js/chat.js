@@ -57,23 +57,20 @@ function getDate() {
 
 socket.on('connect', function() {
   console.log("shocket connected");
-  // socket.on('newmember',function (newmemberData){
-  //   params = newmemberData;
-    
-  //   if( newmemberData && !params.isAdmin){
-  //     params.isAdmin = false;
-  //     isAdmin = false;
-  //   }
-  //   if(newmemberData && params.isAdmin){
-  //     adminScript = $.getScript('/js/adminWindow.js', function() {
-  //       console.log("Admin script loaded");
-  //     });
-  //     adminScript.id = 'adminWindow';
-     
-  //     roomId = params.roomId;
-  //   }
   
-    socket.emit('join', params, function(err) {
+  function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+  const authToken = getCookie('authentication');
+  
+    socket.emit('join', {params,authToken}, function(err) {
       if(err){
 
         alert(err)
@@ -150,7 +147,7 @@ document.querySelector('#submit-btn').addEventListener('click', function(e) {
 
 socket.on('youAreNewAdmin',function(isAdmin){
   if(isAdmin){
-   $.getScript('/js/adminWindow.js', function() {
+   $.getScript('./js/adminWindow.js', function() {
       console.log("admin script loaded");
    });
    $(".admin").show(); 
