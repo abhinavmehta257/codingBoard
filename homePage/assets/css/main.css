@@ -4203,6 +4203,11 @@ body {
 	#navbar{
 		background: none;
 	}
+	#navbar.opened{
+		background-color: rgba(6, 41, 75, .9);
+		opacity: 1;
+		visibility: visible;
+	}
 }
 @media screen and (min-width: 700px) {
 	.navbar-toggle {
