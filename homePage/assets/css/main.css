@@ -4023,8 +4023,9 @@ h1, h1 span{
 /* nav */
 
 :root {
-	--navbar-text-color: hsl(0, 0%, 85%);
-	--navbar-text-color-focus: white;
+	--navbar-height:20px;
+	--navbar-text-color: hsl(0, 0%, 22%);
+	--navbar-text-color-focus: hsl(0, 0%, 39%);
 }
 
 * {
@@ -4040,11 +4041,14 @@ body {
 }
 
 .container {
+	float: right;
 	max-width: 1000px;
 	padding-left: 1.4rem;
 	padding-right: 1.4rem;
 	margin-left: auto;
-	margin-right: auto;
+	margin-right: 0;
+	text-align: right;
+
 }
 
 #navbar {
@@ -4071,7 +4075,7 @@ body {
 
 .home-link,
 .navbar-link {
-	color: var(--navbar-text-color);
+	color: white;
 	transition: color 0.2s ease-in-out;
 	text-decoration: none;
 	display: flex;
@@ -4187,12 +4191,19 @@ body {
 	border-radius: 5px;
 	/* box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); */
 }
+#navbar{
+	background: #4696e5;
+}
 
 #navbar.opened .navbar-links {
 	padding: 1em;
 	max-height: none;
 }
-
+@media screen and (max-width: 700px){
+	#navbar{
+		background: none;
+	}
+}
 @media screen and (min-width: 700px) {
 	.navbar-toggle {
 		display: none;
@@ -4206,6 +4217,9 @@ body {
 		display: block;
 		height: 100vh;
 	}
+	/* .navbar-links{
+		display: none;
+	} */
 
 	#navbar .navbar-links,
 	#navbar.opened .navbar-links {
