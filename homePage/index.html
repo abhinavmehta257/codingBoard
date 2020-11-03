@@ -18,15 +18,26 @@
 	<body class="is-preload">
 		
 		<nav>
-			<ul>
-				<li><a href="/">Home</a></li>
-				<li><a href="/">How to use</a></li>
-				<li><a href="/dashboard">Dashboard</a></li>
-				<li class="login"><a href="/login">Login</a></li>
-			</ul>
-		</nav>
+			<header id="navbar">
+				<nav class="navbar-container container">
+				  <button type="button" class="navbar-toggle" aria-label="Open navigation menu">
+					  <span class="icon-bar"></span>
+					  <span class="icon-bar"></span>
+					  <span class="icon-bar"></span>
+				  </button>
+				  <div class="navbar-menu">
+					<ul class="navbar-links">
+					  <li class="navbar-item"><a class="navbar-link" href="/">Home</a></li>
+					  <li class="navbar-item"><a class="navbar-link" href="/">Instruction</a></li>
+					  <li class="navbar-item"><a class="navbar-link" href="/dashboard">Dashboard</a></li>
+					  <li class="navbar-item"><a class="navbar-link login" href="/login">Login</a></li>
+					</ul>
+				  </div>
+				</nav>
+			</header>
 		<script>
-			window.onload = function(){function getCookie(name) {
+			window.onload = function(){
+				function getCookie(name) {
 						var nameEQ = name + "=";
 						var ca = document.cookie.split(';');
 						for(var i=0;i < ca.length;i++) {
@@ -37,12 +48,40 @@
 						return null;
 					}																
 			logBtn = document.querySelector('.login');
-			logLink = document.querySelector('.login a');
 			authToken = getCookie('authentication');
 			if(authToken){
-				logLink.textContent = 'Logout';
-				logLink.setAttribute('href','/logout');
+				logBtn.textContent = 'Logout';
+				logBtn.setAttribute('href','/logout');
 			} }
+			const navbar = document.getElementById("navbar");
+	const navbarToggle = navbar.querySelector(".navbar-toggle");
+
+	function openMobileNavbar() {
+	navbar.classList.add("opened");
+	navbarToggle.setAttribute("aria-label", "Close navigation menu.");
+	}
+
+	function closeMobileNavbar() {
+	navbar.classList.remove("opened");
+	navbarToggle.setAttribute("aria-label", "Open navigation menu.");
+	}
+
+	navbarToggle.addEventListener("click", () => {
+	if (navbar.classList.contains("opened")) {
+		closeMobileNavbar();
+	} else {
+		openMobileNavbar();
+	}
+	});
+
+	const navbarMenu = navbar.querySelector(".navbar-menu");
+	const navbarLinksContainer = navbar.querySelector(".navbar-links");
+
+	navbarLinksContainer.addEventListener("click", (clickEvent) => {
+	clickEvent.stopPropagation();
+	});
+
+	navbarMenu.addEventListener("click", closeMobileNavbar);
 		</script>
 		
 		<!-- Header -->
