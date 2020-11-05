@@ -3,6 +3,7 @@ const express = require('express');
 const User = require("../model/User");
 const path = require('path');
 const {auth} = require('../validToken');
+const { json } = require('express');
 
 
 const publicPath = path.join(__dirname, '../public');
@@ -28,6 +29,13 @@ router.get('/startclass',auth, async (req,res)=>{
 
 
 router.get('/join',(req,res)=>{
-    res.render('join',{title:'Join Room'});
+
+    classStarted = true;
+    if(!classStarted){
+        return res.render('waiting-room');
+    }else{
+        res.render('join',{title:'Join Room'});
+    }
+    
 });
 module.exports = router;

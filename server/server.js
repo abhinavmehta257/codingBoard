@@ -88,7 +88,7 @@ io.on('connection',  (socket) => {
             if(!user) return callback("Room Doesn't exist");
             roomList.addRoom(params.roomId);
           }else if(roomList.getRoom(params.roomId) && params.isAdmin == 'on'){
-            return callback("Room alredy exist");
+            return callback("Room is in progress");
           }else{
             if(!roomList.getRoom(params.roomId)){
             return callback("room donot exist try again");}
@@ -196,16 +196,16 @@ io.on('connection',  (socket) => {
       
     })
     
-    socket.on("raiseHand", (id)=>{
-      try{
-        let user = users.getUser(id);
-          name = user.name;
-          // console.log(users.getRoomAdmin(user.roomId));
-          io.sockets.sockets[users.getRoomAdmin(user.roomId).id].emit("handRaised",name);
-        }catch(err){
-          console.log(err);
-        }
-    })
+    // socket.on("raiseHand", (id)=>{
+    //   try{
+    //     let user = users.getUser(id);
+    //       name = user.name;
+    //       // console.log(users.getRoomAdmin(user.roomId));
+    //       io.sockets.sockets[users.getRoomAdmin(user.roomId).id].emit("handRaised",name);
+    //     }catch(err){
+    //       console.log(err);
+    //     }
+    // })
 
     socket.on("submitAssignment",(resultData)=>{
       try{
@@ -258,7 +258,7 @@ io.on('connection',  (socket) => {
             }
           }
         }
-      
+        console.log(user);
       }catch(err){
         console.log(err);
         socket.emit('connectionError',{error:"connection Error"});

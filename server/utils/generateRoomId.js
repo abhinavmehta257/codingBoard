@@ -1,6 +1,6 @@
-module.exports = function () {
+module.exports = function (length) {
 	 
-    this.length = 10;
+    this.length = length;
     this.timestamp = +new Date;
     
     var _getRandomInt = function( min, max ) {

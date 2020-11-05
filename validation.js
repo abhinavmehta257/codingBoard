@@ -25,9 +25,9 @@ const scheduleValidation = data =>{
     const schema = new Joi.object({
         topic:Joi.string().min(3).required(),
         lang: Joi.required(),
-        date: Joi.date().min('now').required(),
+        date: Joi.date().required(),
         time: Joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/)
-    })
+    });
 
     return schema.validate(data);
 }

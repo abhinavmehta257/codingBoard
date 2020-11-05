@@ -24,12 +24,12 @@ router.post("/register",async (req,res)=>{
     //check user exist 
     const emailExist = await User.findOne({email:req.body.email});
 
-    if(emailExist) return res.status(400).render('register',{error:'Email alredy exist please login'});
+    if(emailExist) return res.status(400).render('register',{error:'User alredy exist please login'});
     
     //hash
     const salt = await bcrypt.genSalt(15);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    roomId = new generateRoomId();
+    roomId = new generateRoomId(10);
     //creatw new user
     if(error) return res.status(400).render('register',{error:error.details[0].message});
     const user = new User({
@@ -54,16 +54,17 @@ router.post("/login",async (req,res)=>{
     if(error) return res.status(400).render('login', {title:'Login',error:error.details[0].message});
     //check user exist 
     const user = await User.findOne({email:req.body.email});
-    if(!user) return res.status(400).render('login', {title:'Login',error:"User doesn't exist, please sign up"});
+    if(!user) return res.status(400).render('login', {title:'Login',error:"Email Or Password is wrong"});
     //check pass
     const validPass = await bcrypt.compare(req.body.password, user.password);
-    if(!validPass) return res.status(400).render('login', {title:'Login',error:"Wrong password"});
-
+    if(!validPass){
+       return res.status(400).render('login', {title:'Login',error:"Email Or Password is wrong"});
+    }else{
     //create auth token
-    const token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET);
-    res.setHeader('auth-token', token);
-    res.send();
-
+      const token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET);
+      res.setHeader('auth-token', token);
+      res.send();
+    }
 },function(err) {
   console.log(err);
 });

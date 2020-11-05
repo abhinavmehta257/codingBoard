@@ -6,16 +6,6 @@ let isMicOn = true;
 let isCamOn = true;
 $("#Nochat").hide();
 
-window.onload = function(){
-    $("#site-content").on("click", function(){
-        if(participent_list_open){
-            participentListClose();
-        }
-        if(chat_open){
-            chatClose();
-        }
-    });
-}
 
 function participentListToggle(){
     if(participent_list_open){
@@ -83,15 +73,6 @@ function chatOpen(){
     chat_open = true;
 }
 
-const invite_btn = document.querySelector('#invite')
-
- invite_btn.addEventListener('click', function(){
-        console.log('invie btn clicked');
-        let searchQuery = window.location.search.substring(1);
-        let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
-        link = `${window.location.origin}/codingboard/join?roomId=${params.roomId}&lang=${params.lang}`;
-        copy(link);  
-    });
 
 function copy(txt){
     console.log("copy called");
@@ -151,30 +132,6 @@ function addNewFile(isPrompt = false, name = ""){
           showError("Error","The file name is alredy exist. Try different file name");
       }
         
-}
-
-function micToggle(){
-    if(isMicOn){
-        socket.emit("muteAudio")
-            
-    }else{
-        if(!isMicOn){
-            socket.emit("unmuteAudio")
-                
-        }
-    }
-    
-}
-
-function camToggle(){
-    if(isCamOn){
-        socket.emit("muteVideo");
-    }else{
-        if(!isCamOn){
-            socket.emit("unmuteVideo");
-        }
-    }
-    
 }
 
 $(document).ready(function(){

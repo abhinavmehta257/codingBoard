@@ -141,25 +141,6 @@ function sendAssignment(reciver = 'all'){
 
 }
 
-const raiseHandSound = new sound("./../Mallet.mp3");
-socket.on("handRaised", function(name){
-
-  const template = document.querySelector('#snackbar-temp').innerHTML;
-    const newUserTemplate = Mustache.render(template,{
-      Name:name
-    })
-    let p = document.createElement("div");
-    p.innerHTML = newUserTemplate;
-
-  // Get the snackbar DIV
-  var x = document.getElementById("snackbar");
-    x.innerHTML = p.innerHTML;
-  // Add the "show" class to DIV
-  x.className = "show";
-  raiseHandSound.play();
-  // After 3 seconds, remove the show class from DIV
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-});
 
 function makeAdmin(id){
   socket.emit("makeAdmin",{id});
@@ -280,6 +261,18 @@ function assignmentToggle(){
     isAssignmentOpen = true;
   }
 }
+
+const invite_btn = document.querySelector('#invite');
+
+invite_btn.addEventListener('click', function(){
+       console.log('invie btn clicked');
+       let searchQuery = window.location.search.substring(1);
+       let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
+       link = `${window.location.origin}/codingboard/join?roomId=${params.roomId}&lang=${params.lang}`;
+       copy(link);  
+   });
+
+
 $("#studentAssignments .close").on('click', function(){
   assignmentToggle();
 })

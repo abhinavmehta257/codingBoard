@@ -79,7 +79,6 @@ socket.on('connect', function() {
 
       }
     });
-  // })
 
   socket.on('connectionError', function(error){
     showError("Connection Error", "connection error occured please reconnect");
@@ -224,12 +223,6 @@ socket.on("gotCode", function(data){
       layout.root.contentItems[0].contentItems[0].addChild( newItemConfig );
 })
 
-function raiseHand(btn){
-  socketID = socket.id;
-  socket.emit("raiseHand",socketID);
-  $(this).slideUp();
-}
-// .substring(s.indexOf('/*'), s.indexOf('*/'))
 function submitAssignment(data){
   if(confirm("Do you want to submite the assignment")){
     to = "admin";
