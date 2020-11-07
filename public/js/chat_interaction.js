@@ -34,20 +34,7 @@ function chatToggle(){
     }
 } 
 
-function sound(src) {
-    this.sound = document.createElement("audio");
-    this.sound.src = src;
-    this.sound.setAttribute("preload", "auto");
-    this.sound.setAttribute("controls", "none");
-    this.sound.style.display = "none";
-    document.body.appendChild(this.sound);
-    this.play = function(){
-      this.sound.play();
-    }
-    this.stop = function(){
-      this.sound.pause();
-    }
-}
+
 
 function participentListOpen(){
     $(`.chat__sidebar`).animate({left:'0'});
@@ -71,18 +58,6 @@ function chatOpen(){
     $(`.chat__main`).animate({left:'0'});
     $('#chat-collapser').animate({left:'+=275px'});
     chat_open = true;
-}
-
-
-function copy(txt){
-    console.log("copy called");
-  var cb = document.getElementById("cb");
-  cb.value = txt;
-  cb.style.display='block';
-  cb.select();
-  document.execCommand('copy');
-  cb.style.display='none';
-  alert("room link copied")
 }
 
 function addNewFile(isPrompt = false, name = ""){

@@ -16,7 +16,7 @@ class assignments{
     let assignment = this.assignments.filter((assignment) => assignment.user.id == id)[0];
     return assignment;
   }
-ev
+
   addAssignment(assignment){
     let currentAssignment = this.getAssignment(assignment.user.id);
     if(currentAssignment){
@@ -46,8 +46,8 @@ function removeUser(id){
     }
 };
 
-function getCode(btn){
-    userId = btn.id;
+function getCode(id){
+    userId = id;
     senderId = socket.id;
     data = {userId, senderId}
     socket.emit("getCode",data)
@@ -144,8 +144,6 @@ function sendAssignment(reciver = 'all'){
 
 function makeAdmin(id){
   socket.emit("makeAdmin",{id});
-    socket.emit("muteVideo");
-    socket.emit("muteAudio");
     $('.admin').remove();
    
 }
@@ -262,17 +260,178 @@ function assignmentToggle(){
   }
 }
 
-const invite_btn = document.querySelector('#invite');
+$(document).ready(function(){
+  const invite_btn = document.querySelector('#invite');
+
+  function copy(txt){
+    console.log("copy called");
+  var cb = document.getElementById("cb");
+  cb.value = txt;
+  cb.style.display='block';
+  cb.select();
+  document.execCommand('copy');
+  cb.style.display='none';
+  console.log(txt);
+  alert("room link copied")
+}
+
 
 invite_btn.addEventListener('click', function(){
        console.log('invie btn clicked');
        let searchQuery = window.location.search.substring(1);
        let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
        link = `${window.location.origin}/codingboard/join?roomId=${params.roomId}&lang=${params.lang}`;
+       console.log(link);
        copy(link);  
    });
+});
 
 
 $("#studentAssignments .close").on('click', function(){
   assignmentToggle();
 })
+
+
+function getCodeStream(btn) {
+  id = btn.id;
+  let student =  studentBoards.filter((editor)=>editor.editorId == id);
+  if(student.length == 0){
+    data ={
+      senderId:socket.id,
+      userId:id
+    }
+    socket.emit('startStream',data);
+  }
+}
+let studentsourceUserCursor = [];
+let studentBoards = [];
+// let remoteSelectionManager;
+socket.on("streamStarted", function(info) {
+  // console.log(info);
+  let studentEditor =  studentBoards.filter((editor)=>editor.editorId == info.user.id)[0];
+  if(studentEditor){
+    let cursor = studentsourceUserCursor.filter((cursor)=>cursor.id == info.user.id);
+    if(cursor.length == 0){
+      sourceUserCursor = null;
+    }else{
+      sourceUserCursor = cursor[0].cursor;
+    }
+    console.log();
+    addCollabExt(info,studentEditor.editor,sourceUserCursor);
+  }else{
+    createStudentBoard(info);
+  }
+});
+
+
+function addCollabExt(info,editor, sourceUserCursor){
+  require(["MonacoCollabExt"], function (MonacoCollabExt) {
+    
+    const remoteCursorManager = new MonacoCollabExt.RemoteCursorManager({
+      editor: editor,
+      tooltips: true,
+      tooltipDuration: 2
+    });
+     
+    if(!sourceUserCursor || sourceUserCursor == null){
+       sourceUserCursor = remoteCursorManager.addCursor('source', 'orange',info.user.name);
+       studentsourceUserCursor.push({id:info.user.id, cursor:sourceUserCursor});
+    }
+    
+    
+  const targetContentManager = new MonacoCollabExt.EditorContentManager({
+    editor: editor
+  });
+  let action = info.data.action;
+  switch (action){
+    case "onInsert":
+      editor.updateOptions({readOnly: false});
+      targetContentManager.insert(info.data.index, info.data.text);
+      editor.updateOptions({readOnly: true});  
+      break;
+    case "onReplace":
+      editor.updateOptions({readOnly: false});
+      targetContentManager.replace(info.data.index, info.data.length, info.data.text);
+      editor.updateOptions({readOnly: true});
+      break; 
+    case  "onDelete":
+      editor.updateOptions({readOnly: false});
+      targetContentManager.delete(info.data.index, info.data.length);
+      editor.updateOptions({readOnly: true}); 
+    break;
+    case "onDidChangeCursorPosition":
+      sourceUserCursor.setOffset(info.data.offset);
+      editor.revealLineInCenter(info.data.offset);
+      break;
+    
+  }
+  });
+}
+
+function createStudentBoard(data){
+ 
+  let board = document.createElement('div');
+  board.className = "col-3 p-1 mb-2"
+  // board.style.background = 'whitesmoke';
+  board.style.color = 'black';
+  board.style.borderRadius = '10px';
+  id = data.user.id;
+  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px"><span data-id='${id}' onclick='stopStream(this)' class="close">×</span><p style="padding-left:20px">${data.user.name}</p><div data-user='${id}' class='editor'><div></div>`;
+  $('.boards').append(board);
+  let codeArea = document.querySelector(`[data-user = '${id}'`);
+  let newEditor = monaco.editor.create(codeArea, {
+    automaticLayout: true,
+    value:data.data.code,
+    theme: "vs-dark",
+    scrollBeyondLastLine: true,
+    readOnly: true,
+    language: data.data.lang,
+    minimap: {
+        enabled: false
+    },
+    rulers: [80, 120]
+  });
+  
+  codeBoard = {
+    editorId:data.user.id,
+    editor:newEditor
+  }
+  studentBoards.push(codeBoard);
+}
+
+function stopStream(btn){
+id = btn.getAttribute("data-id");
+console.log(id);
+
+ socket.emit('stopStream',id);
+ document.querySelector(`[data-user = '${id}'`).parentElement.parentElement.remove();
+ studentBoards =  studentBoards.filter((editor)=>editor.editorId != id)
+ studentsourceUserCursor = studentsourceUserCursor.filter((cursor)=>cursor.id != id);
+}
+
+isLiveBoard = false
+function liveBoardsToggle(){
+  if(!isLiveBoard){
+    $('.live_boards').slideDown();
+    isLiveBoard = true;
+  }else{
+    $('.live_boards').slideUp();
+    isLiveBoard = false;
+  }
+}
+
+isLeaveConfirm = false;
+function leaveRoomToggle(){
+  if(!isLeaveConfirm){
+    $('.leave_confirm').slideDown();
+    isLeaveConfirm = true;
+  }else{
+    isLeaveConfirm = false;
+    $('.leave_confirm').slideUp();
+  }
+ 
+}
+
+function endAndLeaveRoom(){
+  socket.emit('endAndLeaveRoom');
+}

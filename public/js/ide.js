@@ -470,8 +470,8 @@ function insertTemplate() {
 
 function loadRandomLanguage() {
     
-    // let searchQuery = window.location.search.substring(1);
-    // let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
+    let searchQuery = window.location.search.substring(1);
+    let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
     $selectLanguage.dropdown("set selected",params.lang );
     apiUrl = resolveApiUrl($selectLanguage.val());
     insertTemplate();
@@ -609,7 +609,7 @@ $(document).ready(function () {
 
     loadMessages();
 
-    require(["vs/editor/editor.main", "monaco-vim", "monaco-emacs"], function (ignorable, MVim, MEmacs) {
+    require(["vs/editor/editor.main", "monaco-vim", "monaco-emacs", "MonacoCollabExt"], function (ignorable, MVim, MEmacs,MonacoCollabExt) {
         layout = new GoldenLayout(layoutConfig, $("#site-content"));
 
         MonacoVim = MVim;
@@ -635,13 +635,10 @@ $(document).ready(function () {
                 isEditorDirty = sourceEditor.getValue() != sources[currentLanguageId];
             });
 
-            sourceEditor.onDidLayoutChange(resizeEditor);
+                sourceEditor.onDidLayoutChange(resizeEditor);
         });
 
-        layout.registerComponent("video", function(container, state){
-            container.getElement().html( `<div id="localTrack" style="width: inherit; height: inherit;" ></div>` );
-            
-        });
+        
         layout.registerComponent("stdin", function (container, state) {
             stdinEditor = monaco.editor.create(container.getElement()[0], {
                 automaticLayout: true,

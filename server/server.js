@@ -194,18 +194,29 @@ io.on('connection',  (socket) => {
         console.log(err);
       }
       
-    })
+    });
+
+    socket.on('endAndLeaveRoom',()=>{
+      user = users.getUser(socket.id);
+      io.to(user.roomId).emit('classEnded');
+    });
     
-    // socket.on("raiseHand", (id)=>{
-    //   try{
-    //     let user = users.getUser(id);
-    //       name = user.name;
-    //       // console.log(users.getRoomAdmin(user.roomId));
-    //       io.sockets.sockets[users.getRoomAdmin(user.roomId).id].emit("handRaised",name);
-    //     }catch(err){
-    //       console.log(err);
-    //     }
-    // })
+    socket.on('startStream',(data)=>{
+      try{
+        admin = users.checkIsAdmin(data.senderId);
+        if(admin){
+          io.sockets.sockets[data.userId].emit("startStream",data)
+        }
+      }catch(err){
+        console.log(err);
+      }
+    });
+
+    socket.on('stream',(data)=>{
+      user = users.getUser(socket.id);
+      admin = users.getRoomAdmin(user.roomId);
+      io.sockets.sockets[admin.id].emit("streamStarted",{user,data});
+    })
 
     socket.on("submitAssignment",(resultData)=>{
       try{
@@ -227,6 +238,7 @@ io.on('connection',  (socket) => {
           io.to(newAdmin.id).emit('youAreNewAdmin', { isAdmin : true });
           io.to(newAdmin.roomId).emit('updateUsersList', users.getUserList(newAdmin.roomId));
         }
+        
       }catch(err){
         console.log(err);
       }
@@ -269,6 +281,13 @@ io.on('connection',  (socket) => {
       }
     });
     
+    socket.on('stopStream',(id)=>{
+      user = users.getUser();
+      if(user){
+        io.sockets.sockets[id].emit('stopStream');
+      }
+    });
+
     socket.on('error', (error) => {
       console.log("socket error: ",error,"user: ",users.getUser(socket.id));
     });
@@ -293,12 +312,7 @@ io.on('connection',  (socket) => {
     socket.on('reconnect_failed', () => {
       console.log("failed to reconnect: ","user: ",users.getUser(socket.id));
     });
-    // socket.on('ping', () => {
-    //   console.log("ping to user: ",users.getUser(socket.id));
-    // });
-    // socket.on('pong', (latency) => {
-    //   console.log("pong from user: ",users.getUser(socket.id),"latency: ",latency);
-    // });
+    
 });    
 
 server.listen(port, ()=>{
