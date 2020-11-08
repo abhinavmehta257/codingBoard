@@ -252,7 +252,7 @@ socket.on("gotCode", function(data){
     layout.registerComponent(`${editorId}`, function(container, state){
        
       
-        container.getElement().html(`<button class="send-btn admin" style="float:right; padding:2px !important" id="${data.user.id}" onclick='sendCode(this)'>Send Code<button>`);
+        container.getElement().html(`<button class="send-btn admin" style="float:right; padding:2px !important" id="${data.user.id}" onclick='sendCode(this)'>Send Code to ${data.user.id}<button>`);
       if(data.codeData.assignment){
         container.getElement().html(`<button class="assignmentSubmitButton" style="float:right; padding:2px !important" id="${data.user.id}" onclick='run(true)'>Submit Code<button>`);
       }

@@ -323,6 +323,7 @@ socket.on("streamStarted", function(info) {
   }
 });
 
+isStudentBoardInFocus = false;
 
 function addCollabExt(info,editor, sourceUserCursor){
   require(["MonacoCollabExt"], function (MonacoCollabExt) {
@@ -361,7 +362,9 @@ function addCollabExt(info,editor, sourceUserCursor){
     break;
     case "onDidChangeCursorPosition":
       sourceUserCursor.setOffset(info.data.offset);
-      editor.revealLineInCenter(info.data.offset);
+      if(!isStudentBoardInFocus){
+        editor.revealLineInCenter(info.data.offset);
+      }
       break;
     
   }
@@ -376,7 +379,7 @@ function createStudentBoard(data){
   board.style.color = 'black';
   board.style.borderRadius = '10px';
   id = data.user.id;
-  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px"><span data-id='${id}' onclick='stopStream(this)' class="close">×</span><p style="padding-left:20px">${data.user.name}</p><div data-user='${id}' class='editor'><div></div>`;
+  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px"><span data-id='${id}' onclick='stopStream(this)' class="close">×</span><p style="padding-left:20px">${data.user.name}</p><div data-user='${id}' class='editor student_board'><div></div>`;
   $('.boards').append(board);
   let codeArea = document.querySelector(`[data-user = '${id}'`);
   let newEditor = monaco.editor.create(codeArea, {
@@ -397,6 +400,13 @@ function createStudentBoard(data){
     editor:newEditor
   }
   studentBoards.push(codeBoard);
+  $('.student_board').hover(function(){
+    isStudentBoardInFocus = true;
+    console.log('in');
+  },function(){
+    isStudentBoardInFocus = false;
+    console.log('out');
+  });
 }
 
 function stopStream(btn){
@@ -431,6 +441,9 @@ function leaveRoomToggle(){
   }
  
 }
+
+
+
 
 function endAndLeaveRoom(){
   socket.emit('endAndLeaveRoom');

@@ -282,7 +282,7 @@ io.on('connection',  (socket) => {
     });
     
     socket.on('stopStream',(id)=>{
-      user = users.getUser();
+      user = users.getUser(id);
       if(user){
         io.sockets.sockets[id].emit('stopStream');
       }

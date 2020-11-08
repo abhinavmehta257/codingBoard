@@ -609,7 +609,7 @@ $(document).ready(function () {
 
     loadMessages();
 
-    require(["vs/editor/editor.main", "monaco-vim", "monaco-emacs", "MonacoCollabExt"], function (ignorable, MVim, MEmacs,MonacoCollabExt) {
+    require(["vs/editor/editor.main", "monaco-vim", "monaco-emacs"], function (ignorable, MVim, MEmacs) {
         layout = new GoldenLayout(layoutConfig, $("#site-content"));
 
         MonacoVim = MVim;
