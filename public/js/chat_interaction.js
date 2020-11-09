@@ -139,7 +139,7 @@ $(document).ready(function(){
 
       roomId.innerHTML = params.roomId;
       language.innerHTML = params.lang;
-      link.innerHTML = `https://codingboard.herokuapp.com/codingboard/join?roomId=${params.roomId}`; 
+      link.innerHTML = `codingboard.herokuapp.com/codingboard/join?roomId=${params.roomId}`; 
       
       
     //   document.querySelector('.information').addEventListener('click',copy(`https://codingboard.herokuapp.com/codingboard/join?roomId = ${params.roomId}</a>`))
