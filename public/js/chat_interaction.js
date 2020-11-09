@@ -124,7 +124,7 @@ $(document).ready(function(){
         });
       });
 
-      isLeaveConfirm;
+      var isLeaveConfirm;
       $('#site-content').on('click',function(){
           if(isInfo){showInfoToggle()};
           if(participent_list_open){participentListToggle()};
