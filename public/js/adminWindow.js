@@ -347,12 +347,20 @@ function addCollabExt(info,editor, sourceUserCursor){
 function createStudentBoard(data){
  
   let board = document.createElement('div');
-  board.className = "col-3 p-1 mb-2"
+  if(studentBoardSize.value != '2'){
+    board.className = `${studentBoardSize.value} mb-2 student-board`;
+    board.style.height = '230px';
+  }else{
+    board.className = `col-6 p-1 mb-2 student-board`;
+    board.style.height = '460px';
+  }
+  
+  // board. = "student-board";
   // board.style.background = 'whitesmoke';
   board.style.color = 'black';
   board.style.borderRadius = '10px';
   id = data.user.id;
-  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px"><span data-id='${id}' onclick='stopStream(this)' class="close">×</span><p style="padding-left:20px">${data.user.name}</p><div data-user='${id}' class='editor student_board'><div></div>`;
+  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px;height: inherit;"><span data-id='${id}' onclick='stopStream(this)' class="close">×</span><p style="padding-left:20px">${data.user.name}</p><div style = 'height: inherit;'data-user='${id}' class='editor student_board'><div></div>`;
   $('.boards').append(board);
   let codeArea = document.querySelector(`[data-user = '${id}'`);
   let newEditor = monaco.editor.create(codeArea, {
@@ -415,9 +423,23 @@ function leaveRoomToggle(){
  
 }
 
-
-
-
 function endAndLeaveRoom(){
   socket.emit('endAndLeaveRoom');
 }
+
+$(document).ready(function(){
+  studentBoardSize = document.querySelector('#studentBoardSize');
+      studentBoardSize.addEventListener('change',function(){
+          console.log(studentBoardSize.value);
+          block = document.getElementsByClassName('student-board');
+         for(i=0;i<block.length;i++){
+          block[i].style.height = '230px';
+              block[i].className = studentBoardSize.value + " mb-2 student-board";
+              if(studentBoardSize.value=='2'){
+                block[i].className = 'col-6 p-1 mb-2 student-board';
+                block[i].style.height = '460px';
+              }
+          }
+        //   block.className = 
+      });
+});

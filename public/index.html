@@ -255,9 +255,17 @@
     
     <div id="site-content"></div>
     <div class="live_boards ">
-        <span style="color: white; margin-right: 20px;" onclick='liveBoardsToggle()' class="close admin">x</span>
+        <span style=" margin-right: 20px;" onclick='liveBoardsToggle()' class="close admin">x</span>
         <div  style="display:inline ">
+            
             <h1 class="admin">Students Code</h1>
+            <label style="padding-left: 50px;">Select layout</label>
+            <select  style='background-color: aliceblue;'name="studentBoardSize" id="studentBoardSize" placeholder="Change Board size">
+                <option value="col-3 p-1">8 at a time</option>
+                <option value="col-4 p-1">6 at a time</option>
+                <option value="col-6 p-1">4 at a time</option>
+                <option value="2">2 at a time</option>
+            </select>
             <p >GOTO: Participant > click on "<button class="getCode admin" style="padding: 5px;border-radius: 5px;">=></button>" To place realtime code</p>
         </div>
         <div class="boards row m-0 p-3"></div>

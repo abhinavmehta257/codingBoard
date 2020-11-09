@@ -243,3 +243,17 @@ background:#121212;
     border-radius: 5px;
     display: none;
 }
+
+select{
+    background-color: transparent;
+    color: #000000;
+    outline: none;
+    outline-style: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: solid #000000 1px;
+    padding: 3px 10px;
+    margin: 0 10px;
+    width: 200px;
+}
