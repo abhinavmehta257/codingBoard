@@ -2,8 +2,6 @@
 let participent_list_open = false
 let chat_open = false
 let filenumber = 1;
-let isMicOn = true;
-let isCamOn = true;
 $("#Nochat").hide();
 
 
@@ -127,7 +125,61 @@ $(document).ready(function(){
           console.log($(this).text().toLowerCase().indexOf(value) > -1);
         });
       });
+
+      $('#site-content').on('click',function(){
+          if(isInfo){showInfoToggle()};
+          if(participent_list_open){participentListToggle()};
+          if(chat_open){chatToggle()};
+          if(isLeaveConfirm){leaveRoomToggle()};
+      });
+
+      roomId = document.querySelector('.information .roomId');
+      language = document.querySelector('.information .language');
+      link = document.querySelector('.information .link');
+
+      roomId.innerHTML = params.roomId;
+      language.innerHTML = params.lang;
+      link.innerHTML = `https://codingboard.herokuapp.com/codingboard/join?roomId=${params.roomId}`; 
+      
+      
+    //   document.querySelector('.information').addEventListener('click',copy(`https://codingboard.herokuapp.com/codingboard/join?roomId = ${params.roomId}</a>`))
 }); 
+
+let invite_btn;
+$(document).ready(function(){
+invite_btn = document.querySelector('#invite');
+
+  function copy(txt){
+    console.log("copy called");
+    var cb = document.getElementById("cb");
+    cb.value = txt;
+    cb.style.display='block';
+    cb.select();
+    document.execCommand('copy');
+    cb.style.display='none';
+    console.log(txt);
+    alert("room link copied");
+  }
+  invite_btn.addEventListener('click', function(){
+    console.log('invie btn clicked');
+    let searchQuery = window.location.search.substring(1);
+    let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
+    console.log(params);
+    link = `https://codingboard.herokuapp.com/codingboard/join?roomId=`+params.roomId;
+    console.log(link);
+    copy(link);  
+    });
+    $('#info-link').on('click', function(){
+        let searchQuery = window.location.search.substring(1);
+    let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
+    console.log(params);
+    link = `https://codingboard.herokuapp.com/codingboard/join?roomId=`+params.roomId;
+    console.log(link);
+    copy(link);
+    })
+});
+
+
 
 function fullscreenToggle(){
     if(document.fullscreenElement || document.webkitFullscreenElement){
@@ -136,5 +188,15 @@ function fullscreenToggle(){
         document.documentElement.requestFullscreen().catch(console.log);
     }
 }
+let isInfo = false 
 
+function showInfoToggle(){
+    if(!isInfo){
+        $('.information').slideDown();
+        isInfo = true;
+    }else{
+        $('.information').slideUp();
+        isInfo = false;
+    }
+}
 

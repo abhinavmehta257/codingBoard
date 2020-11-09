@@ -260,33 +260,6 @@ function assignmentToggle(){
   }
 }
 
-$(document).ready(function(){
-  const invite_btn = document.querySelector('#invite');
-
-  function copy(txt){
-    console.log("copy called");
-  var cb = document.getElementById("cb");
-  cb.value = txt;
-  cb.style.display='block';
-  cb.select();
-  document.execCommand('copy');
-  cb.style.display='none';
-  console.log(txt);
-  alert("room link copied")
-}
-
-
-invite_btn.addEventListener('click', function(){
-       console.log('invie btn clicked');
-       let searchQuery = window.location.search.substring(1);
-       let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
-       link = `${window.location.origin}/codingboard/join?roomId=${params.roomId}&lang=${params.lang}`;
-       console.log(link);
-       copy(link);  
-   });
-});
-
-
 $("#studentAssignments .close").on('click', function(){
   assignmentToggle();
 })

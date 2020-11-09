@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
 
@@ -125,10 +126,8 @@
     </div>
     <div id="site-navigation" class="ui small inverted menu">
         <div id="site-header" class="header item">
-            <a href="/">
                 <img id="site-icon" src="./images/codingRoomLogo.png">
-                <h2>Coding<span style="color: #0e7fc9; font-size: inherit !important;">Room</span></h2>
-            </a>
+                <h2 style="margin-top:0 ;">Coding<span style="color: #0e7fc9; font-size: inherit !important;">Room</span></h2>
         </div>
         <div class="left menu">
             <div class="ui dropdown item site-links on-hover">
@@ -228,6 +227,7 @@
             <div class="item no-left-padding borderless">
                 <button id="run-btn" class="ui primary labeled icon button"><i class="play icon"></i>Run (F9)</button>
             </div>
+            
             <div class="item no-left-padding borderless admin">
                 <button id="run-btn" style="padding: 5px 20px; border-radius: 5px;" onclick="liveBoardsToggle()" class="ui primary labeled admin icon ">Show students board</button>
             </div>
@@ -235,6 +235,16 @@
                 <button style="background: red; padding: 5px 20px; border-radius: 5px;"id="leave" onclick="leaveRoomToggle()" class="ui primary labeled admin icon ">Leave</button>
                 <div class="leave_confirm">
                     <button style="background: red; padding: 5px 20px; border-radius: 5px;"id="leave" onclick="endAndLeaveRoom()" class="ui primary labeled admin icon ">Confirm Leave and end class</button>
+                </div>
+            </div>
+            <div class="item no-left-padding borderless info">
+                <i class="fas info-icon fa-info-circle" onclick="showInfoToggle()"></i><br>
+                <div class="information">
+                    <h2>CodingRoom</h2>
+                    <p>Room ID :  <span class="roomId" style="padding-left: 5px;"></span><br></p>
+                    <p>language : <span class="language" style="padding-left: 5px;"></span><br></p>
+                    <p>Link :  <span class="link" style="padding-left: 5px;"></span></p>
+                    <span style='cursor:pointer' id="info-link">COPY <span></span><i class="fas fa-copy"></i>
                 </div>
             </div>
             <div id="navigation-message" class="item borderless">
@@ -248,7 +258,7 @@
         <span style="color: white; margin-right: 20px;" onclick='liveBoardsToggle()' class="close admin">x</span>
         <div  style="display:inline ">
             <h1 class="admin">Students Code</h1>
-            <p >GOTO: Participant> click on "<button class="getCode admin" style="padding: 5px;border-radius: 5px;">=></button>" To place realtime code</p>
+            <p >GOTO: Participant > click on "<button class="getCode admin" style="padding: 5px;border-radius: 5px;">=></button>" To place realtime code</p>
         </div>
         <div class="boards row m-0 p-3"></div>
     </div>
@@ -330,7 +340,7 @@
 </div>
     
     <div>
-        <input id="cb" type="text" hidden>
+        <input id="cb" type="text" style="display: none;">
         <script id="chatInteraction" type="text/javascript" src="./js/chat_interaction.js"></script>
         <script id="chat" type="text/javascript" src="./js/chat.js"></script>
       </div>
