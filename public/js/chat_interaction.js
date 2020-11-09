@@ -147,6 +147,8 @@ $(document).ready(function(){
 
 let invite_btn;
 $(document).ready(function(){
+    $('.admin').hide();
+
 invite_btn = document.querySelector('#invite');
 
   function copy(txt){
