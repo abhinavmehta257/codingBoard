@@ -1,6 +1,6 @@
 <div class="signup-form">
 	<h1>Coding <span>Room</span></h1>
-    <form id="login-form" action="/login" method="POST">
+    <div id="login-form">
 		<h2>Login</h2>
 		<hr>
         <div class="form-group">
@@ -10,10 +10,10 @@
             <input type="password" class="form-control" name="password" placeholder="Password" required="required">
         </div>
 		<div class="form-group">
-            <button onclick="postData()"  class="btn btn-primary btn-lg">Login</button>
+            <button onclick="postData()" style="background:#06294b ;" class="btn btn-primary btn-lg">Login</button>
         </div>
         <p id="error">{{error}}</p>
-    </form>
+    </div>
 	<div class="hint-text">Don't have an account? <a href="/register">Signup here</a></div>
 </div>
 <script>
