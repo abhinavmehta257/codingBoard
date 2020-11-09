@@ -139,7 +139,7 @@ $(document).ready(function(){
 
       roomId.innerHTML = params.roomId;
       language.innerHTML = params.lang;
-      link.innerHTML = `http://codingboard.herokuapp.com/codingboard/join?roomId=${params.roomId}`; 
+      link.innerHTML = `${document.location.origin}/codingboard/join?roomId=${params.roomId}`; 
       
       
     //   document.querySelector('.information').addEventListener('click',copy(`https://codingboard.herokuapp.com/codingboard/join?roomId = ${params.roomId}</a>`))
@@ -165,7 +165,7 @@ invite_btn = document.querySelector('#invite');
     let searchQuery = window.location.search.substring(1);
     let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
     console.log(params);
-    link = `https://codingboard.herokuapp.com/codingboard/join?roomId=`+params.roomId;
+    link = `${document.location.origin}/codingboard/join?roomId=`+params.roomId;
     console.log(link);
     copy(link);  
     });
@@ -173,7 +173,7 @@ invite_btn = document.querySelector('#invite');
         let searchQuery = window.location.search.substring(1);
     let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
     console.log(params);
-    link = `https://codingboard.herokuapp.com/codingboard/join?roomId=`+params.roomId;
+    link = `${document.location.origin}/codingboard/join?roomId=`+params.roomId;
     console.log(link);
     copy(link);
     })
