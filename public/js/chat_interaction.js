@@ -32,8 +32,6 @@ function chatToggle(){
     }
 } 
 
-
-
 function participentListOpen(){
     $(`.chat__sidebar`).animate({left:'0'});
     $('#sidebar-collapser').animate({left:'+=260px'});
@@ -126,6 +124,7 @@ $(document).ready(function(){
         });
       });
 
+      isLeaveConfirm;
       $('#site-content').on('click',function(){
           if(isInfo){showInfoToggle()};
           if(participent_list_open){participentListToggle()};

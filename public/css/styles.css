@@ -244,7 +244,7 @@ background:#121212;
     display: none;
 }
 
-select{
+.live_boards select{
     background-color: transparent;
     color: #000000;
     outline: none;
