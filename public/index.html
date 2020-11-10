@@ -116,7 +116,7 @@
         </script>
 
         <script id="participent-template" type="text/template">
-        {{User.name}} {{^User.isAdmin}}<button class="getCode admin" id="{{{User.id}}}" title= "Realtime student's code" onclick="{{func}}">=></button>{{/User.isAdmin}}{{#User.isAdmin}}(Host){{/User.isAdmin}}
+        {{User.name}} {{^User.isAdmin}}<button class="  getCode admin" id="{{{User.id}}}" title= "Realtime student's code" onclick="{{func}}"><i class="fas fa-external-link-alt"></i></button>{{/User.isAdmin}}{{#User.isAdmin}}(Host){{/User.isAdmin}}
         </script>
 
       </div>
@@ -323,7 +323,9 @@
         </div>
     </div>
 
-    
+    <!-- realtime student board attached -->
+<div id="snackbar"></div>
+<script id="snackbar-temp"  type="text/template">{{Name}} Board is attached</script>
 
 <!-- Context menu-->
  <nav id="context-menu" class="context-menu">

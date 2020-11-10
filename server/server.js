@@ -254,7 +254,7 @@ io.on('connection',  (socket) => {
           if(user){
             if(users.getUserList(user.roomId).length ==0){
               roomList.removeRoom(user.roomId);
-            
+              
             }else{
               if(user.isAdmin){
                 newAdmin = users.getUserList(user.roomId)[0];
@@ -264,7 +264,8 @@ io.on('connection',  (socket) => {
                 io.to(newAdmin.id).emit('youAreNewAdmin', { isAdmin : true });
               }else{
                 io.to(user.roomId).emit('updateUsersList', users.getUserList(user.roomId));
-                
+                admin = users.getRoomAdmin(user.roomId);
+                io.sockets.sockets[admin.id].emit('userDissconected',user);
               }
               
             }
@@ -282,10 +283,15 @@ io.on('connection',  (socket) => {
     });
     
     socket.on('stopStream',(id)=>{
-      user = users.getUser(id);
-      if(user){
-        io.sockets.sockets[id].emit('stopStream');
+      try{
+        user = users.getUser(id);
+        if(user){
+          io.sockets.sockets[id].emit('stopStream');
+        }
+      }catch(err){
+        console.log(err);
       }
+      
     });
 
     socket.on('error', (error) => {
