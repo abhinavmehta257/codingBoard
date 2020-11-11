@@ -141,7 +141,7 @@ io.on('connection',  (socket) => {
             }
           }else{
             io.sockets.sockets[codeData.to].emit("gotCode",{codeData,user});
-            callback("code send to "+userTo.name);
+            callback("code was sent to "+userTo.name);
           }
           // console.log("server got code",codeData);
         }catch(err){
@@ -197,8 +197,13 @@ io.on('connection',  (socket) => {
     });
 
     socket.on('endAndLeaveRoom',()=>{
-      user = users.getUser(socket.id);
-      io.to(user.roomId).emit('classEnded');
+      try{
+        user = users.getUser(socket.id);
+        io.to(user.roomId).emit('classEnded');
+      }catch(err){
+        console.log(err);
+      }
+      
     });
     
     socket.on('startStream',(data)=>{
@@ -213,10 +218,15 @@ io.on('connection',  (socket) => {
     });
 
     socket.on('stream',(data)=>{
-      user = users.getUser(socket.id);
-      admin = users.getRoomAdmin(user.roomId);
-      io.sockets.sockets[admin.id].emit("streamStarted",{user,data});
-    })
+      try{
+        user = users.getUser(socket.id);
+        admin = users.getRoomAdmin(user.roomId);
+        io.sockets.sockets[admin.id].emit("streamStarted",{user,data});
+      }catch(err){
+        console.log(err);
+      }
+      
+    });
 
     socket.on("submitAssignment",(resultData)=>{
       try{
@@ -276,8 +286,6 @@ io.on('connection',  (socket) => {
         console.log(err);
         socket.emit('connectionError',{error:"connection Error"});
         users.removeUser(socket.id);
-        // var roomId = users.getRoomId(socket.id).roomId;
-        
         socket.disconnect();
       }
     });

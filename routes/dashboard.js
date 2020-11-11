@@ -39,7 +39,7 @@ router.post('/schedule',auth, async (req,res)=>{
 
     if(error) return res.status(400).render('schedule',{error:error.details[0].message,layout:'dashboard'});
     classId = new generateRoomId(4);
-    console.log(classId.generate());
+    // console.log(classId.generate());
     user_id = req.user.id;
     schedule = {
         topic:req.body.topic,

@@ -274,7 +274,9 @@ function getCodeStream(btn) {
       userId:id
     }
     socket.emit('startStream',data);
+    liveBoardAttached(btn);
   }
+  
 }
 let studentsourceUserCursor = [];
 let studentBoards = [];
@@ -289,7 +291,6 @@ socket.on("streamStarted", function(info) {
     }else{
       sourceUserCursor = cursor[0].cursor;
     }
-    console.log();
     addCollabExt(info,studentEditor.editor,sourceUserCursor);
   }else{
     createStudentBoard(info);
@@ -443,34 +444,17 @@ $(document).ready(function(){
       });
 });
 
-function liveBoardAttached(name){
 
-  const template = document.querySelector('#snackbar-temp').innerHTML;
-    const newUserTemplate = Mustache.render(template,{
-      Name:name
-    })
-    let p = document.createElement("div");
-    p.innerHTML = newUserTemplate;
-
-  // Get the snackbar DIV
-  var x = document.getElementById("snackbar");
-    x.innerHTML = p.innerHTML;
-  // Add the "show" class to DIV
-  x.className = "show";
-  // raiseHandSound.play();
-  // After 3 seconds, remove the show class from DIV
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-}
 
 socket.on('userDissconected',function(user){
   // console.log(user);
   
+  //removing realtime board
   let studentEditor =  studentBoards.filter((editor)=>editor.editorId == user.id)[0];
-  // console.log(studentEditor);
   if(studentEditor){
     if(studentEditor.editorId == user.id){
-      // console.log("user dissconnected: ",user);
       document.querySelector(`[data-user = '${user.id}'`).parentElement.parentElement.remove();
+      studentBoards = studentBoards.filter((editor)=>editor.editorId != user.id);
     }
   }
 })

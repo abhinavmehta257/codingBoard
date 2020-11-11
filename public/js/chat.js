@@ -252,7 +252,7 @@ socket.on("gotCode", function(data){
     layout.registerComponent(`${editorId}`, function(container, state){
        
       
-        container.getElement().html(`<button class="send-btn admin" style="float:right; padding:2px !important" id="${data.user.id}" onclick='sendCode(this)'>Send Code to ${data.user.id}<button>`);
+        container.getElement().html(`<button class="send-btn admin" style="float:right; padding:2px !important" id="${data.user.id}" onclick='sendCode(this)'>Send Code to ${data.user.name}<button>`);
       if(data.codeData.assignment){
         container.getElement().html(`<button class="assignmentSubmitButton" style="float:right; padding:2px !important" id="${data.user.id}" onclick='run(true)'>Submit Code<button>`);
       }
@@ -275,7 +275,33 @@ socket.on("gotCode", function(data){
         });
         
       layout.root.contentItems[0].contentItems[0].addChild( newItemConfig );
-})
+      liveBoardAttached(data.user.name);
+});
+
+function liveBoardAttached(btn){
+
+  if(!btn.id){
+    text = `Got ${btn}'s code`;
+  }else{
+    name = document.querySelector(`[data-id='${btn.id}']`).innerText;
+    text = `${name}'s board is added`;
+  }
+  const template = document.querySelector('#snackbar-temp').innerHTML;
+    const newUserTemplate = Mustache.render(template,{
+      Text: text
+    })
+    let p = document.createElement("div");
+    p.innerHTML = newUserTemplate;
+
+  // Get the snackbar DIV
+  var x = document.getElementById("snackbar");
+    x.innerHTML = p.innerHTML;
+  // Add the "show" class to DIV
+  x.className = "show";
+  // raiseHandSound.play();
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
 
 socket.on('stopStream',function(){
   isStream = false;
