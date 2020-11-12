@@ -273,16 +273,17 @@ function downloadSource() {
 
 
 function run(assignment = false) {
-    if (sourceEditor.getValue().trim() === "") {
+    activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+    activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
+
+    if (activeEditor[0].newEditor.getValue().trim() === "") {
         showError("Error", "Source code can't be empty!");
         return;
     } else {
         $runBtn.addClass("loading");
     }
 
-    activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
-    activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
-
+    
     document.getElementById("stdout-dot").hidden = true;
     document.getElementById("stderr-dot").hidden = true;
     document.getElementById("compile-output-dot").hidden = true;

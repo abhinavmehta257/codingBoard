@@ -64,14 +64,21 @@ function sendCode(btn = null){
   }
     
   var from = socket.id;
-  activeEditorCode = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().container.getElement()[0].getElementsByClassName("view-lines")[0].innerText;
+  // activeEditorCode = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().container.getElement()[0].getElementsByClassName("view-lines")[0].innerText;
+  activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+    activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
 
+    if(activeEditor[0]){
+      var codeString = encode(activeEditor[0].newEditor.getValue());
+   }else{
+     var codeString = encode(sourceEditor.getValue());
+   }
   // console.log(activeEditorCode);
-    if(activeEditorCode){
-        codeString = encode(activeEditorCode);
-    }else{
-     codeString = encode(sourceEditor.getValue());
-    }
+    // if(activeEditorCode){
+    //     codeString = encode(activeEditorCode);
+    // }else{
+    //  codeString = encode(sourceEditor.getValue());
+    // }
     
   codeData = {
     to,from,codeString,assignment //------------------
