@@ -53,6 +53,12 @@ function getCode(id){
     socket.emit("getCode",data)
 }
 
+function removeAllStudentBoards(){
+  block = document.getElementsByClassName('student-board');
+  for(i=0;i<block.length;i++){
+    block[i].style.remove();
+    }
+}
 
 function sendCode(btn = null){
   if(btn!= null){

@@ -13,16 +13,17 @@ function scrollToBottom() {
 
 isStream = false;
 isPreviouslyStreamed = false;
-function startStream(){
+previouslyStreamedEditor=[];
+function startStream(sourceEditor){
   require(["MonacoCollabExt"], function (MonacoCollabExt) {
-  activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+  // activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
     
-    if(activeEditorname && activeEditorname!='source'){
-      activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname)[0].newEditor;
-      stream = activeEditor;
-    }else{
-      stream = sourceEditor;
-    }
+  //   if(activeEditorname && activeEditorname!='source'){
+  //     activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname)[0].newEditor;
+  //     stream = activeEditor;
+  //   }else{
+  //     stream = sourceEditor;
+  //   }
   
     const sourceContentManager = new MonacoCollabExt.EditorContentManager({
           editor: sourceEditor,
@@ -65,7 +66,6 @@ function startStream(){
       }
     });
   }
-
 
 function encode(str) {
   return btoa(unescape(encodeURIComponent(str || "")));
@@ -309,10 +309,7 @@ socket.on('stopStream',function(){
 })
 
 socket.on('startStream',function(){
-  if(!isPreviouslyStreamed){
-    startStream();
-    isPreviouslyStreamed = true;
-  }
+  
   isStream = true;
   activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
     
@@ -321,6 +318,12 @@ socket.on('startStream',function(){
       stream = activeEditor;
     }else{
       stream = sourceEditor;
+    }
+    previousEditor = previouslyStreamedEditor.filter(editor => editor == activeEditorname)[0];
+    if(!isPreviouslyStreamed || !previousEditor){
+      startStream(stream);
+      isPreviouslyStreamed = true;
+      previouslyStreamedEditor.push(activeEditorname);
     }
 
     socket.emit("stream",{action:'code',code:stream.getValue(),lang:sourceEditor.getModel().getLanguageIdentifier().language});
