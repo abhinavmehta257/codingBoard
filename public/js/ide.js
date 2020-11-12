@@ -1,3 +1,4 @@
+
 var defaultUrl = localStorageGetItem("api-url") || "https://judge0.p.rapidapi.com";
 var apiUrl = defaultUrl;
 var wait = localStorageGetItem("wait") || false;
@@ -270,65 +271,6 @@ function downloadSource() {
     download(sourceValue, fileName, "text/plain");
 }
 
-function loadSavedSource() {
-    snippet_id = getIdFromURI();
-
-    if (snippet_id.length == 36) {
-        $.ajax({
-            url: apiUrl + "/submissions/" + snippet_id + "?fields=source_code,language_id,stdin,stdout,stderr,compile_output,message,time,memory,status,compiler_options,command_line_arguments&base64_encoded=true",
-            type: "GET",
-            headers: {
-                "x-rapidapi-host": "judge0.p.rapidapi.com",
-                "x-rapidapi-key": "b02959f027msh6d79ce58f0aee8ep11f50cjsn008a6c0de58b"
-            },
-            success: function(data, textStatus, jqXHR) {
-                sourceEditor.setValue(decode(data["source_code"]));
-                $selectLanguage.dropdown("set selected", data["language_id"]);
-                $compilerOptions.val(data["compiler_options"]);
-                $commandLineArguments.val(data["command_line_arguments"]);
-                stdinEditor.setValue(decode(data["stdin"]));
-                stdoutEditor.setValue(decode(data["stdout"]));
-                stderrEditor.setValue(decode(data["stderr"]));
-                compileOutputEditor.setValue(decode(data["compile_output"]));
-                sandboxMessageEditor.setValue(decode(data["message"]));
-                var time = (data.time === null ? "-" : data.time + "s");
-                var memory = (data.memory === null ? "-" : data.memory + "KB");
-                $statusLine.html(`${data.status.description}, ${time}, ${memory}`);
-                changeEditorLanguage();
-            },
-            error: handleRunError
-        });
-    } else if (snippet_id.length == 4) {
-        $.ajax({
-            url: pbUrl + "/" + snippet_id + ".json",
-            type: "GET",
-            headers: {
-                "x-rapidapi-host": "judge0.p.rapidapi.com",
-                "x-rapidapi-key": "b02959f027msh6d79ce58f0aee8ep11f50cjsn008a6c0de58b"
-            },
-            success: function (data, textStatus, jqXHR) {
-                sourceEditor.setValue(decode(data["source_code"]));
-                $selectLanguage.dropdown("set selected", data["language_id"]);
-                $compilerOptions.val(data["compiler_options"]);
-                $commandLineArguments.val(data["command_line_arguments"]);
-                stdinEditor.setValue(decode(data["stdin"]));
-                stdoutEditor.setValue(decode(data["stdout"]));
-                stderrEditor.setValue(decode(data["stderr"]));
-                compileOutputEditor.setValue(decode(data["compile_output"]));
-                sandboxMessageEditor.setValue(decode(data["sandbox_message"]));
-                $statusLine.html(decode(data["status_line"]));
-                changeEditorLanguage();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                showError("Not Found", "Code not found!");
-                window.history.replaceState(null, null, location.origin + location.pathname);
-                loadRandomLanguage();
-            }
-        });
-    } else {
-        loadRandomLanguage();
-    }
-}
 
 function run(assignment = false) {
     if (sourceEditor.getValue().trim() === "") {
@@ -432,6 +374,8 @@ function run(assignment = false) {
         sendRequest(data);
     }
 }
+
+
 
 function fetchSubmission(submission_token,assignment = false) {
     $.ajax({
@@ -762,6 +706,13 @@ $(document).ready(function () {
    
 
 });
+
+
+document.addEventListener('keydown', function(e){
+    if(e.key == 'F9'){
+        run();
+    }
+})
 
 // document.getElementById("localTrack").addEventListener("dblclick",()=>{
 //                 fullscreenToggle();

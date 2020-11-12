@@ -73,13 +73,14 @@
           <div class="chat__sidebar" style="text-align: center;">
             <h3>Participents</h3>
             <hr>
-            <input id="participant_earch" type="text" placeholder="Search participant..">
+            <input id="participant_search" type="text" placeholder="Search participant..">
             <div id="users" class="participants"></div>
           </div>
           <button id="sidebar-collapser" onclick="participentListToggle()"><span style="padding: 2px;">Participant</span></button>
         </div>
          
         <div class="chat">
+            
           <div class="chat__main">
             <ol id="messages" class="chat__messages"></ol>
             <div id="to">
@@ -266,6 +267,7 @@
                 <option value="col-6 p-1">4 at a time</option>
                 <option value="2">2 at a time</option>
             </select>
+            <input id="participant_search_board" type="text" placeholder="Search student board..">
             <p >GOTO: Participant > click on "<button class="getCode admin" style="padding: 5px;border-radius: 5px;"><i class="fas fa-external-link-alt"></i></button>" To add student's realtime code</p>
         </div>
         <div class="boards row m-0 p-3"></div>
@@ -345,7 +347,7 @@
 </div>
 <div id="studentAssignments">
     <button style="float: left;" onclick="downloadAssignments()">Download</button><div onclick="assignmentToggle()" style="cursor: pointer;"><h4 style="margin-top: 0;">Assignments</h4></div><span class="close">&times;</span>
-    <input id="participant_earch_assignment" type="text" placeholder="Search participant..">
+    <input id="participant_search_assignment" type="text" placeholder="Search participant..">
     <div id="studentAssignmentsList"> <h1 class="no-assignment">No assignment to view</h1> <p>GOTO: File>send Assignment, to send new assignment</p> </div>
 </div>
     

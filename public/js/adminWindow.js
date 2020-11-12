@@ -77,7 +77,7 @@ function sendCode(btn = null){
     to,from,codeString,assignment //------------------
   }
   socket.emit("sendCode",codeData,function(message){
-    alert(message);
+    liveBoardAttached(message);
   });
 
 }
@@ -130,7 +130,7 @@ function sendAssignment(reciver = 'all'){
     to,from,codeString,assignment //------------------
   }
   socket.emit("sendCode",codeData,function(msg){
-    alert(msg);
+    liveBoardAttached(msg);
     closePopup();
   });
   if(reciver =='all'){
@@ -361,7 +361,7 @@ function createStudentBoard(data){
   board.style.color = 'black';
   board.style.borderRadius = '10px';
   id = data.user.id;
-  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px;height: inherit;"><span data-id='${id}' onclick='stopStream(this)' class="close">×</span><p style="padding-left:20px">${data.user.name}</p><div style = 'height: inherit;'data-user='${id}' class='editor student_board'><div></div>`;
+  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px;height: inherit;"><span data-id='${id}' onclick='stopStream(this)' class="close">×</span><p class = 'name' style="padding-left:20px">${data.user.name}</p><div style = 'height: inherit;'data-user='${id}' class='editor student_board'><div></div>`;
   $('.boards').append(board);
   let codeArea = document.querySelector(`[data-user = '${id}']`);
   let newEditor = monaco.editor.create(codeArea, {

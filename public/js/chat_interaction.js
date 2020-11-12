@@ -107,20 +107,27 @@ function addNewFile(isPrompt = false, name = ""){
 
 $(document).ready(function(){
     
-    $("#participant_earch").on("keyup", function() {
+    $("#participant_search").on("keyup", function() {
       var value = $(this).val().toLowerCase();
       $("#users li").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 
-        console.log($(this).text().toLowerCase().indexOf(value) > -1);
       });
     });
-    $("#participant_earch_assignment").on("keyup", function() {
+    
+    $("#participant_search_board").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $(".boards .name").filter(function() {
+            $(this).parent().parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              console.log($(this).text());
+          });
+      });
+
+      $("#participant_search_assignment").on("keyup", function() {
         var value = $(this).val().toLowerCase();
         $("#studentAssignmentsList li").filter(function() {
           $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
   
-          console.log($(this).text().toLowerCase().indexOf(value) > -1);
         });
       });
 

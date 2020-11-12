@@ -225,7 +225,7 @@ socket.on("giveCode",function(data){
     to,from,codeString
   }
   socket.emit("sendCode",codeData,function(message){
-    alert(message);
+    liveBoardAttached(message);
   });
   // console.log("user send code: ",codeData);
 })
@@ -275,13 +275,13 @@ socket.on("gotCode", function(data){
         });
         
       layout.root.contentItems[0].contentItems[0].addChild( newItemConfig );
-      liveBoardAttached(data.user.name);
+      liveBoardAttached(`Got code from ${data.user.name}`);
 });
 
 function liveBoardAttached(btn){
 
   if(!btn.id){
-    text = `Got ${btn}'s code`;
+    text = btn;
   }else{
     name = document.querySelector(`[data-id='${btn.id}']`).innerText;
     text = `${name}'s board is added`;
@@ -350,7 +350,7 @@ function submitAssignment(data){
     to,from,resultString,codeString
   }
   socket.emit("submitAssignment",resultData);
-  alert("assignment submitted");
+  liveBoardAttached("assignment submitted");
   console.log("data send", resultData);
   }
 }
