@@ -275,13 +275,22 @@ function downloadSource() {
 function run(assignment = false) {
     activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
     activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
-
-    if (activeEditor[0].newEditor.getValue().trim() === "") {
-        showError("Error", "Source code can't be empty!");
-        return;
-    } else {
-        $runBtn.addClass("loading");
+    if(activeEditor[0]){
+        if (activeEditor[0].newEditor.getValue().trim() === "") {
+            showError("Error", "Source code can't be empty!");
+            return;
+        } else {
+            $runBtn.addClass("loading");
+        }
+    }else{
+        if (sourceEditor.getValue().trim() === "") {
+            showError("Error", "Source code can't be empty!");
+            return;
+        } else {
+            $runBtn.addClass("loading");
+        }
     }
+    
 
     
     document.getElementById("stdout-dot").hidden = true;
