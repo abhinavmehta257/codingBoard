@@ -14,6 +14,7 @@ function scrollToBottom() {
 isStream = false;
 isPreviouslyStreamed = false;
 previouslyStreamedEditor=[];
+firstTimeStream = true;
 function startStream(sourceEditor){
   require(["MonacoCollabExt"], function (MonacoCollabExt) {
   // activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
@@ -325,9 +326,34 @@ socket.on('startStream',function(){
       isPreviouslyStreamed = true;
       previouslyStreamedEditor.push(activeEditorname);
     }
-
     socket.emit("stream",{action:'code',code:stream.getValue(),lang:sourceEditor.getModel().getLanguageIdentifier().language});
+    if(firstTimeStream){
+      changeBoardStream();
+    }
 });
+
+function changeBoardStream(){
+    layout.root.contentItems[ 0 ].contentItems[0].on('activeContentItemChanged', function(component){
+      editorName = component.componentName;
+      activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+      console.log(component.componentName);
+      if(activeEditorname && activeEditorname!='source'){
+        activeEditor = editors.filter((editor)=>editor.editorId == editorName)[0].newEditor;
+        stream = activeEditor;
+      }else{
+        stream = sourceEditor;
+      }
+      if(isStream){
+        previousEditor = previouslyStreamedEditor.filter(editor => editor == activeEditorname)[0];
+        if(!previousEditor){
+          startStream(stream);
+          previouslyStreamedEditor.push(activeEditorname);
+        }
+        socket.emit("stream",{action:'boardChanged',code:stream.getValue()});
+      }
+    });
+    firstTimeStream = false;
+}
 
 socket.on('classEnded',function(){
   alert('Class is ended');

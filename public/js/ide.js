@@ -265,10 +265,7 @@ function downloadSource() {
        var sourceValue = sourceEditor.getValue();
        var fileName = fileNames[value]
     }
-
-    
-
-    download(sourceValue, fileName, "text/plain");
+ download(sourceValue, fileName, "text/plain");
 }
 
 

@@ -353,6 +353,12 @@ function addCollabExt(info,editor, sourceUserCursor){
         editor.revealLineInCenter(info.data.offset);
       }
       break;
+    case 'boardChanged':
+      editor.updateOptions({readOnly: false});
+      editor.setValue(info.data.code);
+      editor.updateOptions({readOnly: true}); 
+      console.log('boardChanged data:',info);
+      break;
     
   }
   });
