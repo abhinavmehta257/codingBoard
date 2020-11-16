@@ -43,7 +43,7 @@ var messagesData;
 var layoutConfig = {
     settings: {
         showPopoutIcon: false,
-        reorderEnabled: true
+        reorderEnabled: false
     },
     dimensions: {
         borderWidth: 3,
