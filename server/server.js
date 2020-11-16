@@ -143,7 +143,6 @@ io.on('connection',  (socket) => {
             io.sockets.sockets[codeData.to].emit("gotCode",{codeData,user});
             callback("code was sent to "+userTo.name);
           }
-          // console.log("server got code",codeData);
         }catch(err){
           console.log(err);
         }

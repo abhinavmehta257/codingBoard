@@ -1,4 +1,3 @@
-
 var defaultUrl = localStorageGetItem("api-url") || "https://judge0.p.rapidapi.com";
 var apiUrl = defaultUrl;
 var wait = localStorageGetItem("wait") || false;
@@ -102,6 +101,15 @@ var layoutConfig = {
                         type: "component",
                         componentName: "sandbox message",
                         title: "SANDBOX MESSAGE",
+                        isClosable: false,
+                        componentState: {
+                            readOnly: true
+                        }
+                    },
+                    {
+                        type: "component",
+                        componentName: "preview",
+                        title: "Preview",
                         isClosable: false,
                         componentState: {
                             readOnly: true
@@ -220,6 +228,15 @@ function handleResult(data, assignment =false) {
             $statusLine.removeClass("blink");
         }, 3000);
     }
+    
+    if($('#select-language').val() == '68'){
+        let iDoc = document.getElementById('preview').contentWindow.document;
+        iDoc.open();
+        iDoc.write(stdout);
+        iDoc.close(); 
+    }
+
+       
 
     stdoutEditor.setValue(stdout);
     stderrEditor.setValue(stderr);
@@ -228,6 +245,12 @@ function handleResult(data, assignment =false) {
 
     if (stdout !== "") {
         var dot = document.getElementById("stdout-dot");
+        if (!dot.parentElement.classList.contains("lm_active")) {
+            dot.hidden = false;
+        }
+    }
+    if (stdout !== "" && $('#select-language').val() == '68') {
+        var dot = document.getElementById("preview-dot");
         if (!dot.parentElement.classList.contains("lm_active")) {
             dot.hidden = false;
         }
@@ -299,6 +322,12 @@ function run(assignment = false) {
     stderrEditor.setValue("");
     compileOutputEditor.setValue("");
     sandboxMessageEditor.setValue("");
+
+        let iDoc = document.getElementById('preview').contentWindow.document;
+        iDoc.open();
+        iDoc.write("");
+        iDoc.close(); 
+
 
     if(activeEditor[0]){
        var sourceValue = encode(activeEditor[0].newEditor.getValue());
@@ -560,12 +589,23 @@ $(document).ready(function () {
 
     loadMessages();
 
+    
+
     require(["vs/editor/editor.main", "monaco-vim", "monaco-emacs"], function (ignorable, MVim, MEmacs) {
         layout = new GoldenLayout(layoutConfig, $("#site-content"));
 
         MonacoVim = MVim;
         MonacoEmacs = MEmacs;
 
+        layout.registerComponent('preview',function(container){
+            container.getElement().html( "<iframe style='background:white;width:inherit; height:inherit 'id='preview'></iframe>");
+            container.on("tab", function(tab) {
+                tab.element.append("<span id=\"preview-dot\" class=\"dot\" hidden></span>");
+                tab.element.on("mousedown", function(e) {
+                    e.target.closest(".lm_tab").children[3].hidden = true;
+                });
+            });
+        });
         layout.registerComponent("source", function (container, state) {
             sourceEditor = monaco.editor.create(container.getElement()[0], {
                 automaticLayout: true,
