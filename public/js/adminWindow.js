@@ -217,7 +217,7 @@ function getAssignmentCode(btn){
       
       let newEditor = monaco.editor.create(container.getElement()[0], {
           automaticLayout: true,
-          theme: "vs-dark",
+          // theme: "vs-dark",
           scrollBeyondLastLine: true,
           readOnly: state.readOnly,
           language: "cpp",
@@ -356,7 +356,8 @@ function addCollabExt(info,editor, sourceUserCursor){
     case 'boardChanged':
       editor.updateOptions({readOnly: false});
       editor.setValue(info.data.code);
-      editor.updateOptions({readOnly: true}); 
+      editor.updateOptions({readOnly: true});
+      monaco.editor.setModelLanguage(editor.getModel(), info.data.lang); 
       console.log('boardChanged data:',info);
       break;
     
@@ -386,7 +387,7 @@ function createStudentBoard(data){
   let newEditor = monaco.editor.create(codeArea, {
     automaticLayout: true,
     value:data.data.code,
-    theme: "vs-dark",
+    // theme: "vs-dark",
     scrollBeyondLastLine: true,
     readOnly: true,
     language: data.data.lang,

@@ -79,7 +79,7 @@ function addNewFile(isPrompt = false, name = ""){
             }
           let newEditor = monaco.editor.create(container.getElement()[0], {
               automaticLayout: true,
-              theme: "vs-dark",
+            //   theme: "vs-dark",
               scrollBeyondLastLine: true,
               readOnly: state.readOnly,
               language: "cpp",

@@ -260,7 +260,7 @@ socket.on("gotCode", function(data){
       
       let newEditor = monaco.editor.create(container.getElement()[0], {
           automaticLayout: true,
-          theme: "vs-dark",
+          // theme: "vs-dark",
           scrollBeyondLastLine: true,
           readOnly: state.readOnly,
           language: "cpp",
@@ -349,7 +349,7 @@ function changeBoardStream(){
           startStream(stream);
           previouslyStreamedEditor.push(activeEditorname);
         }
-        socket.emit("stream",{action:'boardChanged',code:stream.getValue()});
+        socket.emit("stream",{action:'boardChanged',code:stream.getValue(),lang:stream.getModel().getLanguageIdentifier().language});
       }
     });
     firstTimeStream = false;
