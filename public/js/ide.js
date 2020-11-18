@@ -81,6 +81,15 @@ var layoutConfig = {
                         componentState: {
                             readOnly: true
                         }
+                    },
+                    {
+                        type: "component",
+                        componentName: "preview",
+                        title: "Preview",
+                        isClosable: false,
+                        componentState: {
+                            readOnly: true
+                        }
                     }, {
                         type: "component",
                         componentName: "stderr",
@@ -101,15 +110,6 @@ var layoutConfig = {
                         type: "component",
                         componentName: "sandbox message",
                         title: "SANDBOX MESSAGE",
-                        isClosable: false,
-                        componentState: {
-                            readOnly: true
-                        }
-                    },
-                    {
-                        type: "component",
-                        componentName: "preview",
-                        title: "Preview",
                         isClosable: false,
                         componentState: {
                             readOnly: true
