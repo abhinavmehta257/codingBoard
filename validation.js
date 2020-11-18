@@ -2,7 +2,7 @@ const Joi = require('@hapi/joi');
 
 const registerValidation = data =>{
 const schema = Joi.object({
-    first_name: Joi.string().min(6).required(),
+    first_name: Joi.string().min(3).required(),
     last_name: Joi.string().min(0).required(),
     email: Joi.string().min(6).required().email(),
     password: Joi.string().min(6).required(),
@@ -23,10 +23,10 @@ const loginValidation = data =>{
 
 const scheduleValidation = data =>{
     const schema = new Joi.object({
-        topic:Joi.string().min(3).required(),
-        lang: Joi.required(),
-        date: Joi.date().required(),
-        time: Joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/)
+        topic   :   Joi.string().min(3).required(),
+        lang    :   Joi.required(),
+        date    :   Joi.date().required(),
+        time    :   Joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/)
     });
 
     return schema.validate(data);

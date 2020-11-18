@@ -229,6 +229,9 @@
         case "sendAssignment":
           openAssignmentPopup(selectedUserId);
           break;
+        case "getCode":
+           getCode(selectedUserId);
+           break;  
       }
 
 

@@ -1,5 +1,3 @@
-
-
 let socket = io();
 window.editors = [];
 let editorNumber=1;
@@ -12,6 +10,63 @@ function scrollToBottom() {
   let messages = document.querySelector('#messages').lastElementChild;
   messages.scrollIntoView();
 }
+
+isStream = false;
+isPreviouslyStreamed = false;
+previouslyStreamedEditor=[];
+firstTimeStream = true;
+function startStream(sourceEditor){
+  require(["MonacoCollabExt"], function (MonacoCollabExt) {
+  // activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+    
+  //   if(activeEditorname && activeEditorname!='source'){
+  //     activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname)[0].newEditor;
+  //     stream = activeEditor;
+  //   }else{
+  //     stream = sourceEditor;
+  //   }
+  
+    const sourceContentManager = new MonacoCollabExt.EditorContentManager({
+          editor: sourceEditor,
+          onInsert(index, text) {
+          if(isStream){
+          let action ='onInsert';
+          socket.emit("stream",{action,index,text});
+        }
+          },
+          onReplace(index, length, text) {
+          if(isStream){
+          let action ='onReplace';
+          socket.emit("stream",{action,index,length,text});
+          }
+          },
+          onDelete(index, length) {
+          if(isStream){
+          let action ='onDelete';
+          socket.emit("stream",{action,index,length});
+          }
+          }
+        });
+    
+  });
+  
+    sourceEditor.onDidChangeCursorPosition(e => {
+      const offset = sourceEditor.getModel().getOffsetAt(e.position);
+      if(isStream){
+      action = 'onDidChangeCursorPosition'
+      socket.emit("stream",{action,offset});
+      }
+    });
+
+    sourceEditor.onDidChangeCursorSelection(e => {
+      const startOffset = sourceEditor.getModel().getOffsetAt(e.selection.getStartPosition());
+      const endOffset = sourceEditor.getModel().getOffsetAt(e.selection.getEndPosition());
+      if(isStream){
+      action = 'onDidChangeCursorSelection';
+      socket.emit("stream",{action,startOffset,endOffset});
+      }
+    });
+  }
 
 function encode(str) {
   return btoa(unescape(encodeURIComponent(str || "")));
@@ -95,12 +150,13 @@ socket.on('disconnect', function() {
 
 socket.on('updateUsersList', function (users) {
   let ol = document.createElement('ul');
+  $('#numberOfUser').text(`Users(${users.length})`);
   // console.log(users);
   users.forEach(function (user) {
     const template = document.querySelector('#participent-template').innerHTML;
     const newUserTemplate = Mustache.render(template,{
       User:user,
-      func:'getCode(this)'
+      func:'getCodeStream(this)'
     })
     let li = document.createElement('li');
     li.innerHTML = newUserTemplate;
@@ -171,7 +227,7 @@ socket.on("giveCode",function(data){
     to,from,codeString
   }
   socket.emit("sendCode",codeData,function(message){
-    alert(message);
+    liveBoardAttached(message);
   });
   // console.log("user send code: ",codeData);
 })
@@ -198,14 +254,14 @@ socket.on("gotCode", function(data){
     layout.registerComponent(`${editorId}`, function(container, state){
        
       
-        container.getElement().html(`<button class="send-btn admin" style="float:right; padding:2px !important" id="${data.user.id}" onclick='sendCode(this)'>Send Code<button>`);
+        container.getElement().html(`<button class="send-btn admin" style="float:right; padding:2px !important" id="${data.user.id}" onclick='sendCode(this)'>Send Code to ${data.user.name}<button>`);
       if(data.codeData.assignment){
         container.getElement().html(`<button class="assignmentSubmitButton" style="float:right; padding:2px !important" id="${data.user.id}" onclick='run(true)'>Submit Code<button>`);
       }
       
       let newEditor = monaco.editor.create(container.getElement()[0], {
           automaticLayout: true,
-          theme: "vs-dark",
+          // theme: "vs-dark",
           scrollBeyondLastLine: true,
           readOnly: state.readOnly,
           language: "cpp",
@@ -221,6 +277,88 @@ socket.on("gotCode", function(data){
         });
         
       layout.root.contentItems[0].contentItems[0].addChild( newItemConfig );
+      liveBoardAttached(`Got code from ${data.user.name}`);
+});
+
+function liveBoardAttached(btn){
+
+  if(!btn.id){
+    text = btn;
+  }else{
+    name = document.querySelector(`[data-id='${btn.id}']`).innerText;
+    text = `${name}'s board is added`;
+  }
+  const template = document.querySelector('#snackbar-temp').innerHTML;
+    const newUserTemplate = Mustache.render(template,{
+      Text: text
+    })
+    let p = document.createElement("div");
+    p.innerHTML = newUserTemplate;
+
+  // Get the snackbar DIV
+  var x = document.getElementById("snackbar");
+    x.innerHTML = p.innerHTML;
+  // Add the "show" class to DIV
+  x.className = "show";
+  // raiseHandSound.play();
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+socket.on('stopStream',function(){
+  isStream = false;
+  console.log('stream: ',isStream);
+})
+
+socket.on('startStream',function(){
+  
+  isStream = true;
+  activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+    
+    if(activeEditorname && activeEditorname!='source'){
+      activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname)[0].newEditor;
+      stream = activeEditor;
+    }else{
+      stream = sourceEditor;
+    }
+    previousEditor = previouslyStreamedEditor.filter(editor => editor == activeEditorname)[0];
+    if(!isPreviouslyStreamed || !previousEditor){
+      startStream(stream);
+      isPreviouslyStreamed = true;
+      previouslyStreamedEditor.push(activeEditorname);
+    }
+    socket.emit("stream",{action:'code',code:stream.getValue(),lang:sourceEditor.getModel().getLanguageIdentifier().language});
+    if(firstTimeStream){
+      changeBoardStream();
+    }
+});
+
+function changeBoardStream(){
+    layout.root.contentItems[ 0 ].contentItems[0].on('activeContentItemChanged', function(component){
+      editorName = component.componentName;
+      activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+      console.log(component.componentName);
+      if(activeEditorname && activeEditorname!='source'){
+        activeEditor = editors.filter((editor)=>editor.editorId == editorName)[0].newEditor;
+        stream = activeEditor;
+      }else{
+        stream = sourceEditor;
+      }
+      if(isStream){
+        previousEditor = previouslyStreamedEditor.filter(editor => editor == activeEditorname)[0];
+        if(!previousEditor){
+          startStream(stream);
+          previouslyStreamedEditor.push(activeEditorname);
+        }
+        socket.emit("stream",{action:'boardChanged',code:stream.getValue(),lang:stream.getModel().getLanguageIdentifier().language});
+      }
+    });
+    firstTimeStream = false;
+}
+
+socket.on('classEnded',function(){
+  alert('Class is ended');
+  socket.disconnect();
 })
 
 function submitAssignment(data){
@@ -242,7 +380,7 @@ function submitAssignment(data){
     to,from,resultString,codeString
   }
   socket.emit("submitAssignment",resultData);
-  alert("assignment submitted");
+  liveBoardAttached("assignment submitted");
   console.log("data send", resultData);
   }
 }

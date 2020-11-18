@@ -51,14 +51,17 @@ router.post("/login",async (req,res)=>{
     
      // Validation
     const {error} = loginValidation(req.body);
-    if(error) return res.status(400).render('login', {title:'Login',error:error.details[0].message});
+    if(error) return res.status(400).send({error:error.details[0].message});
+    // if(error) return res.status(400).render('login', {title:'Login',error:error.details[0].message});
     //check user exist 
     const user = await User.findOne({email:req.body.email});
-    if(!user) return res.status(400).render('login', {title:'Login',error:"Email Or Password is wrong"});
+    if(!user) return res.status(400).send({error:"Email Or Password is wrong"});
+    // if(!user) return res.status(400).render('login', {title:'Login',error:"Email Or Password is wrong"});
     //check pass
     const validPass = await bcrypt.compare(req.body.password, user.password);
     if(!validPass){
-       return res.status(400).render('login', {title:'Login',error:"Email Or Password is wrong"});
+       return res.status(400).send({error:"Email Or Password is wrong"});
+      //  return res.status(400).render('login', {title:'Login',error:"Email Or Password is wrong"});
     }else{
     //create auth token
       const token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET);

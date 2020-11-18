@@ -113,3 +113,39 @@ textarea{
 .no-assignment{
     color: rgb(0,0,0, .5);
 }
+
+/* //live boards */
+
+.live_boards{
+    position: relative;
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background: #4f4f4f;
+    color: aliceblue;
+    padding: 20px;
+    overflow: scroll;
+    z-index: 1;
+    top: 0;
+    
+}
+
+
+.editor{
+    height: 230px;
+    color: white;
+}
+
+.live_boards .admin{
+    display: inline !important;
+}
+
+.leave_confirm{
+    color: black;
+    padding: 10px;
+    background: silver;
+    position: relative;
+    display: none;
+    z-index: 2;
+    border-radius: 5px;
+}

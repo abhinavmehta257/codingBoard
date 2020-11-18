@@ -16,10 +16,12 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="./js/libs/mustache.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/monaco-themes/dist/monaco-themes.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout.min.js" integrity="sha256-NhJAZDfGgv4PiB+GVlSrPdh3uc75XXYSM4su8hgTchI=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-base.css" integrity="sha256-oIDR18yKFZtfjCJfDsJYpTBv1S9QmxYopeqw2dO96xM=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-dark-theme.css" integrity="sha256-ygw8PvSDJJUGLf6Q9KIQsYR3mOmiQNlDaxMLDOx9xL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/monaco-collab-ext.css">
 
     <script>
         var require = {
@@ -33,20 +35,24 @@
     <script src="https://unpkg.com/monaco-editor/min/vs/loader.js"></script>
     <script src="https://unpkg.com/monaco-editor@0.18.1/min/vs/editor/editor.main.nls.js"></script>
     <script src="https://unpkg.com/monaco-editor@0.18.1/min/vs/editor/editor.main.js"></script>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
 
     <script type="text/javascript" src="./third_party/download.js"></script>
+    <script type="text/javascript" src="./js/libs/monaco-collab-ext.js"></script>
+    <script type="text/javascript" src="./js/editorTheme.js"></script>
+
 
     <script id="ide" type="text/javascript" src="./js/ide.js"></script>
+    <!-- <script id="ide" type="text/javascript" src="./js/liveCodeStream.js"></script> -->
 
     <link type="text/css" rel="stylesheet" href="./css/ide.css">
 
     <title>CodingRoom</title>
-    <!-- <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon"> -->
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -59,7 +65,6 @@
         gtag('config', 'UA-155566684-2');
         </script>
 
-    <!-- <meta name="viewport" content="width=device-width, inital-scale=1, user-scalable=no"> -->
     <link rel="stylesheet" href="./css/styles.css">
     
 </head>
@@ -69,15 +74,17 @@
       <div class="collapsers">
         <div class="participentList">
           <div class="chat__sidebar">
-            <h3>People</h3>
+            <h3>Participents</h3>
+            <p id='numberOfUser' style="color: white; padding-left:20px;">users(0)</p>
             <hr>
-            <input id="participant_earch" type="text" placeholder="Search participant..">
-            <div id="users" class="participants"></div>
+            <input id="participant_search" type="text" placeholder="Search participant..">
+            <div id="users" class="participants"  style="text-align: center;"></div>
           </div>
-          <button id="sidebar-collapser" onclick="participentListToggle()"><span style="padding: 2px;">Participent</span></button>
+          <button id="sidebar-collapser" onclick="participentListToggle()"><span style="padding: 2px;">Participant</span></button>
         </div>
          
         <div class="chat">
+            
           <div class="chat__main">
             <ol id="messages" class="chat__messages"></ol>
             <div id="to">
@@ -114,7 +121,7 @@
         </script>
 
         <script id="participent-template" type="text/template">
-        {{User.name}} {{^User.isAdmin}}<button class="getCode admin" id="{{{User.id}}}" title= "GetCode" onclick="{{func}}"><\></button>{{/User.isAdmin}}{{#User.isAdmin}}(Host){{/User.isAdmin}}
+        {{User.name}} {{^User.isAdmin}}<button class="  getCode admin" id="{{{User.id}}}" title= "Realtime student's code" onclick="{{func}}"><i class="fas fa-external-link-alt"></i></button>{{/User.isAdmin}}{{#User.isAdmin}}(Host){{/User.isAdmin}}
         </script>
 
       </div>
@@ -124,10 +131,8 @@
     </div>
     <div id="site-navigation" class="ui small inverted menu">
         <div id="site-header" class="header item">
-            <a href="/">
                 <img id="site-icon" src="./images/codingRoomLogo.png">
-                <h2>Coding<span style="color: #0e7fc9; font-size: inherit !important;">Room</span></h2>
-            </a>
+                <h2 style="margin-top:0 ;">Coding<span style="color: #0e7fc9; font-size: inherit !important;">Room</span></h2>
         </div>
         <div class="left menu">
             <div class="ui dropdown item site-links on-hover">
@@ -136,105 +141,119 @@
                     <a class="item" onclick="addNewFile(false, prompt('File Name'))"><i class="file code icon"></i> New File</a>
                     <!-- <div class="item" onclick="save()"><i class="save icon"></i> Save (Ctrl + S)</div> -->
                     <div class="item" onclick="downloadSource()"><i class="download icon"></i> Download</div>
-                    <div class="item admin send-prompt" onclick="addNewFile(true)"><i class="file code icon "></i> Send Prompt</div>
+                    <div class="item admin send-prompt" onclick="sendCode()"><i class="file code icon "></i> Send To all</div>
                     <div class="item admin send-assignment" onclick="openAssignmentPopup('all')"><i class="file code icon "></i> Send Assignment</div>
                     <div class="item submit-as-assignment" onclick="run(true)"><i class="file code icon "></i> submit as Assignment</div>
-                    <!-- <div class="item"><i class="share icon"></i> Share</div> -->
+                    <!-- <div class=""> -->
+                        <select id=lang class = 'ui item dropdown'>
+                        <option value="">Themes</option>
+                        <option value="vs-dark" >Vs dark</option>
+                        <option value="vs">Vs Light</option>
+                        <option value="hc-black">hc-black</option>
+                      </select>
                     <!-- <div id="insert-template-btn" class="item"><i class="file code outline icon"></i> Insert template
                         for current language</div> -->
                 </div>
             </div>
-            <div class="link item" onclick="$('#site-settings').modal('show')"><i class="cog icon"></i> Settings</div>
+            <!-- <div class="link item" onclick="$('#site-settings').modal('show')"><i class="cog icon"></i> Settings</div> -->
             <div class="item borderless">
                 <select id="select-language" class="ui dropdown">
-                    <!-- <option value="45" mode="UNKNOWN">Assembly (NASM 2.14.02)</option> Unknown mode. Help needed. -->
                     <option value="46" mode="shell">Bash (5.0.0)</option>
-                    <!-- <option value="47" mode="UNKNOWN">Basic (FBC 1.07.1)</option> Unknown mode. Help needed. -->
-                    <!-- <option value="1011" mode="UNKNOWN">Bosque (latest)</option>  Unknown mode. Help needed. -->
                     <option value="75" mode="c">C (Clang 7.0.1)</option>
-                    <option value="1013" mode="c">C (Clang 9.0.1)</option>
-                    <option value="1001" mode="c">C (Clang 10.0.1)</option>
                     <option value="48" mode="c">C (GCC 7.4.0)</option>
                     <option value="49" mode="c">C (GCC 8.3.0)</option>
-                    <!-- <option value="50" mode="c">C (GCC 9.2.0)</option> -->
                     <option value="51" mode="csharp">C# (Mono 6.6.0.161)</option>
-                    <option value="1017" mode="csharp">C# (Mono 6.10.0.104)</option>
-                    <option value="1016" mode="csharp">C# (.NET Core SDK 3.1.302)</option>
-                    <option value="1018" mode="csharp">C# Test (.NET Core SDK 3.1.302, NUnit 3.12.0)</option>
                     <option value="76" mode="cpp">C++ (Clang 7.0.1)</option>
-                    <option value="1014" mode="cpp">C++ (Clang 9.0.1)</option>
-                    <option value="1002" mode="cpp">C++ (Clang 10.0.1)</option>
                     <option value="52" mode="cpp">C++ (GCC 7.4.0)</option>
                     <option value="53" mode="cpp">C++ (GCC 8.3.0)</option>
-                    <!-- <option value="54" mode="cpp">C++ (GCC 9.2.0)</option> -->
-                    <option value="1015" mode="cpp">C++ Test (Clang 10.0.1, Google Test 1.8.1)</option>
-                    <option value="1012" mode="cpp">C++ Test (GCC 8.4.0, Google Test 1.8.1)</option>
-                    <!-- <option value="1003" mode="c">C3 (latest)</option> Replacement mode. Help needed. -->
                     <option value="86" mode="clojure">Clojure (1.10.1)</option>
-                    <!-- <option value="77" mode="UNKNOWN">COBOL (GnuCOBOL 2.2)</option> Unknown mode. Help needed. -->
-                    <!-- <option value="55" mode="UNKNOWN">Common Lisp (SBCL 2.0.0)</option> Unknown mode. Help needed. -->
-                    <!-- <option value="56" mode="UNKNOWN">D (DMD 2.089.1)</option> Unknown mode. Help needed. -->
-                    <!-- <option value="57" mode="UNKNOWN">Elixir (1.9.4)</option> Unknown mode. Help needed. -->
-                    <!-- <option value="58" mode="UNKNOWN">Erlang (OTP 22.2)</option> Unknown mode. Help needed. -->
                     <option value="44" mode="plaintext">Executable</option>
                     <option value="87" mode="fsharp">F# (.NET Core SDK 3.1.202)</option>
                     <option value="1019" mode="fsharp">F# (.NET Core SDK 3.1.302)</option>
-                    <!-- <option value="59" mode="UNKNOWN">Fortran (GFortran 9.2.0)</option> Unknown mode. Help needed. -->
                     <option value="60" mode="go">Go (1.13.5)</option>
-                    <!-- <option value="88" mode="UNKNOWN">Groovy (3.0.3)</option> Unknown mode. Help needed. -->
-                    <!-- <option value="61" mode="UNKNOWN">Haskell (GHC 8.8.1)</option> Unknown mode. Help needed. -->
                     <option value="62" mode="java">Java (OpenJDK 13.0.1)</option>
-                    <option value="1004" mode="java">Java (OpenJDK 14.0.1)</option>
-                    <option value="1005" mode="java">Java Test (OpenJDK 14.0.1, JUnit Platform Console Standalone 1.6.2)</option>
                     <option value="63" mode="javascript">JavaScript (Node.js 12.14.0)</option>
                     <option value="78" mode="kotlin">Kotlin (1.3.70)</option>
                     <option value="64" mode="lua">Lua (5.3.5)</option>
-                    <option value="1006" mode="c">MPI (OpenRTE 3.1.3) with C (GCC 8.3.0)</option>
-                    <option value="1007" mode="cpp">MPI (OpenRTE 3.1.3) with C++ (GCC 8.3.0)</option>
-                    <option value="1008" mode="python">MPI (OpenRTE 3.1.3) with Python (3.7.3)</option>
-                    <!-- <option value="1009" mode="python">Nim (stable)</option> Replacement mode. Help needed. -->
                     <option value="79" mode="objective-c">Objective-C (Clang 7.0.1)</option>
-                    <!-- <option value="65" mode="UNKNOWN">OCaml (4.09.0)</option> Unknown mode. Help needed. -->
-                    <!-- <option value="66" mode="UNKNOWN">Octave (5.1.0)</option> Unknown mode. Help needed. -->
                     <option value="67" mode="pascal">Pascal (FPC 3.0.4)</option>
                     <option value="85" mode="perl">Perl (5.28.1)</option>
                     <option value="68" mode="php">PHP (7.4.1)</option>
                     <option value="43" mode="plaintext">Plain Text</option>
-                    <!-- <option value="69" mode="UNKNOWN">Prolog (GNU Prolog 1.4.5)</option> Unknown mode. Help needed. -->
                     <option value="70" mode="python">Python (2.7.17)</option>
                     <option value="71" mode="python">Python (3.8.1)</option>
-                    <option value="1010" mode="python">Python for ML (3.7.3)</option>
                     <option value="80" mode="r">R (4.0.0)</option>
                     <option value="72" mode="ruby">Ruby (2.7.0)</option>
                     <option value="73" mode="rust">Rust (1.40.0)</option>
-                    <!-- <option value="81" mode="UNKNOWN">Scala (2.13.2)</option> Unknown mode. Help needed. -->
                     <option value="82" mode="sql">SQL (SQLite 3.27.2)</option>
                     <option value="83" mode="swift">Swift (5.2.3)</option>
                     <option value="74" mode="typescript">TypeScript (3.7.4)</option>
-                    <!-- <option value="84" mode="vb">Visual Basic.Net (vbnc 0.0.0.5943)</option> (vbnc 0.0.0.5943) -->
                 </select>
             </div>
-            <div class="item fitted borderless wide screen only">
+            <!-- <div class="item fitted borderless wide screen only">
                 <div class="ui input">
                     <input id="compiler-options" type="text" placeholder="Compiler options"></input>
                 </div>
-            </div>
+            </div> -->
             <div class="item borderless wide screen only">
                 <div class="ui input">
                     <input id="command-line-arguments" type="text" placeholder="Command line arguments"></input>
                 </div>
             </div>
+            <div class="item borderless wide screen only" >
+                <!-- <select id=lang class = 'ui dropdown'>
+                  <option value="vs-dark" selected>Default</option>
+                  <option value="vs">Vs Light</option>
+                  <option value="hc-black">hc-black</option>
+                </select> -->
+              </div>
             <div class="item no-left-padding borderless">
                 <button id="run-btn" class="ui primary labeled icon button"><i class="play icon"></i>Run (F9)</button>
+            </div>
+            
+            <div class="item no-left-padding borderless admin">
+                <button id="run-btn" style="padding: 5px 20px; border-radius: 5px;" onclick="liveBoardsToggle()" class="ui primary labeled admin icon ">Show students editor</button>
+            </div>
+            <div class="item no-left-padding borderless admin">
+                <button style="background: red; padding: 5px 20px; border-radius: 5px;"id="leave" onclick="leaveRoomToggle()" class="ui primary labeled admin icon ">Leave</button>
+                <div class="leave_confirm">
+                    <button style="background: red; padding: 5px 20px; border-radius: 5px;"id="leave" onclick="endAndLeaveRoom()" class="ui primary labeled admin icon ">Confirm Leave and end class</button>
+                </div>
+            </div>
+            <div class="item no-left-padding borderless info">
+                <i class="fas info-icon fa-info-circle" onclick="showInfoToggle()"></i><br>
+                <div class="information">
+                    <h2>CodingRoom</h2>
+                    <p>Room ID :  <span class="roomId" style="padding-left: 5px;"></span><br></p>
+                    <p>language : <span class="language" style="padding-left: 5px;"></span><br></p>
+                    <p>Link :  <span class="link" style="padding-left: 5px;"></span></p>
+                    <span style='cursor:pointer' id="info-link">COPY <span></span><i class="fas fa-copy"></i>
+                </div>
             </div>
             <div id="navigation-message" class="item borderless">
                 <span class="navigation-message-text"></span>
             </div>
         </div>
     </div>
-
+    
     <div id="site-content"></div>
-
+    <div class="live_boards ">
+        <span style=" margin-right: 20px;" onclick='liveBoardsToggle()' class="close admin">x</span>
+        <div  style="display:inline ">
+            
+            <h1 class="admin">Students Code</h1>
+            <label style="padding-left: 50px;">Select layout</label>
+            <select  style='background-color: aliceblue;border-radius: 5px;'name="studentBoardSize" id="studentBoardSize" placeholder="Change Board size">
+                <option value="col-3 p-1">8 at a time</option>
+                <option value="col-4 p-1">6 at a time</option>
+                <option value="col-6 p-1">4 at a time</option>
+                <option value="2">2 at a time</option>
+            </select>
+            <input id="participant_search_board" type="text" placeholder="Search student board..">
+            <p >GOTO: Participant > click on "<button class="getCode admin" style="padding: 5px;border-radius: 5px;"><i class="fas fa-external-link-alt"></i></button>" To add student's realtime code</p>
+        </div>
+        <div class="boards row m-0 p-3"></div>
+    </div>
     <div id="site-modal" class="ui modal">
         <div class="header">
             <i class="close icon"></i>
@@ -288,6 +307,10 @@
         </div>
     </div>
 
+    <!-- realtime student board attached -->
+<div id="snackbar"></div>
+<script id="snackbar-temp"  type="text/template">{{Text}}</script>
+
 <!-- Context menu-->
  <nav id="context-menu" class="context-menu">
     <ul class="context-menu__items">
@@ -295,6 +318,7 @@
         <a href="#" class="context-menu__link" data-action="makeAdmin">Make host</a>
         <a href="#" class="context-menu__link" data-action="removeUser">Remove user</a>
         <a href="#" class="context-menu__link" data-action="sendAssignment">Send Assignment</a>
+        <a href="#" class="context-menu__link" data-action="getCode">Get Code</a>
       </li>
     </ul>
   </nav>
@@ -305,12 +329,12 @@
 </div>
 <div id="studentAssignments">
     <button style="float: left;" onclick="downloadAssignments()">Download</button><div onclick="assignmentToggle()" style="cursor: pointer;"><h4 style="margin-top: 0;">Assignments</h4></div><span class="close">&times;</span>
-    <input id="participant_earch_assignment" type="text" placeholder="Search participant..">
+    <input id="participant_search_assignment" type="text" placeholder="Search participant..">
     <div id="studentAssignmentsList"> <h1 class="no-assignment">No assignment to view</h1> <p>GOTO: File>send Assignment, to send new assignment</p> </div>
 </div>
     
     <div>
-        <input id="cb" type="text" hidden>
+        <input id="cb" type="text" style="display: none;">
         <script id="chatInteraction" type="text/javascript" src="./js/chat_interaction.js"></script>
         <script id="chat" type="text/javascript" src="./js/chat.js"></script>
       </div>

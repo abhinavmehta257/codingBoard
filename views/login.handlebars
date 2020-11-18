@@ -1,6 +1,7 @@
 <div class="signup-form">
 	<h1>Coding <span>Room</span></h1>
-    <form id="login-form" action="/login" method="POST">
+    <form action="/login" method="POST">
+    <div id="login-form">
 		<h2>Login</h2>
 		<hr>
         <div class="form-group">
@@ -10,13 +11,15 @@
             <input type="password" class="form-control" name="password" placeholder="Password" required="required">
         </div>
 		<div class="form-group">
-            <button onclick="postData()"  class="btn btn-primary btn-lg">Login</button>
+            <button onclick="postData()"style="background:#06294b ;" class="login-btn btn btn-primary btn-lg">Login</button>
         </div>
         <p id="error">{{error}}</p>
+    </div>
     </form>
 	<div class="hint-text">Don't have an account? <a href="/register">Signup here</a></div>
 </div>
 <script>
+    //
     function setCookie(name,value,days) {
         var expires = "";
         if (days) {
@@ -29,11 +32,19 @@
    success = function(res){
        token = post.getResponseHeader('auth-token');
        setCookie('authentication',token,3);
-       console.log(res);
+       //console.log(res);
        location.replace("/dashboard");
+       $('.login-btn').html(`Login`);
        
     }
+    fail = function(res){
+        //console.log(res);
+        $('.login-btn').html(`Login`);
+    }
 	function postData(){
+        $('.login-btn').html(`<i class="fa fa-refresh fa-spin"></i>`);
+        $('.login-btn').prop("disabled", true);
+        //console.log($(this))
 		userEmail = document.querySelector('input[name="email"]').value;
 		userPassword = document.querySelector('input[name="password"]').value;
 		let data = {email:userEmail, password:userPassword};
@@ -43,6 +54,10 @@
                 url: '/login',
                 data: data,
                 success: success
-            });                                                                                 
+                }).fail(function(res) { 
+                    $('.login-btn').html(`Login`);
+                    $('.login-btn').prop("disabled", false);
+                    $('#error').html(res.responseJSON.error);
+                });;                                                                                
 	}
 </script>

@@ -42,7 +42,7 @@ var messagesData;
 var layoutConfig = {
     settings: {
         showPopoutIcon: false,
-        reorderEnabled: true
+        reorderEnabled: false
     },
     dimensions: {
         borderWidth: 3,
@@ -77,6 +77,15 @@ var layoutConfig = {
                         type: "component",
                         componentName: "stdout",
                         title: "STDOUT",
+                        isClosable: false,
+                        componentState: {
+                            readOnly: true
+                        }
+                    },
+                    {
+                        type: "component",
+                        componentName: "preview",
+                        title: "Preview",
                         isClosable: false,
                         componentState: {
                             readOnly: true
@@ -219,6 +228,15 @@ function handleResult(data, assignment =false) {
             $statusLine.removeClass("blink");
         }, 3000);
     }
+    
+    if($('#select-language').val() == '68'){
+        let iDoc = document.getElementById('preview').contentWindow.document;
+        iDoc.open();
+        iDoc.write(stdout);
+        iDoc.close(); 
+    }
+
+       
 
     stdoutEditor.setValue(stdout);
     stderrEditor.setValue(stderr);
@@ -227,6 +245,12 @@ function handleResult(data, assignment =false) {
 
     if (stdout !== "") {
         var dot = document.getElementById("stdout-dot");
+        if (!dot.parentElement.classList.contains("lm_active")) {
+            dot.hidden = false;
+        }
+    }
+    if (stdout !== "" && $('#select-language').val() == '68') {
+        var dot = document.getElementById("preview-dot");
         if (!dot.parentElement.classList.contains("lm_active")) {
             dot.hidden = false;
         }
@@ -264,83 +288,31 @@ function downloadSource() {
        var sourceValue = sourceEditor.getValue();
        var fileName = fileNames[value]
     }
-
-    
-
-    download(sourceValue, fileName, "text/plain");
+ download(sourceValue, fileName, "text/plain");
 }
 
-function loadSavedSource() {
-    snippet_id = getIdFromURI();
-
-    if (snippet_id.length == 36) {
-        $.ajax({
-            url: apiUrl + "/submissions/" + snippet_id + "?fields=source_code,language_id,stdin,stdout,stderr,compile_output,message,time,memory,status,compiler_options,command_line_arguments&base64_encoded=true",
-            type: "GET",
-            headers: {
-                "x-rapidapi-host": "judge0.p.rapidapi.com",
-                "x-rapidapi-key": "b02959f027msh6d79ce58f0aee8ep11f50cjsn008a6c0de58b"
-            },
-            success: function(data, textStatus, jqXHR) {
-                sourceEditor.setValue(decode(data["source_code"]));
-                $selectLanguage.dropdown("set selected", data["language_id"]);
-                $compilerOptions.val(data["compiler_options"]);
-                $commandLineArguments.val(data["command_line_arguments"]);
-                stdinEditor.setValue(decode(data["stdin"]));
-                stdoutEditor.setValue(decode(data["stdout"]));
-                stderrEditor.setValue(decode(data["stderr"]));
-                compileOutputEditor.setValue(decode(data["compile_output"]));
-                sandboxMessageEditor.setValue(decode(data["message"]));
-                var time = (data.time === null ? "-" : data.time + "s");
-                var memory = (data.memory === null ? "-" : data.memory + "KB");
-                $statusLine.html(`${data.status.description}, ${time}, ${memory}`);
-                changeEditorLanguage();
-            },
-            error: handleRunError
-        });
-    } else if (snippet_id.length == 4) {
-        $.ajax({
-            url: pbUrl + "/" + snippet_id + ".json",
-            type: "GET",
-            headers: {
-                "x-rapidapi-host": "judge0.p.rapidapi.com",
-                "x-rapidapi-key": "b02959f027msh6d79ce58f0aee8ep11f50cjsn008a6c0de58b"
-            },
-            success: function (data, textStatus, jqXHR) {
-                sourceEditor.setValue(decode(data["source_code"]));
-                $selectLanguage.dropdown("set selected", data["language_id"]);
-                $compilerOptions.val(data["compiler_options"]);
-                $commandLineArguments.val(data["command_line_arguments"]);
-                stdinEditor.setValue(decode(data["stdin"]));
-                stdoutEditor.setValue(decode(data["stdout"]));
-                stderrEditor.setValue(decode(data["stderr"]));
-                compileOutputEditor.setValue(decode(data["compile_output"]));
-                sandboxMessageEditor.setValue(decode(data["sandbox_message"]));
-                $statusLine.html(decode(data["status_line"]));
-                changeEditorLanguage();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                showError("Not Found", "Code not found!");
-                window.history.replaceState(null, null, location.origin + location.pathname);
-                loadRandomLanguage();
-            }
-        });
-    } else {
-        loadRandomLanguage();
-    }
-}
 
 function run(assignment = false) {
-    if (sourceEditor.getValue().trim() === "") {
-        showError("Error", "Source code can't be empty!");
-        return;
-    } else {
-        $runBtn.addClass("loading");
-    }
-
     activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
     activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
+    if(activeEditor[0]){
+        if (activeEditor[0].newEditor.getValue().trim() === "") {
+            showError("Error", "Source code can't be empty!");
+            return;
+        } else {
+            $runBtn.addClass("loading");
+        }
+    }else{
+        if (sourceEditor.getValue().trim() === "") {
+            showError("Error", "Source code can't be empty!");
+            return;
+        } else {
+            $runBtn.addClass("loading");
+        }
+    }
+    
 
+    
     document.getElementById("stdout-dot").hidden = true;
     document.getElementById("stderr-dot").hidden = true;
     document.getElementById("compile-output-dot").hidden = true;
@@ -350,6 +322,12 @@ function run(assignment = false) {
     stderrEditor.setValue("");
     compileOutputEditor.setValue("");
     sandboxMessageEditor.setValue("");
+
+        let iDoc = document.getElementById('preview').contentWindow.document;
+        iDoc.open();
+        iDoc.write("");
+        iDoc.close(); 
+
 
     if(activeEditor[0]){
        var sourceValue = encode(activeEditor[0].newEditor.getValue());
@@ -433,6 +411,8 @@ function run(assignment = false) {
     }
 }
 
+
+
 function fetchSubmission(submission_token,assignment = false) {
     $.ajax({
         url: apiUrl + "/submissions/" + submission_token + "?base64_encoded=true",
@@ -470,8 +450,8 @@ function insertTemplate() {
 
 function loadRandomLanguage() {
     
-    // let searchQuery = window.location.search.substring(1);
-    // let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
+    let searchQuery = window.location.search.substring(1);
+    let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
     $selectLanguage.dropdown("set selected",params.lang );
     apiUrl = resolveApiUrl($selectLanguage.val());
     insertTemplate();
@@ -609,12 +589,23 @@ $(document).ready(function () {
 
     loadMessages();
 
+    
+
     require(["vs/editor/editor.main", "monaco-vim", "monaco-emacs"], function (ignorable, MVim, MEmacs) {
         layout = new GoldenLayout(layoutConfig, $("#site-content"));
 
         MonacoVim = MVim;
         MonacoEmacs = MEmacs;
 
+        layout.registerComponent('preview',function(container){
+            container.getElement().html( "<iframe style='background:white;width:inherit; height:inherit 'id='preview'></iframe>");
+            container.on("tab", function(tab) {
+                tab.element.append("<span id=\"preview-dot\" class=\"dot\" hidden></span>");
+                tab.element.on("mousedown", function(e) {
+                    e.target.closest(".lm_tab").children[3].hidden = true;
+                });
+            });
+        });
         layout.registerComponent("source", function (container, state) {
             sourceEditor = monaco.editor.create(container.getElement()[0], {
                 automaticLayout: true,
@@ -635,13 +626,10 @@ $(document).ready(function () {
                 isEditorDirty = sourceEditor.getValue() != sources[currentLanguageId];
             });
 
-            sourceEditor.onDidLayoutChange(resizeEditor);
+                sourceEditor.onDidLayoutChange(resizeEditor);
         });
 
-        layout.registerComponent("video", function(container, state){
-            container.getElement().html( `<div id="localTrack" style="width: inherit; height: inherit;" ></div>` );
-            
-        });
+        
         layout.registerComponent("stdin", function (container, state) {
             stdinEditor = monaco.editor.create(container.getElement()[0], {
                 automaticLayout: true,
@@ -765,6 +753,13 @@ $(document).ready(function () {
    
 
 });
+
+
+document.addEventListener('keydown', function(e){
+    if(e.key == 'F9'){
+        run();
+    }
+})
 
 // document.getElementById("localTrack").addEventListener("dblclick",()=>{
 //                 fullscreenToggle();

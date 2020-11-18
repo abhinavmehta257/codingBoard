@@ -16,7 +16,7 @@ class assignments{
     let assignment = this.assignments.filter((assignment) => assignment.user.id == id)[0];
     return assignment;
   }
-ev
+
   addAssignment(assignment){
     let currentAssignment = this.getAssignment(assignment.user.id);
     if(currentAssignment){
@@ -46,13 +46,19 @@ function removeUser(id){
     }
 };
 
-function getCode(btn){
-    userId = btn.id;
+function getCode(id){
+    userId = id;
     senderId = socket.id;
     data = {userId, senderId}
     socket.emit("getCode",data)
 }
 
+function removeAllStudentBoards(){
+  block = document.getElementsByClassName('student-board');
+  for(i=0;i<block.length;i++){
+    block[i].style.remove();
+    }
+}
 
 function sendCode(btn = null){
   if(btn!= null){
@@ -64,20 +70,27 @@ function sendCode(btn = null){
   }
     
   var from = socket.id;
-  activeEditorCode = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().container.getElement()[0].getElementsByClassName("view-lines")[0].innerText;
+  // activeEditorCode = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().container.getElement()[0].getElementsByClassName("view-lines")[0].innerText;
+  activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+    activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
 
+    if(activeEditor[0]){
+      var codeString = encode(activeEditor[0].newEditor.getValue());
+   }else{
+     var codeString = encode(sourceEditor.getValue());
+   }
   // console.log(activeEditorCode);
-    if(activeEditorCode){
-        codeString = encode(activeEditorCode);
-    }else{
-     codeString = encode(sourceEditor.getValue());
-    }
+    // if(activeEditorCode){
+    //     codeString = encode(activeEditorCode);
+    // }else{
+    //  codeString = encode(sourceEditor.getValue());
+    // }
     
   codeData = {
     to,from,codeString,assignment //------------------
   }
   socket.emit("sendCode",codeData,function(message){
-    alert(message);
+    liveBoardAttached(message);
   });
 
 }
@@ -130,7 +143,7 @@ function sendAssignment(reciver = 'all'){
     to,from,codeString,assignment //------------------
   }
   socket.emit("sendCode",codeData,function(msg){
-    alert(msg);
+    liveBoardAttached(msg);
     closePopup();
   });
   if(reciver =='all'){
@@ -144,8 +157,6 @@ function sendAssignment(reciver = 'all'){
 
 function makeAdmin(id){
   socket.emit("makeAdmin",{id});
-    socket.emit("muteVideo");
-    socket.emit("muteAudio");
     $('.admin').remove();
    
 }
@@ -206,7 +217,7 @@ function getAssignmentCode(btn){
       
       let newEditor = monaco.editor.create(container.getElement()[0], {
           automaticLayout: true,
-          theme: "vs-dark",
+          // theme: "vs-dark",
           scrollBeyondLastLine: true,
           readOnly: state.readOnly,
           language: "cpp",
@@ -262,17 +273,208 @@ function assignmentToggle(){
   }
 }
 
-const invite_btn = document.querySelector('#invite');
-
-invite_btn.addEventListener('click', function(){
-       console.log('invie btn clicked');
-       let searchQuery = window.location.search.substring(1);
-       let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
-       link = `${window.location.origin}/codingboard/join?roomId=${params.roomId}&lang=${params.lang}`;
-       copy(link);  
-   });
-
-
 $("#studentAssignments .close").on('click', function(){
   assignmentToggle();
+})
+
+
+function getCodeStream(btn) {
+  id = btn.id;
+  let student =  studentBoards.filter((editor)=>editor.editorId == id);
+  if(student.length == 0){
+    data ={
+      senderId:socket.id,
+      userId:id
+    }
+    socket.emit('startStream',data);
+    liveBoardAttached(btn);
+  }
+  
+}
+let studentsourceUserCursor = [];
+let studentBoards = [];
+// let remoteSelectionManager;
+socket.on("streamStarted", function(info) {
+  // console.log(info);
+  let studentEditor =  studentBoards.filter((editor)=>editor.editorId == info.user.id)[0];
+  if(studentEditor){
+    let cursor = studentsourceUserCursor.filter((cursor)=>cursor.id == info.user.id);
+    if(cursor.length == 0){
+      sourceUserCursor = null;
+    }else{
+      sourceUserCursor = cursor[0].cursor;
+    }
+    addCollabExt(info,studentEditor.editor,sourceUserCursor);
+  }else{
+    createStudentBoard(info);
+  }
+});
+
+isStudentBoardInFocus = false;
+
+function addCollabExt(info,editor, sourceUserCursor){
+  require(["MonacoCollabExt"], function (MonacoCollabExt) {
+    
+    const remoteCursorManager = new MonacoCollabExt.RemoteCursorManager({
+      editor: editor,
+      tooltips: true,
+      tooltipDuration: 2
+    });
+     
+    if(!sourceUserCursor || sourceUserCursor == null){
+       sourceUserCursor = remoteCursorManager.addCursor('source', 'orange',info.user.name);
+       studentsourceUserCursor.push({id:info.user.id, cursor:sourceUserCursor});
+    }
+    
+    
+  const targetContentManager = new MonacoCollabExt.EditorContentManager({
+    editor: editor
+  });
+  let action = info.data.action;
+  switch (action){
+    case "onInsert":
+      editor.updateOptions({readOnly: false});
+      targetContentManager.insert(info.data.index, info.data.text);
+      editor.updateOptions({readOnly: true});  
+      break;
+    case "onReplace":
+      editor.updateOptions({readOnly: false});
+      targetContentManager.replace(info.data.index, info.data.length, info.data.text);
+      editor.updateOptions({readOnly: true});
+      break; 
+    case  "onDelete":
+      editor.updateOptions({readOnly: false});
+      targetContentManager.delete(info.data.index, info.data.length);
+      editor.updateOptions({readOnly: true}); 
+    break;
+    case "onDidChangeCursorPosition":
+      sourceUserCursor.setOffset(info.data.offset);
+      if(!isStudentBoardInFocus){
+        editor.revealLineInCenter(info.data.offset);
+      }
+      break;
+    case 'boardChanged':
+      editor.updateOptions({readOnly: false});
+      editor.setValue(info.data.code);
+      editor.updateOptions({readOnly: true});
+      monaco.editor.setModelLanguage(editor.getModel(), info.data.lang); 
+      console.log('boardChanged data:',info);
+      break;
+    
+  }
+  });
+}
+
+function createStudentBoard(data){
+ 
+  let board = document.createElement('div');
+  if(studentBoardSize.value != '2'){
+    board.className = `${studentBoardSize.value} mb-5 student-board`;
+    board.style.height = '230px';
+  }else{
+    board.className = `col-6 p-1 mb-5 student-board`;
+    board.style.height = '460px';
+  }
+  
+  // board. = "student-board";
+  // board.style.background = 'whitesmoke';
+  board.style.color = 'black';
+  board.style.borderRadius = '10px';
+  id = data.user.id;
+  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px;height: inherit;"><span data-id='${id}' onclick='stopStream(this)' class="close">×</span><p class = 'name' style="padding-left:20px">${data.user.name}</p><div style = 'height: inherit;'data-user='${id}' class='editor student_board'><div></div>`;
+  $('.boards').append(board);
+  let codeArea = document.querySelector(`[data-user = '${id}']`);
+  let newEditor = monaco.editor.create(codeArea, {
+    automaticLayout: true,
+    value:data.data.code,
+    // theme: "vs-dark",
+    scrollBeyondLastLine: true,
+    readOnly: true,
+    language: data.data.lang,
+    minimap: {
+        enabled: false
+    },
+    rulers: [80, 120]
+  });
+  
+  codeBoard = {
+    editorId:data.user.id,
+    editor:newEditor
+  }
+  studentBoards.push(codeBoard);
+  $('.student_board').hover(function(){
+    isStudentBoardInFocus = true;
+    console.log('in');
+  },function(){
+    isStudentBoardInFocus = false;
+    console.log('out');
+  });
+}
+
+function stopStream(btn){
+id = btn.getAttribute("data-id");
+// console.log(id);
+
+ socket.emit('stopStream',id);
+ document.querySelector(`[data-user = '${id}'`).parentElement.parentElement.remove();
+ studentBoards =  studentBoards.filter((editor)=>editor.editorId != id)
+ studentsourceUserCursor = studentsourceUserCursor.filter((cursor)=>cursor.id != id);
+}
+
+isLiveBoard = false
+function liveBoardsToggle(){
+  if(!isLiveBoard){
+    $('.live_boards').slideDown();
+    isLiveBoard = true;
+  }else{
+    $('.live_boards').slideUp();
+    isLiveBoard = false;
+  }
+}
+
+isLeaveConfirm = false;
+function leaveRoomToggle(){
+  if(!isLeaveConfirm){
+    $('.leave_confirm').slideDown();
+    isLeaveConfirm = true;
+  }else{
+    isLeaveConfirm = false;
+    $('.leave_confirm').slideUp();
+  }
+ 
+}
+
+function endAndLeaveRoom(){
+  socket.emit('endAndLeaveRoom');
+}
+
+$(document).ready(function(){
+  studentBoardSize = document.querySelector('#studentBoardSize');
+      studentBoardSize.addEventListener('change',function(){
+          console.log(studentBoardSize.value);
+          block = document.getElementsByClassName('student-board');
+         for(i=0;i<block.length;i++){
+          block[i].style.height = '230px';
+              block[i].className = studentBoardSize.value + " mb-5 student-board";
+              if(studentBoardSize.value=='2'){
+                block[i].className = 'col-6 p-1 mb-5 student-board';
+                block[i].style.height = '460px';
+              }
+          }
+      });
+});
+
+
+
+socket.on('userDissconected',function(user){
+  // console.log(user);
+  
+  //removing realtime board
+  let studentEditor =  studentBoards.filter((editor)=>editor.editorId == user.id)[0];
+  if(studentEditor){
+    if(studentEditor.editorId == user.id){
+      document.querySelector(`[data-user = '${user.id}'`).parentElement.parentElement.remove();
+      studentBoards = studentBoards.filter((editor)=>editor.editorId != user.id);
+    }
+  }
 })
