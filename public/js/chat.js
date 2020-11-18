@@ -150,6 +150,7 @@ socket.on('disconnect', function() {
 
 socket.on('updateUsersList', function (users) {
   let ol = document.createElement('ul');
+  $('#numberOfUser').text(`Users(${users.length})`);
   // console.log(users);
   users.forEach(function (user) {
     const template = document.querySelector('#participent-template').innerHTML;

@@ -73,11 +73,12 @@
     <div id="chating">
       <div class="collapsers">
         <div class="participentList">
-          <div class="chat__sidebar" style="text-align: center;">
+          <div class="chat__sidebar">
             <h3>Participents</h3>
+            <p id='numberOfUser' style="color: white; padding-left:20px;">users(0)</p>
             <hr>
             <input id="participant_search" type="text" placeholder="Search participant..">
-            <div id="users" class="participants"></div>
+            <div id="users" class="participants"  style="text-align: center;"></div>
           </div>
           <button id="sidebar-collapser" onclick="participentListToggle()"><span style="padding: 2px;">Participant</span></button>
         </div>
@@ -211,7 +212,7 @@
             </div>
             
             <div class="item no-left-padding borderless admin">
-                <button id="run-btn" style="padding: 5px 20px; border-radius: 5px;" onclick="liveBoardsToggle()" class="ui primary labeled admin icon ">Show students board</button>
+                <button id="run-btn" style="padding: 5px 20px; border-radius: 5px;" onclick="liveBoardsToggle()" class="ui primary labeled admin icon ">Show students editor</button>
             </div>
             <div class="item no-left-padding borderless admin">
                 <button style="background: red; padding: 5px 20px; border-radius: 5px;"id="leave" onclick="leaveRoomToggle()" class="ui primary labeled admin icon ">Leave</button>
