@@ -365,6 +365,7 @@ function addCollabExt(info,editor, sourceUserCursor){
   });
 }
 
+
 function createStudentBoard(data){
  
   let board = document.createElement('div');

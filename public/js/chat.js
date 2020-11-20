@@ -15,17 +15,9 @@ isStream = false;
 isPreviouslyStreamed = false;
 previouslyStreamedEditor=[];
 firstTimeStream = true;
+
 function startStream(sourceEditor){
   require(["MonacoCollabExt"], function (MonacoCollabExt) {
-  // activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
-    
-  //   if(activeEditorname && activeEditorname!='source'){
-  //     activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname)[0].newEditor;
-  //     stream = activeEditor;
-  //   }else{
-  //     stream = sourceEditor;
-  //   }
-  
     const sourceContentManager = new MonacoCollabExt.EditorContentManager({
           editor: sourceEditor,
           onInsert(index, text) {
