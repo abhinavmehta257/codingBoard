@@ -25,6 +25,7 @@
     "moment": "^2.27.0",
     "mongoose": "^5.10.11",
     "socket.io": "^2.3.0",
+    "stripe": "^8.125.0",
     "twilio": "^3.49.4",
     "twilio-video": "^2.7.2"
   },

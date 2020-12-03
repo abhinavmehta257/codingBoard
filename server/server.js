@@ -11,6 +11,7 @@ const {Rooms} = require('./utils/rooms');
 const codingboard = require('../routes/codingboard');
 const authRoute = require('../routes/auth');
 const dashboard = require('../routes/dashboard');
+const payment = require('../routes/payment');
 var cookieParser = require('cookie-parser');
 const User = require("../model/User");
 const {verifyAdmin} = require('../validToken');
@@ -59,6 +60,8 @@ app.set('view engine', 'handlebars');
 app.use("/",authRoute);
 //dashboars
 app.use("/dashboard", dashboard);
+//payment
+app.use("/payment", payment);
 
 //webapplication route
 app.use("/codingboard",codingboard);

@@ -4,20 +4,20 @@
             <hr>
 
             <table class="upcomming-classes">
-                <tr>
+                <tr style="text-align: center;">
                     <th>Topic</th>
                     <th>Language</th>
                     <Th>Date</Th>
                     <th>Time</th>
-                    <th>Start</th>
+                    <th>Action</th>
                 </tr>
                 {{#each classes}}
-                <tr>
+                <tr style="text-align: center;">
                     <td>{{this.topic}}</td>
                     <td>{{this.language}}</td>
                     <td>{{this.date}}</td>
                     <td>{{this.time}}</td>
-                    <td><a href="/codingboard/startclass" target="_blank">Start</a></td>
+                    <td><a href="/codingboard/startclass" target="_blank" class="startBtn">Start</a></td>
                 </tr>
                 {{/each}}
             </table>    

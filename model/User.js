@@ -1,3 +1,4 @@
+const { date } = require('@hapi/joi');
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -31,6 +32,15 @@ const UserSchema = new mongoose.Schema({
     },
     schedule:{
         type:[],
+        required:false
+    },
+    subscription_status:{
+        type:String,
+        required:false,
+        default:'inactive'
+    },
+    trial_end:{
+        type:Date,
         required:false
     },
     date:{

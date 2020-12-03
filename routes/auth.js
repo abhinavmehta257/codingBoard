@@ -4,17 +4,20 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const {loginValidation, registerValidation} = require("../validation");
 const generateRoomId = require('../server/utils/generateRoomId');
+const { date } = require('@hapi/joi');
 
 
 //register
 router.get("/register",(req,res)=>{
+  const usertoken = req.cookies['authentication'];
+    if(usertoken) if (jwt.verify(usertoken, process.env.TOKEN_SECRET)) return res.redirect('/dashboard');
   res.render('register');
 });
   //login
 router.get("/login",(req,res)=>{
-  res.render('login');
   const usertoken = req.cookies['authentication'];
     if(usertoken) if (jwt.verify(usertoken, process.env.TOKEN_SECRET)) return res.redirect('/dashboard');
+  res.render('login');
 });
   
 router.post("/register",async (req,res)=>{
@@ -22,7 +25,7 @@ router.post("/register",async (req,res)=>{
     const {error} = registerValidation(req.body);
 
     //check user exist 
-    const emailExist = await User.findOne({email:req.body.email});
+    const emailExist = await User.findOne({email:req.body.email}).catch(err => console.log(err));
 
     if(emailExist) return res.status(400).render('register',{error:'User alredy exist please login'});
     
@@ -37,10 +40,11 @@ router.post("/register",async (req,res)=>{
         last_name:req.body.last_name,
         email:req.body.email,
         password:hashedPassword,
+        trial_end: new Date(Date.now() + 604800000),
         roomId: roomId.generate()
     });
     try {
-        await user.save(); 
+        await user.save().catch(err => console.log(err)); 
         res.render('register',{title:'register',error:'Signup Success. Please login'});
     } catch (error) {
         res.status(400).send(error); 
@@ -54,7 +58,7 @@ router.post("/login",async (req,res)=>{
     if(error) return res.status(400).send({error:error.details[0].message});
     // if(error) return res.status(400).render('login', {title:'Login',error:error.details[0].message});
     //check user exist 
-    const user = await User.findOne({email:req.body.email});
+    const user = await User.findOne({email:req.body.email}).catch(err => console.log(err));
     if(!user) return res.status(400).send({error:"Email Or Password is wrong"});
     // if(!user) return res.status(400).render('login', {title:'Login',error:"Email Or Password is wrong"});
     //check pass

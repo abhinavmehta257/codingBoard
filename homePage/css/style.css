@@ -1,0 +1,438 @@
+ /*!
+Template Name: Free Clean SaaS Pricing Page Template
+Template URI: https://www.template.net
+Author: Template.net
+Author URI: https://www.template.net
+License: Template.net
+License URI: https://www.template.net/license-agreement
+*/
+
+ * {
+     -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+     box-sizing: border-box
+ }
+
+ *:before,
+ *:after {
+     -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+     box-sizing: border-box
+ }
+
+ h1,
+ h2,
+ h3,
+ h4,
+ h5,
+ h6,
+ p {
+     margin-bottom: 0;
+ }
+
+ body {
+     margin: 0px;
+     padding: 0px;
+     color: black;
+     position: relative;
+     overflow-x: hidden;
+     background-color: #4696e5;
+     font-family: 'Montserrat', sans-serif;
+     position: relative;
+     overflow-x: hidden;
+ }
+
+ body,
+ html {
+     height: 100%;
+ }
+
+ /*-- Banner --*/
+ .banner {
+     height: 785px;
+     background-image: url(../images/test.png);
+     background-repeat: no-repeat;
+     background-position: center;
+     background-size: cover;
+     position: relative;
+ }
+
+
+ /*-- pricing-header --*/
+ .pricing {
+     margin: -655px 0 0;
+ }
+
+ .pricing .pricing-header h1 {
+     font-size: 62px;
+     font-weight: bold;
+     padding-bottom: 37px;
+     line-height: 65px;
+     margin: 0;
+     color: #000000;
+     text-shadow: 1px 1px 2px #595959;
+ }
+
+ .pricing .pricing-header p {
+     font-size: 18px;
+     font-weight: 500;
+     color: #000000;
+ }
+
+ .pricing-header {
+     padding-bottom: 100px;
+     text-align: left;
+ }
+
+ /*-- pricing --*/
+ .pricing .card {
+     border-radius: 0;
+     transition: all 0.2s;
+     border: none;
+     -webkit-box-shadow: 0 0 9px 0 #d6d6d6;
+     -moz-box-shadow: 0 0 9px 0 #d6d6d6;
+     box-shadow: 0 0 9px 0 #d6d6d6;
+ }
+
+ .pricing .card-header {
+     color: #000;
+     padding: 80px 120px 0;
+     background-color: transparent;
+     border: none;
+ }
+
+ .pricing .card-header h4 {
+     font-size: 21px;
+     color: #a3a3a3;
+     padding-bottom: 5px;
+ }
+
+ .pricing .currency {
+     color: #4696e5;
+     font-size: 65px;
+     display: block;
+     font-weight: 400;
+ }
+
+ .pricing .card-header h6 {
+     font-size: 18px;
+     color: #4696e5;
+     padding-bottom: 40px;
+     text-transform: uppercase;
+ }
+
+ .card-header p {
+     font-size: 18px;
+     font-weight: 500;
+     margin: 0;
+     padding-bottom: 25px;
+     color: #585858;
+     font-family: Arial, Helvetica, sans-serif;
+ }
+
+ .pricing .card .list-group-item i {
+     color: #4696e5;
+     margin-right: 10px;
+ }
+
+ .pricing .card ul:nth-child(2) {
+     padding-left: 40px;
+ }
+
+ .pricing .card .btn-info {
+     color: #fff;
+     font-size: 22px;
+     background-color: #f68e56;
+     border: none;
+     margin: 30px 60px;
+     padding: 16px 0;
+     font-weight: 600;
+     text-transform: uppercase;
+ }
+
+ .pricing .btn:hover {
+     transition: all 0.2s;
+     -webkit-box-shadow: 0 6px 6px -6px #f68e56;
+     -moz-box-shadow: 0 6px 6px -6px #f68e56;
+     box-shadow: 0 6px 6px -6px #f68e56;
+ }
+
+ .pricing .card p {
+     font-size: 18px;
+     padding-bottom: 40px;
+     font-family: Arial, Helvetica, sans-serif;
+ }
+
+ .pricing .card ul {
+     list-style: none;
+     padding: 40px 55px 0;
+ }
+
+ .bottom-content {
+     color: #ffffff;
+     padding: 75px 0 165px;
+ }
+
+ .pricing .pricing-bottom h3 {
+     font-size: 32px;
+     font-weight: 600;
+     color: #ffffff;
+ }
+
+ .pricing .pricing-bottom p {
+     font-size: 16px;
+     font-weight: 500;
+     padding: 25px 0 40px;
+     width: 85%;
+     color: #2d5c6f;
+     margin: 0 auto;
+ }
+
+ .pricing .pricing-bottom .btn-info {
+     padding: 23px 132px;
+     font-size: 22px;
+     text-transform: uppercase;
+     font-weight: 600;
+     letter-spacing: 0.3px;
+     border: none;
+     background-color: #000000;
+ }
+
+ .pricing-bottom {
+     padding: 100px 0 140px;
+     border-bottom: 2px solid #ffffff9c;
+ }
+
+ .fa-question-circle {
+     font-size: 30px;
+     margin-right: 15px;
+ }
+
+ .bottom-content h3 {
+     font-size: 18px;
+     line-height: 27px;
+     margin-bottom: 8px;
+     font-weight: 600;
+     padding-bottom: 0;
+     font-family: Arial, Helvetica, sans-serif;
+ }
+
+ .bottom-content p {
+     font-size: 18px;
+     font-weight: 400;
+     padding-bottom: 0;
+     font-family: Arial, Helvetica, sans-serif;
+ }
+
+ .pricing .card-block {
+     text-align: left;
+     display: flex;
+ }
+
+ .bottom-content .content-box {
+     display: flex;
+     margin-bottom: 40px;
+ }
+
+ .pricing .card-block .list-group-item {
+     border: none;
+     color: #000000;
+     font-size: 16px;
+     font-weight: 600;
+     padding: 10px 0;
+     margin-bottom: 0;
+     background-color: transparent;
+     font-family: Arial, Helvetica, sans-serif;
+ }
+
+ .period {
+     font-size: 36px;
+     text-transform: uppercase;
+     display: block;
+ }
+
+ .pricing .card-price {
+     font-size: 3rem;
+     margin: 0;
+ }
+
+ .pricing .card-price .period {
+     font-size: 0.8rem;
+ }
+
+
+ /* Hover Effects on Card */
+
+ .bottom-content .btn:hover {
+     color: #007bff;
+     text-decoration: underline;
+ }
+
+ /*======================
+        media query styles start
+        ========================*/
+
+ /*-- 1920 to 1430 styles start --*/
+
+ @media (min-width: 1024px) {
+     .container {
+         max-width: 720px;
+     }
+ }
+
+ @media only screen and (max-width: 1024px) {
+     .banner {
+         height: 750px;
+     }
+
+     .pricing-header {
+         padding-bottom: 50px;
+     }
+
+     .pricing .card-header {
+         padding: 50px 120px 0;
+     }
+
+     .pricing .card-header h6 {
+         font-size: 14px;
+         padding-bottom: 20px;
+     }
+
+     .pricing .card-header h4 {
+         font-size: 18px;
+     }
+
+     .pricing .card .card-header p {
+         font-size: 14px;
+         padding-bottom: 0;
+     }
+
+     .pricing .currency {
+         font-size: 54px;
+     }
+
+     .pricing .pricing-header h1 {
+         font-size: 48px;
+         padding-bottom: 20px;
+         line-height: 54px;
+     }
+
+     .pricing .pricing-header p {
+         font-size: 16px;
+     }
+
+     .pricing .card-block .list-group-item {
+         font-size: 14px;
+         padding: 5px 0;
+     }
+
+     .pricing .card .btn-info {
+         font-size: 16px;
+         padding: 14px 0;
+     }
+
+     .pricing .card p {
+         font-size: 16px;
+         padding-bottom: 30px;
+     }
+
+     .pricing .pricing-bottom .btn-info {
+         padding: 18px 90px;
+         font-size: 18px;
+     }
+
+     .pricing-bottom {
+         padding: 80px 0 60px;
+     }
+
+     .bottom-content p {
+         font-size: 16px;
+     }
+ }
+
+ @media only screen and (max-width: 767px) {
+     .pricing .card-block {
+         display: block;
+     }
+
+     .pricing .card-header {
+         padding: 50px 60px 0;
+     }
+
+     .pricing .card ul {
+         padding: 40px 60px 0;
+     }
+
+     .pricing .card ul:nth-child(2) {
+         padding: 0 60px 0;
+         padding-left: 60px;
+     }
+
+     .pricing .pricing-bottom p {
+         font-size: 12px;
+     }
+
+     .pricing .pricing-bottom h3 {
+         font-size: 26px;
+     }
+
+     .pricing .pricing-bottom .btn-info {
+         padding: 14px 50px;
+         font-size: 14px;
+     }
+
+     .content-box .fa-question-circle {
+         font-size: 25px;
+     }
+
+     .bottom-content h3 {
+         line-height: 20px;
+     }
+
+     .bottom-content {
+         padding: 75px 0 80px;
+     }
+ }
+
+ @media only screen and (max-width: 580px) {
+     .pricing .pricing-header h1 {
+         font-size: 42px;
+         line-height: 45px;
+     }
+
+     .pricing .pricing-header p {
+         font-size: 14px;
+     }
+
+     .pricing .currency {
+         font-size: 46px;
+     }
+
+     .pricing .card-header h4 {
+         font-size: 16px;
+     }
+
+     .pricing .card-header h6 {
+         font-size: 12px;
+     }
+
+     .pricing .card ul {
+         padding: 40px 40px 0;
+     }
+
+     .pricing .card-header {
+         padding: 50px 40px 0;
+     }
+
+     .pricing .card ul:nth-child(2) {
+         padding: 0 40px 0;
+     }
+
+     .content-box .fa-question-circle {
+         font-size: 20px;
+     }
+
+     .bottom-content p {
+         font-size: 14px;
+     }
+ }

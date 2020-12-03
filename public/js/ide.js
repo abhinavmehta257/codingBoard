@@ -929,11 +929,18 @@ my $name = <STDIN>;\n\
 print \"hello, $name\";\n\
 ";
 
-var phpSource = "\
-<?php\n\
-print(\"hello, world\\n\");\n\
-?>\n\
-";
+var phpSource = `<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My first PHP page</h1>
+
+<?php
+echo "Hello World!";
+?>
+
+</body>
+</html>`;
 
 var plainTextSource = "hello, world\n";
 

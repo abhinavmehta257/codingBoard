@@ -1,0 +1,27 @@
+<div  class="signup-form">
+	<h1>Coding <span>Room</span></h1>
+    <form>
+        <div id="success_form">
+            <h3 style="color:#18a352;">Payment Successful</h3>
+            <p>
+                <table>
+                    <tr>
+                        <td>Payment type</td>
+                        <td>Net banking</td>
+                    </tr>
+                    <tr>
+                        <td>Customer Id</td>
+                        <td>{{session_details.customer}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td>Amount pain</td>
+                        <td>&#8377;{{session_details.amount_total}}</td>
+                    </tr>
+                </table>
+            </p>
+            <p>
+                *Your account will be resumed in few hours. 
+            </p>
+        </div>
+        </form>
+        <div class="hint-text">Go to <a href="/dashboard">dashboard</a></div>
