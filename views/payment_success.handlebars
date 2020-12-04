@@ -1,9 +1,11 @@
 <div  class="signup-form">
 	<h1>Coding <span>Room</span></h1>
     <form>
-        <div id="success_form">
-            <h3 style="color:#18a352;">Payment Successful</h3>
-            <p>
+            <div style=" height:200px;border-radius:5px;vertical-align:center;">
+                <h3 style="color:#3598dc;">Payment Successful</h3>
+            </div>
+            <div id="success_form">
+                <p>
                 <table>
                     <tr>
                         <td>Payment type</td>
@@ -11,17 +13,17 @@
                     </tr>
                     <tr>
                         <td>Customer Id</td>
-                        <td>{{session_details.customer}}</td>
+                        <td>{{customer}}</td>
                     </tr>
                     <tr style="font-weight: bold;">
                         <td>Amount pain</td>
-                        <td>&#8377;{{session_details.amount_total}}</td>
+                        <td>&#8377;{{amount}}</td>
                     </tr>
                 </table>
             </p>
             <p>
                 *Your account will be resumed in few hours. 
             </p>
-        </div>
+            </div>
         </form>
         <div class="hint-text">Go to <a href="/dashboard">dashboard</a></div>

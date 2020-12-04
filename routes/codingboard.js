@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const express = require('express');
 const User = require("../model/User");
+const roomData = require("../model/roomData");
 const path = require('path');
 const {auth} = require('../validToken');
 const { json } = require('express');
@@ -30,7 +31,22 @@ router.get('/startclass',auth, async (req,res)=>{
     } 
     if(!user) return res.status(401).render('page-error', {title:'401',error_code:'401', error_message:'User is unauthorised to create room.'});
     classUrl = `/codingboard/room?name=${user.first_name}+${user.last_name}&roomId=${user.roomId}&lang=68&isAdmin=on`;
+    roomDatas = new roomData({
+        email:user.email,
+        room:user.roomId
+    });
+    
     res.status(200).redirect(classUrl);
+    try{
+        roomdata = await roomData.findOne({email:roomDatas.email});
+        if(roomdata){
+            await roomData.updateOne({email:roomDatas.email},{$inc: {roomCreated:1}});
+        }else{
+            await roomDatas.save().catch(err => console.log(err)); 
+        }
+    }catch(err){
+        console.log(err);
+    }
 })
 
 

@@ -63,9 +63,14 @@ app.use("/dashboard", dashboard);
 //payment
 app.use("/payment", payment);
 
+
 //webapplication route
 app.use("/codingboard",codingboard);
 
+// 404 page not found
+app.get('*', function(req, res){
+  res.render('error404');
+});
 //connect to db;
 mongoose.connect(process.env.DB_CONNECT,{ useNewUrlParser: true },()=>{
   console.log("db connected");

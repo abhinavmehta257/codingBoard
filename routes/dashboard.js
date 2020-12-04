@@ -19,6 +19,7 @@ router.get('/',auth, async (req,res)=>{
     }else{
         trial = false
     }
+    // console.log(req.get('host'));
     res.render('userInfo',{dashboard:true,user:userInfo,layout:'dashboard',trial_left:trial});
 });
 

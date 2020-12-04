@@ -1,20 +1,14 @@
 const router = require('express').Router();
-// const express = require('express');
 const User = require("../model/User");
-// const path = require('path');
-// const {auth} = require('../validToken');
-// const { json } = require('express');
 const bodyParser = require('body-parser');
-// const { route } = require('./auth');
 
-// let endpointSecret = 'whsec_djfUYH867VkjJu0zPljkykDhipBGedOs';
 dotenv = require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 router.post('/create-checkout-session', async(req,res)=>{
     const session = await stripe.checkout.sessions.create({
-        success_url:'http://localhost:3000/payment/success?id={CHECKOUT_SESSION_ID}',
-        cancel_url : 'http://localhost:3000/payment/cancel',
+        success_url:`https://${req.get('host')}/payment/success?id={CHECKOUT_SESSION_ID}`,
+        cancel_url : `https://${req.get('host')}/payment/cancel`,
         payment_method_types : ['card'],
         mode:'subscription',
         allow_promotion_codes:true,
@@ -29,9 +23,13 @@ router.post('/create-checkout-session', async(req,res)=>{
 });
 
 router.get('/success',auth, async (req,res) =>{
-    const session = await stripe.checkout.sessions.retrieve(req.query.id);
-    console.log(session);
-    res.render('payment_success',{session_details: session});
+  if(req.query.id){
+    const session = await stripe.checkout.sessions.retrieve(req.query.id).catch(err => console.log(err));
+    customerId = session.customer;
+    amount = session.amount_total/100;
+    return res.render('payment_success',{customerId, amount});
+  }
+    res.render('payment_cancel');
 });
 router.get('/cancel',auth, async (req,res) =>{
   res.render('payment_cancel');
