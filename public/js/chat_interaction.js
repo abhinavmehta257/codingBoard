@@ -148,7 +148,6 @@ $(document).ready(function(){
       link.innerHTML = `${document.location.origin}/codingboard/join?roomId=${params.roomId}`; 
       
       
-    //   document.querySelector('.information').addEventListener('click',copy(`https://codingboard.herokuapp.com/codingboard/join?roomId = ${params.roomId}</a>`))
 }); 
 
 let invite_btn;
@@ -208,3 +207,13 @@ function showInfoToggle(){
     }
 }
 
+function loadPreviousCode(){
+    previousCode = localStorage.getItem("previousCode");
+    sourceEditor.setValue(decode(previousCode));
+    liveBoardAttached("Saved code loaded");
+}
+
+function saveCode(){
+    localStorage.setItem("previousCode", encode(sourceEditor.getValue()));
+    liveBoardAttached("Code Saved");
+}

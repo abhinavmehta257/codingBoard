@@ -57,7 +57,8 @@ var layoutConfig = {
             isClosable: false,
             componentState: {
                 readOnly: false
-            }
+            },
+            width:65
         }, {
             type: "column",
             content: [{
@@ -759,11 +760,21 @@ document.addEventListener('keydown', function(e){
     if(e.key == 'F9'){
         run();
     }
-})
+});
 
-// document.getElementById("localTrack").addEventListener("dblclick",()=>{
-//                 fullscreenToggle();
-// });
+// used to process the cmd+s and ctrl+s events
+$(document).keydown(function (event) {
+     if (event.which == 83 && (navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)) {
+        event.preventDefault();
+        saveCode();
+        return false;
+     }
+     if (event.which == 76 && (navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)){
+        event.preventDefault();
+        loadPreviousCode();
+        return false;
+     }
+});
 
 // Template Sources
 var assemblySource = "\
