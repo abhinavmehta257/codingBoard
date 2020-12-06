@@ -15,7 +15,10 @@ router.get('/',auth, async (req,res)=>{
     }
     let today = new Date();
     if(user.subscription_status != 'active'){
-        trial = Math.floor(parseInt(user.trial_end-today)/86400000)
+        trial = Math.floor(parseInt(user.trial_end-today)/86400000);
+        if(trial<0){
+            trial='0';
+        }
     }else{
         trial = false
     }
@@ -28,7 +31,10 @@ router.get('/schedule',auth,async (req,res)=>{
     if(!user) return res.status(400).render('login', {title:'Login',error:"User doesn't exist, please sign up"});
     let today = new Date();
     if(user.subscription_status != 'active'){
-        trial = Math.floor(parseInt(user.trial_end-today)/86400000)
+        trial = Math.floor(parseInt(user.trial_end-today)/86400000);
+        if(trial<0){
+            trial='0';
+        }
     }else{
         trial = false
     }
@@ -40,7 +46,10 @@ router.get('/upcomming',auth, async (req,res)=>{
     if(!user) return res.status(400).render('login', {title:'Login',error:"User doesn't exist, please sign up"});
     let today = new Date();
     if(user.subscription_status != 'active'){
-        trial = Math.floor(parseInt(user.trial_end-today)/86400000)
+        trial = Math.floor(parseInt(user.trial_end-today)/86400000);
+        if(trial<0){
+            trial='0';
+        }
     }else{
         trial = false
     }
@@ -48,7 +57,7 @@ router.get('/upcomming',auth, async (req,res)=>{
     todayTime = `${today.getHours()}:${today = today.getMinutes()}`;
     
     classes = user.schedule;
-    classes = classes.filter((classes) =>classes.date >= todayDate || classes.time >=todayTime);
+    // classes = classes.filter((classes) =>classes.date >= todayDate || classes.time >=todayTime);
     res.render('upcomming-classes',{upcomming:true,classes:classes,layout:'dashboard',trial_left:trial});
 });
 

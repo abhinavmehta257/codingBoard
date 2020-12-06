@@ -118,7 +118,7 @@
                 <div class="my-classes" style="padding: 5px 20px;"><i class="fas fa-chalkboard-teacher"></i>My classes</div>
                 <a href="/dashboard/upcomming"><div class="upcomming-classes button {{#if upcomming}} focused {{/if}} ">Upcomming classes</div></a>
                 <a href="/dashboard/schedule"><div class="schedule button {{#if schedule}} focused {{/if}}">Schedule new class</div></a>
-            <div style="position: fixed; bottom:0px; color:white; background:#e03c30; width:100%">
+            <div style="position: fixed;z-index:1; bottom:0px; color:white; background:#e03c30; width:100%">
                {{#if trial_left }} <p style="margin:0; padding:10px">Only {{trial_left}} Days left for your trial to end. <button id="payBtn" style="color: black; border-radius:5px"> Upgrade now</button> !!🎉</p> {{/if}}
             </div>
             </div>

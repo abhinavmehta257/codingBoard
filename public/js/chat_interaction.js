@@ -209,8 +209,12 @@ function showInfoToggle(){
 
 function loadPreviousCode(){
     previousCode = localStorage.getItem("previousCode");
-    sourceEditor.setValue(decode(previousCode));
-    liveBoardAttached("Saved code loaded");
+    if(previousCode != ''){
+        sourceEditor.setValue(decode(previousCode));
+        liveBoardAttached("Saved code loaded");
+    }else{
+        liveBoardAttached("No saved code found"); 
+    }
 }
 
 function saveCode(){
