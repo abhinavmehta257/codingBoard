@@ -152,6 +152,7 @@ function localStorageGetItem(key) {
 
 function showMessages(data) {
     $('#infoBox').html(`<span onclick='closeInfoBox()' class="close">×</span><br>${data.info}`);
+    $('#infoBox').slideDown();
 }
 function closeInfoBox(){
     $('#infoBox').remove();
@@ -159,7 +160,7 @@ function closeInfoBox(){
 
 function loadMessages() {
     $.ajax({
-        url: `http://localhost:3000/messages/getMessages`,
+        url: `${window.location.origin}/messages/getMessages`,
         type: "GET",
         headers: {
             "Accept": "application/json"
