@@ -180,6 +180,7 @@
                     <option value="67" mode="pascal">Pascal (FPC 3.0.4)</option>
                     <option value="85" mode="perl">Perl (5.28.1)</option>
                     <option value="68" mode="php">PHP (7.4.1)</option>
+                    <option value="68" mode="php">HTML</option>
                     <option value="43" mode="plaintext">Plain Text</option>
                     <option value="70" mode="python">Python (2.7.17)</option>
                     <option value="71" mode="python">Python (3.8.1)</option>
@@ -201,13 +202,13 @@
                     <input id="command-line-arguments" type="text" placeholder="Command line arguments"></input>
                 </div>
             </div>
-            <div class="item borderless wide screen only" >
-                <!-- <select id=lang class = 'ui dropdown'>
+            <!-- <div class="item borderless wide screen only" >
+                 <select id=lang class = 'ui dropdown'>
                   <option value="vs-dark" selected>Default</option>
                   <option value="vs">Vs Light</option>
                   <option value="hc-black">hc-black</option>
-                </select> -->
-              </div>
+                </select>
+              </div> -->
             <div class="item no-left-padding borderless">
                 <button id="run-btn" class="ui primary labeled icon button"><i class="play icon"></i>Run (F9)</button>
             </div>
@@ -327,6 +328,9 @@
 </div>
 <div id="site-footer">
    <span id="status-line"></span>
+</div>
+<div>
+    <div id="infoBox"></div>
 </div>
 <div id="studentAssignments">
     <button style="float: left;" onclick="downloadAssignments()">Download</button><div onclick="assignmentToggle()" style="cursor: pointer;"><h4 style="margin-top: 0;">Assignments</h4></div><span class="close">&times;</span>

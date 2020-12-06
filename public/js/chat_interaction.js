@@ -218,6 +218,13 @@ function loadPreviousCode(){
 }
 
 function saveCode(){
-    localStorage.setItem("previousCode", encode(sourceEditor.getValue()));
+    activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+    activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
+    if(activeEditor[0]){
+        var sourceValue = encode(activeEditor[0].newEditor.getValue());
+     }else{
+       var sourceValue = encode(sourceEditor.getValue());
+     }
+    localStorage.setItem("previousCode", sourceValue);
     liveBoardAttached("Code Saved");
 }

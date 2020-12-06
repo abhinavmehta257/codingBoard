@@ -192,3 +192,8 @@ body {
 input[type="text"] {
     width: 205px !important;
 }
+.ui.modal {
+    height: unset !important;
+    top: auto !important;
+    left: auto !important;
+}

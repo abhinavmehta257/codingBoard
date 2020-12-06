@@ -37,19 +37,19 @@ var $statusLine;
 var timeStart;
 var timeEnd;
 
-var messagesData;
+// var messagesData;
 
 var layoutConfig = {
     settings: {
         showPopoutIcon: false,
-        reorderEnabled: true
+        reorderEnabled: false
     },
     dimensions: {
         borderWidth: 3,
         headerHeight: 22
     },
     content: [{
-        type: "row",
+        type: "column",
         content: [{
             type: "component",
             componentName: "source",
@@ -58,9 +58,9 @@ var layoutConfig = {
             componentState: {
                 readOnly: false
             },
-            width:65
+            height:65
         }, {
-            type: "column",
+            type: "row",
             content: [{
                 type: "stack",
                 content: [{
@@ -150,40 +150,24 @@ function localStorageGetItem(key) {
   }
 }
 
-function showMessages() {
-    var width = $updates.offset().left - parseFloat($updates.css("padding-left")) -
-                $navigationMessage.parent().offset().left - parseFloat($navigationMessage.parent().css("padding-left")) - 5;
-
-    if (width < 200 || messagesData === undefined) {
-        return;
-    }
-
-    var messages = messagesData["messages"];
-
-    $navigationMessage.css("animation-duration", messagesData["duration"]);
-    $navigationMessage.parent().width(width - 5);
-
-    var combinedMessage = "";
-    for (var i = 0; i < messages.length; ++i) {
-        combinedMessage += `${messages[i]}`;
-        if (i != messages.length - 1) {
-            combinedMessage += "&nbsp".repeat(Math.min(200, messages[i].length));
-        }
-    }
-
-    $navigationMessage.html(combinedMessage);
+function showMessages(data) {
+    $('#infoBox').html(`<span onclick='closeInfoBox()' class="close">×</span><br>${data.info}`);
+}
+function closeInfoBox(){
+    $('#infoBox').remove();
 }
 
 function loadMessages() {
     $.ajax({
-        url: `https://minio.judge0.com/public/ide/messages.json?${Date.now()}`,
+        url: `http://localhost:3000/messages/getMessages`,
         type: "GET",
         headers: {
             "Accept": "application/json"
         },
         success: function (data, textStatus, jqXHR) {
-            messagesData = data;
-            showMessages();
+            // messagesData = data;
+            showMessages(data);
+            console.log(data);
         }
     });
 }
@@ -194,10 +178,12 @@ function showError(title, content) {
     $("#site-modal").modal("show");
 
 }
+//not copy
 
 function handleError(jqXHR, textStatus, errorThrown) {
     showError(`${jqXHR.statusText} (${jqXHR.status})`, `<pre>${JSON.stringify(jqXHR, null, 4)}</pre>`);
 }
+//not copy
 
 function handleRunError(jqXHR, textStatus, errorThrown) {
     handleError(jqXHR, textStatus, errorThrown);
@@ -449,7 +435,7 @@ function insertTemplate() {
 
 //set room language
 
-function loadRandomLanguage() {
+function loadLanguage() {
     
     let searchQuery = window.location.search.substring(1);
     let params = JSON.parse('{"' + decodeURI(searchQuery ).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g, '":"') + '"}');
@@ -459,7 +445,7 @@ function loadRandomLanguage() {
 }
 
 window.onload = function(){
-    loadRandomLanguage();
+    loadLanguage();
 }
 function resizeEditor(layoutInfo) {
     if (editorMode != "normal") {
@@ -557,8 +543,8 @@ $(document).ready(function () {
         run();
     });
 
-    $navigationMessage = $("#navigation-message span");
-    $updates = $("#updates");
+   // $navigationMessage = $("#navigation-message span");
+    //$updates = $("#updates");
 
     $(`input[name="editor-mode"][value="${editorMode}"]`).prop("checked", true);
     $("input[name=\"editor-mode\"]").on("change", function(e) {

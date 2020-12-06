@@ -303,3 +303,20 @@ background:#121212;
     to {bottom: 0; opacity: 0;}
   }
 /*toast end*/
+.close{
+    cursor: pointer;
+}
+#infoBox{
+    padding: 10px;
+    position: absolute;
+    top: 3em;
+    border-radius: 5px;
+    right: 1em;
+    width: 20%;
+    height: initial;
+    background:#7dc991;
+    color: black;
+    font-size: smaller;
+    display: none;
+    z-index: 1;
+}

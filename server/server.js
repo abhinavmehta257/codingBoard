@@ -11,6 +11,7 @@ const {Rooms} = require('./utils/rooms');
 const codingboard = require('../routes/codingboard');
 const authRoute = require('../routes/auth');
 const dashboard = require('../routes/dashboard');
+const codingRoomMessage = require('../routes/roomMessages');
 const payment = require('../routes/payment');
 var cookieParser = require('cookie-parser');
 const User = require("../model/User");
@@ -62,6 +63,8 @@ app.use("/",authRoute);
 app.use("/dashboard", dashboard);
 //payment
 app.use("/payment", payment);
+//messages
+app.use("/messages", codingRoomMessage);
 
 
 //webapplication route
