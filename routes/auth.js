@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const {loginValidation, registerValidation} = require("../validation");
 const generateRoomId = require('../server/utils/generateRoomId');
-const { date } = require('@hapi/joi');
+// const { date } = require('@hapi/joi');
 
 
 //register

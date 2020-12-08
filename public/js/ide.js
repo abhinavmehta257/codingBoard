@@ -756,7 +756,7 @@ $(document).keydown(function (event) {
         saveCode();
         return false;
      }
-     if (event.which == 76 && (navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)){
+     if (event.which == 81 && (navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)){
         event.preventDefault();
         loadPreviousCode();
         return false;
