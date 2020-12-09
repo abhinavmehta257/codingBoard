@@ -602,7 +602,7 @@ $(document).ready(function () {
                 readOnly: state.readOnly,
                 language: "cpp",
                 minimap: {
-                    enabled: false
+                    enabled: true
                 },
                 rulers: [80, 120]
             });

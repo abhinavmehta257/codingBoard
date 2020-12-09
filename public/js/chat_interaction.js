@@ -209,8 +209,15 @@ function showInfoToggle(){
 
 function loadPreviousCode(){
     previousCode = localStorage.getItem("previousCode");
+    activeEditorname = layout.root.contentItems[ 0 ].contentItems[0].getActiveContentItem().componentName
+    activeEditor = editors.filter((editor)=>editor.editorId == activeEditorname);
+    
     if(previousCode != ''){
-        sourceEditor.setValue(decode(previousCode));
+        if(activeEditor[0]){
+            activeEditor[0].newEditor.setValue(decode(previousCode));
+         }else{
+           sourceEditor.setValue(decode(previousCode));
+         }
         liveBoardAttached("Saved code loaded");
     }else{
         liveBoardAttached("No saved code found"); 

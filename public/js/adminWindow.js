@@ -382,7 +382,7 @@ function createStudentBoard(data){
   board.style.color = 'black';
   board.style.borderRadius = '10px';
   id = data.user.id;
-  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px;height: inherit;"><span data-id='${id}' onclick='stopStream(this)' class="close">×</span><p class = 'name' style="padding-left:20px">${data.user.name}</p><div style = 'height: inherit;'data-user='${id}' class='editor student_board'><div></div>`;
+  board.innerHTML = `<div class'p-1' style="background:whitesmoke; border-radius:5px;height: inherit;"><span data-id='${id}' style='padding-top:30px' onclick='stopStream(this)' class="close">×</span><p class = 'name' style="padding-left:20px">${data.user.name}</p><div style = 'height: inherit;'data-user='${id}' class='editor student_board'><div></div>`;
   $('.boards').append(board);
   let codeArea = document.querySelector(`[data-user = '${id}']`);
   let newEditor = monaco.editor.create(codeArea, {

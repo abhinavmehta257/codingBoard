@@ -131,8 +131,8 @@
     </div>
     <div id="site-navigation" class="ui small inverted menu">
         <div id="site-header" class="header item">
-                <img id="site-icon" src="./images/codingRoomLogo.png">
-                <h2 style="margin-top:0 ;">Coding<span style="color: #0e7fc9; font-size: inherit !important;">Board</span></h2>
+                <!-- <img id="site-icon" src="./images/codingRoomLogo.png"> -->
+                <h2 style="margin-top:0;padding-left: 5px ;">C<span style="color: #0e7fc9; font-size: inherit !important;">B</span></h2>
         </div>
         <div class="left menu">
             <div class="ui dropdown item site-links on-hover">
@@ -141,19 +141,29 @@
                     <a class="item" onclick="addNewFile(false, prompt('File Name'))"><i class="file code icon"></i> New File</a>
                     <div class="item" onclick="saveCode()"><i class="save icon"></i> Save (Ctrl + S)</div>
                     <div class="item" onclick="downloadSource()"><i class="download icon"></i> Download</div>
-                    <div class="item" onclick="loadPreviousCode()"><i class="file code icon"></i>Load saved code(ctrl + l)</div>
+                    <div class="item" onclick="loadPreviousCode()"><i class="file code icon"></i>Load saved code(ctrl + q)</div>
+                    <div id="insert-template-btn" class="item"><i class="file code outline icon"></i> Insert template
+                        for current language</div>
+                </div>
+            </div>
+            <div class="ui dropdown item site-links on-hover">
+                Action <i class="dropdown icon"></i>
+                <div class="menu">
                     <div class="item admin send-prompt" onclick="sendCode()"><i class="file code icon "></i> Send To all</div>
                     <div class="item admin send-assignment" onclick="openAssignmentPopup('all')"><i class="file code icon "></i> Send Assignment</div>
                     <div class="item submit-as-assignment" onclick="run(true)"><i class="file code icon "></i> submit as Assignment</div>
-                    <!-- <div class=""> -->
-                        <select id=lang class = 'ui item dropdown'>
+                </div>
+            </div>        
+            <div class="ui dropdown item site-links on-hover">
+                Settings <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" onclick="$('#site-settings').modal('show')"><i class="cog icon"></i> Settings</div>
+                    <select id=lang class = 'ui item dropdown'>
                         <option value="">Themes</option>
                         <option value="vs-dark" >Vs dark</option>
                         <option value="vs">Vs Light</option>
                         <option value="hc-black">hc-black</option>
-                      </select>
-                    <!-- <div id="insert-template-btn" class="item"><i class="file code outline icon"></i> Insert template
-                        for current language</div> -->
+                    </select>
                 </div>
             </div>
             <!-- <div class="link item" onclick="$('#site-settings').modal('show')"><i class="cog icon"></i> Settings</div> -->
