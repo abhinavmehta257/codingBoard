@@ -36,7 +36,7 @@ License URI: https://www.template.net/license-agreement
      color: black;
      position: relative;
      overflow-x: hidden;
-     background-color: #4696e5;
+     background-color: rgba(23, 24, 32, 0.95);
      font-family: 'Montserrat', sans-serif;
      position: relative;
      overflow-x: hidden;
@@ -108,7 +108,7 @@ License URI: https://www.template.net/license-agreement
  }
 
  .pricing .currency {
-     color: #4696e5;
+     color: rgba(23, 24, 32, 0.95);
      font-size: 65px;
      display: block;
      font-weight: 400;
@@ -116,7 +116,7 @@ License URI: https://www.template.net/license-agreement
 
  .pricing .card-header h6 {
      font-size: 18px;
-     color: #4696e5;
+     color: rgba(23, 24, 32, 0.95);
      padding-bottom: 40px;
      text-transform: uppercase;
  }
@@ -131,7 +131,7 @@ License URI: https://www.template.net/license-agreement
  }
 
  .pricing .card .list-group-item i {
-     color: #4696e5;
+     color: rgba(23, 24, 32, 0.95);
      margin-right: 10px;
  }
 

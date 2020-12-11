@@ -3,199 +3,227 @@
 	<head>
 		<title>Coding Board</title>
 		<meta charset="utf-8" />
-		<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="0ca0283c-4055-45e8-a719-c22dc01f3a97";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="0ca0283c-4055-45e8-a719-c22dc01f3a97";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+		<link rel="shortcut icon" href="./cb.ico" type="image/x-icon">
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-		<link rel="shortcut icon" href="./cb.ico" type="image/x-icon">
-    	<link rel="icon" href="./cb.ico" type="image/x-icon">
 	</head>
-	<body class="is-preload">
-		
-		<nav>
-			<header id="navbar">
-				<nav class="navbar-container container">
-				  <button type="button" class="navbar-toggle" aria-label="Open navigation menu">
-					  <span class="icon-bar"></span>
-					  <span class="icon-bar"></span>
-					  <span class="icon-bar"></span>
-				  </button>
-				  <div class="navbar-menu">
-					<ul class="navbar-links">
-					  <li class="navbar-item"><a class="navbar-link" href="/">Home</a></li>
-					  <li class="navbar-item"><a class="navbar-link" href="/pricing.html">Pricing</a></li>
-					  <li class="navbar-item"><a class="navbar-link" href="/dashboard">Dashboard</a></li>
-					  <li class="navbar-item"><a class="navbar-link" href="/codingboard/join">JoinRoom</a></li>
-					  <li class="navbar-item"><a class="navbar-link login" href="/login">Login</a></li>
-					</ul>
-				  </div>
-				</nav>
-			</header>
-		<script>
-			window.onload = function(){
-				function getCookie(name) {
-						var nameEQ = name + "=";
-						var ca = document.cookie.split(';');
-						for(var i=0;i < ca.length;i++) {
-							var c = ca[i];
-							while (c.charAt(0)==' ') c = c.substring(1,c.length);
-							if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-						}
-						return null;
-					}																
-			logBtn = document.querySelector('.login');
-			authToken = getCookie('authentication');
-			if(authToken){
-				logBtn.textContent = 'Logout';
-				logBtn.setAttribute('href','/logout');
-			} }
-			const navbar = document.getElementById("navbar");
-	const navbarToggle = navbar.querySelector(".navbar-toggle");
+	<body class="is-preload landing">
+		<div id="page-wrapper">
 
-	function openMobileNavbar() {
-	navbar.classList.add("opened");
-	navbarToggle.setAttribute("aria-label", "Close navigation menu.");
-	}
-
-	function closeMobileNavbar() {
-	navbar.classList.remove("opened");
-	navbarToggle.setAttribute("aria-label", "Open navigation menu.");
-	}
-
-	navbarToggle.addEventListener("click", () => {
-	if (navbar.classList.contains("opened")) {
-		closeMobileNavbar();
-	} else {
-		openMobileNavbar();
-	}
-	});
-
-	const navbarMenu = navbar.querySelector(".navbar-menu");
-	const navbarLinksContainer = navbar.querySelector(".navbar-links");
-
-	navbarLinksContainer.addEventListener("click", (clickEvent) => {
-	clickEvent.stopPropagation();
-	});
-
-	navbarMenu.addEventListener("click", closeMobileNavbar);
-		</script>
-		
-		<!-- Header -->
-			<header id="header">
-				
-				<div class="content">
-					<h1><a href="#">Coding <span>Board</span></a></h1>
-					<p>Best tool teaching Programming Online.</p>
-					<ul class="actions">
-						<li><a href="/register" class="button primary icon solid ">Get Started</a></li>
-						<li><a href="#one" class="button icon solid fa-chevron-down scrolly">Learn More</a></li>
-					</ul>
-				</div>
-				<div class="image phone"><div class="inner"><img id="codingroom_mockup"src="images/codingroom_mockup_3.png" width="100%" alt="Codingroom" /></div></div>
-			</header>
-
-		<!-- One -->
-			<section id="one" class="wrapper style2 special">
-				<header class="major">
-					<h2>NEW TIME <span>NEW WAYS TO LEARN</span></h2>
-					<p>Coding Board is the first web application which enables you to teach Programming with integration any video and audio conferencing application available today.It enables you to connect to every student personally and interact with their code instantly, which enables you to understand their workflow and thinking process. </p>
-				</header>
-				<ul class="icons major">
-					<li><span class="icon solid fa-code"><span class="label">Code</span></span></li>
-					<li><span class="icon solid fa-sync"><span class="label">Compile</span></span></li>
-					<li><span class="icon solid fa-download"><span class="label">Download</span></span></li>
-				</ul>
-			</section>
-		<!-- Two -->
-			<section id="two" class="wrapper">
-				<div class="inner alt">
-					<section class="spotlight">
-						<div class="image"><img src="images/coding-room-smart-editor.jpg" alt="" /></div>
-						<div class="content">
-							<h3>Smart Editor</h3>
-							<p>Smart Editor powered by The Monaco Editor is the code editor that powers by VS Code, This will give you smoothe experience as coding in any native IDE. We bring it all to the browser and sync it across your entire classroom instantly. We also couple that with our state-of-the-art smart IDE that offers real-time suggestions, error checking, and help you and your students! </p>
-						</div>
-					</section>
-					<section class="spotlight">
-						<div class="image"><img src="images/livechat.jpg" alt="" /></div>
-						<div class="content">
-							<h3>Live Chat</h3>
-							<p>In Coding Board we provide you with feature of live chating, which enalebles students and instructors to communicate easily. It gives students opportunity to ask question and discuss their doubt.</p>
-						</div>
-					</section>
-					<section class="spotlight">
-						<div class="image"><img src="images/live-code.jpg" alt="" /></div>
-						<div class="content">
-							<h3>Real-time student's Code dashboard</h3>
-							<p>The unified real-time dashboard hands you the power of seeing and interacting with every students’ coding pad in real time. The live coding dashboard enables each instructor to see every student’s coding, debugging, testing, and thinking processes in real-time. This allows you to provide 100% individualized feedback, help, and support to every student throughout the entire duration of a class at the moment they need it most</p>
-						</div>
-					</section>
-					<section class="spotlight">
-						<div class="image"><img src="images/interactive.jpg" alt="" /></div>
-						<div class="content">
-							<h3>Interactive</h3>
-							<p>Features like seeing studients code,and edit them, allows you to provide 100% individualized feedback, help, and support to every student throughout the entire duration of a class at the moment they need it most.</p>
-						</div>
-					</section>
-					<section class="spotlight">
-						<div class="image"><img src="images/assignment.jpg" alt="" /></div>
-						<div class="content">
-							<h3>Send Assignment</h3>
-							<p>Send Assignment individually or to all student at once. You can also set a pre determined output and sample inputs can be set for your assignment to be checked automatically when submitted. You can also download all the assignments as a word file to be checked at a later time. </p>
-						</div>
-					</section>
-					<section class="spotlight">
-						<div class="image"><img src="images/coding-room-dashboard.jpg" alt="coding-room-dashboard" /></div>
-						<div class="content">
-							<h3>Tooling for efficient Workflow</h3>
-							<p>Coding Board's streamlined admin options, scheduling, and classroom management features enable you to focus your effort 100% on teaching - not fighting with complicated learning management systems!</p>
-						</div>
-					</section>
-					<section class="spotlight">
-						<div class="image"><img src="images/languages.jpg" alt="" /></div>
-						<div class="content">
-							<h3>Languages Configured & Ready to Go</h3>
-							<p>Our platform support many languages such as: <br>• Javascript • Java • Python 2 • Python 3 • C++ • C • Bash • C# • GoLang • Swift • Typescript • Kotlin • Perl • PHP • Ruby • Clojure • Lua  • MicroPython</p>
-						</div>
-					</section>
-					<section class="special">
-						<ul class="icons labeled">
-							<li><span class="icon solid fa-code"><span class="label">Code directy in browser</span></span></li>
-							<li><span class="icon solid fa-sync"><span class="label">Conpile and Run in browser</span></span></li>
-							<li><span class="icon solid fa-download"><span class="label">Download for futute use</span></span></li>
+			<!-- Header -->
+				<header id="header">
+					<h1 id="logo"><a href="/">Coding Board</a></h1>
+					<nav id="nav">
+						<ul>
+							<li><a href="/">Home</a></li>
+							<li><a href="/pricing.html">Pricing</a></li>
+							<li><a href="/dashboard">Dashboard</a></li>
+							<li><a href="/codingboard/join">Join room</a></li>
+							<li><a id="login"href="/login" class="button primary">Login</a></li>
 						</ul>
-					</section>
-				</div>
-			</section>
-
-		<!-- Three -->
-			<section id="three" class="wrapper style2 special">
-				<header class="major">
-					<h2>Coding Board</h2>
-					<p>Coding Board is developed around the idea that <b>"the best way to learn coding is to code"</b>. Giving a hands on experience to the students and instructor is the main goal of Coding Board. Keeping that in mind, we have included many features to smoothen the transition from live practical classroom to virtual.</p>
+					</nav>
 				</header>
-				<ul class="actions special">
-					<li><a href="/register" class="button primary icon solid ">Get Started</a></li>
-				</ul>
-			</section>
-			
+				<script>
+					window.onload = function(){
+						function getCookie(name) {
+								var nameEQ = name + "=";
+								var ca = document.cookie.split(';');
+								for(var i=0;i < ca.length;i++) {
+									var c = ca[i];
+									while (c.charAt(0)==' ') c = c.substring(1,c.length);
+									if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+								}
+								return null;
+							}																
+					logBtn = document.querySelector('#login');
+					authToken = getCookie('authentication');
+					if(authToken){
+						logBtn.textContent = 'Logout';
+						logBtn.setAttribute('href','/logout');
+					} }
+				</script>
+			<!-- Banner -->
+				<section id="banner">
+					<div class="content">
+						<header>
+							<h2>Coding Board</h2>
+							<p>Best tool teaching Programming Online.</p>
+						</header>
+						<span class="image" ><img src="images/coding-board-mockup.png" alt="" /></span>
+					</div>
+					<a href="#one" class="goto-next scrolly">Next</a>
+				</section>
 
-		<!-- Footer -->
-			<footer id="footer">
-				<ul class="icons">
-					<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-					<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-					<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-				</ul>
-			</footer>
+			<!-- One -->
+				<section id="one" class="spotlight style1 bottom">
+					<span class="image fit main"><img src="images/test.png" alt="" /></span>
+					<div class="content">
+						<div class="container">
+							<div class="row">
+								<div class="col-4 col-12-medium">
+									<header>
+										<h2>NEW TIME <span>NEW WAYS TO LEARN</span></h2>
+									</header>
+								</div>
+								<div class="col-4 col-12-medium">
+									<p>Coding Board is the first web application which enables you to teach Programming with integration any video and audio conferencing application available today.It enables you to connect to every student personally and interact with their code instantly, which enables you to understand their workflow and thinking process.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<a href="#two" class="goto-next scrolly">Next</a>
+				</section>
+			<!-- two -->
+			<section id="two" class="spotlight style2 right">
+				<span class="image fit main"><img src="images/coding-board-dashboard.jpg" alt="" /></span>
+				<div class="content">
+					<header>
+						<h2>Tooling for efficient Workflow</h2>
+					</header>
+					<p>Coding Board's streamlined admin options, scheduling, and classroom management features enable you to focus your effort 100% on teaching - not fighting with complicated learning management systems! </p>
+					<ul class="actions">
+						<li><a href="/register" class="button">Get Started</a></li>
+					</ul>
+				</div>
+				<a href="#three" class="goto-next scrolly">Next</a>
+			</section>
+
+			<!-- three -->
+				<section id="three" class="spotlight style3 right">
+					<span class="image fit main"><img src="images/coding-board-editor.jpg" alt="" /></span>
+					<div class="content">
+						<header>
+							<h2>Smart Editor</h2>
+						</header>
+						<p>Smart Editor powered by The Monaco Editor is the code editor that powers by VS Code, This will give you smoothe experience as coding in any native IDE. We bring it all to the browser and sync it across your entire classroom instantly. We also couple that with our state-of-the-art smart IDE that offers real-time suggestions, error checking, and help you and your students! </p>
+						<ul class="actions">
+							<li><a href="/register" class="button">Get Started</a></li>
+						</ul>
+					</div>
+					<a href="#four" class="goto-next scrolly">Next</a>
+				</section>
+
+			
+			<!-- four -->
+				<section id="four" class="spotlight style2 right">
+					<span class="image fit main"><img src="images/coding-board-realtime-student-dashboard.jpg" alt="" /></span>
+					<div class="content">
+						<header>
+							<h2>Real-time student's Code</h2>
+						</header>
+						<p>The unified real-time dashboard hands you the power of seeing and interacting with every students’ coding pad in real time. The live coding dashboard enables each instructor to see every student’s coding, debugging, testing, and thinking processes in real-time. This allows you to provide 100% individualized feedback, help, and support to every student throughout the entire duration of a class at the moment they need it most. </p>
+						<ul class="actions">
+							<li><a href="/register" class="button">Get Started</a></li>
+						</ul>
+					</div>
+					<a href="#five" class="goto-next scrolly">Next</a>
+				</section>
+			
+			<!-- five -->
+				<section id="five" class="spotlight style3 right">
+					<span class="image fit main bottom"><img src="images/coding-board-interactive-class.jpg" alt="" /></span>
+					<div class="content">
+						<header>
+							<h2>Interactive</h2>
+						</header>
+						<p>Features like seeing studients code,and edit them, allows you to provide 100% individualized feedback, help, and support to every student throughout the entire duration of a class at the moment they need it most.</p>
+						<ul class="actions">
+							<li><a href="/register" class="button">Get Started</a></li>
+						</ul>
+					</div>
+					<a href="#six" class="goto-next scrolly">Next</a>
+				</section>
+			
+			
+			<!-- six -->
+				<section id="six" class="spotlight style2 right">
+					<span class="image fit main"><img src="images/coding-board-languages.jpg" alt="" /></span>
+					<div class="content">
+						<header>
+							<h2>Languages Configured & Ready to Go</h2>
+						</header>
+						<p>Our platform support many languages such as: <br>• Javascript • Java • Python 2 • Python 3 • C++ • C • Bash • C# • GoLang • Swift • Typescript • Kotlin • Perl • PHP • Ruby • Clojure • Lua  • MicroPython </p>
+						<ul class="actions">
+							<li><a href="/register" class="button">Get Started</a></li>
+						</ul>
+					</div>
+					<a href="#seven" class="goto-next scrolly">Next</a>
+				</section>
+
+			<!-- seven -->
+				<section id="seven" class="wrapper style1 special fade-up">
+					<div class="container">
+						<header class="major">
+							<h2>Additional features</h2>
+							<p>We provide many additional features to provide the most satisfying teaching experience. </p>
+						</header>
+						<div class="box alt">
+							<div class="row gtr-uniform">
+								<section class="col-4 col-6-medium col-12-xsmall">
+									<h3>Fully web based</h3>
+									<p>The application is fully web based, you don't need to install any additional apps or software. </p>
+								</section>
+								<section class="col-4 col-6-medium col-12-xsmall">
+									<h3>Live Chat</h3>
+									<p>Live chat enables you to interact with your student more efficiently.</p>
+								</section>
+								<section class="col-4 col-6-medium col-12-xsmall">
+									<h3>Data privacy</h3>
+									<p>Coding Board do not saves your data. After the class is ended, all the data is been destroyed automatically </p>
+							</div>
+						</div>
+						<footer class="major">
+							<ul class="actions special">
+								<li><a href="/register" class="button">Get Started</a></li>
+							</ul>
+						</footer>
+					</div>
+				</section>
+
+			<!-- eight -->
+				<section id="eight" class="wrapper style2 special fade">
+					<div class="container">
+						<header>
+							<h2>Contact Us</h2>
+							<p>Enter your email and we will get in touch with you.</p>
+						</header>
+						<form method="post" action="#" class="cta">
+							<div class="row gtr-uniform gtr-50">
+								<div class="col-8 col-12-xsmall"><input type="email" name="email" id="email" placeholder="Your Email Address" /></div>
+								<div class="col-4 col-12-xsmall"><input type="submit" value="Submit" class="fit primary" /></div>
+							</div>
+						</form>
+					</div>
+				</section>
+
+			<!-- Footer -->
+				<!-- <footer id="footer">
+					<ul class="icons">
+						<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+						<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+						<li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
+					</ul>
+					<ul class="copyright">
+						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</footer> -->
+
+		</div>
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
 			<script src="assets/js/browser.min.js"></script>
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-			
+
 	</body>
 </html>
