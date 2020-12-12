@@ -56,7 +56,7 @@ app.engine(
   })
 );
 app.set('view engine', 'handlebars');
-
+//ssl
 //register and signin routes
 app.use("/",authRoute);
 //dashboars

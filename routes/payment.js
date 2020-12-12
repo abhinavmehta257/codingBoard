@@ -7,13 +7,13 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 router.post('/create-checkout-session', async(req,res)=>{
     const session = await stripe.checkout.sessions.create({
-        success_url:`https://${req.get('host')}/payment/success?id={CHECKOUT_SESSION_ID}`,
-        cancel_url : `https://${req.get('host')}/payment/cancel`,
+        success_url:`http://${req.get('host')}/payment/success?id={CHECKOUT_SESSION_ID}`,
+        cancel_url : `http://${req.get('host')}/payment/cancel`,
         payment_method_types : ['card'],
         mode:'subscription',
         allow_promotion_codes:true,
         line_items:[{
-            price:'price_1Hnp3xF40RZizFmFrYnT3VUI',
+            price:'price_1HxSwwF40RZizFmFhpqUKTs0',
             quantity:1
         }]
     });
