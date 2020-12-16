@@ -21,7 +21,7 @@ router.get('/',(req,res)=>{
     }
 });
 
-router.get('/startclass',auth, async (req,res)=>{
+router.get('/startclass',checkSubscriptionStatus, async (req,res)=>{
     user_id = req.user.id;
     const user = await User.findOne({_id:user_id});
     
