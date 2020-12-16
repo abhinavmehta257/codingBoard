@@ -10,7 +10,7 @@ const { json } = require('express');
 
 const publicPath = path.join(__dirname, '../public');
 
-router.use('/room',checkSubscriptionStatus,express.static(publicPath));
+router.use('/room',express.static(publicPath));
 
 router.get('/',(req,res)=>{
     classStarted = true;
