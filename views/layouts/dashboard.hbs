@@ -129,7 +129,7 @@
             </div>
         </div>
         <script>
-        var stripe = Stripe('pk_test_51HmGACF40RZizFmFt2BWlOPSRoInNi1iq6aPmxTKB7xQGLgeFBS8jxtwi8sGuNsSMPqq4t794we7UfeSUygLG5aH00WtArjDO5');
+        var stripe = Stripe('pk_live_51HmGACF40RZizFmFJLdYhPeRK5uiUAdZyKzaqak7r9HNzssOBV059mG8kXb0EW1azyX2nny9Qgpqpd3c9POtqQvF00Lhv7JdT7');
         var payBnt = document.getElementById('payBtn');
         payBnt.addEventListener('click', function(){
             fetch('/payment/create-checkout-session',{
