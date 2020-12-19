@@ -13,7 +13,7 @@ router.post('/create-checkout-session', async(req,res)=>{
         mode:'subscription',
         allow_promotion_codes:true,
         line_items:[{
-            price:'price_1HxSwwF40RZizFmFhpqUKTs0',
+            price:process.env.PRICE_MONTHLY,
             quantity:1
         }]
     });
