@@ -156,8 +156,10 @@ function sendAssignment(reciver = 'all'){
 
 
 function makeAdmin(id){
-  socket.emit("makeAdmin",{id});
-    $('.admin').remove();
+  socket.emit("makeAdmin",{id},(message)=>{
+    alert(message);
+    window.location.reload();
+  });
    
 }
 

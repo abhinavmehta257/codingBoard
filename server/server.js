@@ -9,6 +9,7 @@ const {isRealString} = require('./utils/isRealString');
 const {Users} = require('./utils/users');
 const {Rooms} = require('./utils/rooms');
 const codingboard = require('../routes/codingboard');
+const emailVerification = require('../routes/emailVerification');
 const authRoute = require('../routes/auth');
 const dashboard = require('../routes/dashboard');
 const codingRoomMessage = require('../routes/roomMessages');
@@ -61,6 +62,8 @@ app.set('view engine', 'handlebars');
 app.use("/",authRoute);
 //dashboars
 app.use("/dashboard", dashboard);
+//email verification
+app.use("/email", emailVerification);
 //payment
 app.use("/payment", payment);
 //messages
@@ -248,7 +251,7 @@ io.on('connection',  (socket) => {
       }
     });
 
-    socket.on("makeAdmin", (user)=>{
+    socket.on("makeAdmin", (user, callback)=>{
       try{
         newAdmin = users.getUser(user.id);
         if(newAdmin.isAdmin != true ){
@@ -258,7 +261,7 @@ io.on('connection',  (socket) => {
           io.to(newAdmin.id).emit('youAreNewAdmin', { isAdmin : true });
           io.to(newAdmin.roomId).emit('updateUsersList', users.getUserList(newAdmin.roomId));
         }
-        
+        callback(`${newAdmin.name} is now admin`);
       }catch(err){
         console.log(err);
       }
