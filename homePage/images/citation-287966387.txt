@@ -1,0 +1,1 @@
+Madsen, Magnus & Tip, Frank & Lhoták, Ondřej. (2015). Static Analysis of Event-Driven Node.js JavaScript Applications. ACM SIGPLAN Notices. 50. 505-519. 10.1145/2858965.2814272. 

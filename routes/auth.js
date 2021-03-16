@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const {loginValidation, registerValidation} = require("../validation");
 const generateRoomId = require('../server/utils/generateRoomId');
-// const { date } = require('@hapi/joi');
+const sendEmail = require('../server/utils/sendEmail');
 
 
 //register
@@ -35,17 +35,19 @@ router.post("/register",async (req,res)=>{
     roomId = new generateRoomId(10);
     //creatw new user
     if(error) return res.status(400).render('register',{error:error.details[0].message});
-    const user = new User({
-        first_name:req.body.first_name,
-        last_name:req.body.last_name,
-        email:req.body.email,
-        password:hashedPassword,
-        trial_end: new Date(Date.now() + 604800000),
-        roomId: roomId.generate()
-    });
+   
+    const user = {
+      first_name:req.body.first_name,
+      last_name:req.body.last_name,
+      email:req.body.email,
+      password:hashedPassword,
+      trial_end: new Date(Date.now() + 604800000),
+      roomId: roomId.generate()
+    };
+    const token = jwt.sign(user, process.env.TOKEN_SECRET);
+    
     try {
-        await user.save().catch(err => console.log(err)); 
-        res.render('register',{title:'register',error:'Signup Success. Please login'});
+        if(sendEmail(user.email, token)) return res.render('show-message',{message:"Please verify your email by going to the link send to your email"});
     } catch (error) {
         res.status(400).send(error); 
     }
@@ -56,16 +58,13 @@ router.post("/login",async (req,res)=>{
      // Validation
     const {error} = loginValidation(req.body);
     if(error) return res.status(400).send({error:error.details[0].message});
-    // if(error) return res.status(400).render('login', {title:'Login',error:error.details[0].message});
     //check user exist 
     const user = await User.findOne({email:req.body.email}).catch(err => console.log(err));
     if(!user) return res.status(400).send({error:"Email Or Password is wrong"});
-    // if(!user) return res.status(400).render('login', {title:'Login',error:"Email Or Password is wrong"});
     //check pass
     const validPass = await bcrypt.compare(req.body.password, user.password);
     if(!validPass){
        return res.status(400).send({error:"Email Or Password is wrong"});
-      //  return res.status(400).render('login', {title:'Login',error:"Email Or Password is wrong"});
     }else{
     //create auth token
       const token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET);
