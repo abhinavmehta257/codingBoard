@@ -9,7 +9,7 @@ const {isRealString} = require('./utils/isRealString');
 const {Users} = require('./utils/users');
 const {Rooms} = require('./utils/rooms');
 const codingboard = require('../routes/codingboard');
-const emailVerification = require('../routes/emailVerification');
+//const emailVerification = require('../routes/emailVerification');
 const authRoute = require('../routes/auth');
 const dashboard = require('../routes/dashboard');
 const codingRoomMessage = require('../routes/roomMessages');
@@ -63,7 +63,7 @@ app.use("/",authRoute);
 //dashboars
 app.use("/dashboard", dashboard);
 //email verification
-app.use("/email", emailVerification);
+//app.use("/email", emailVerification);
 //payment
 app.use("/payment", payment);
 //messages
