@@ -23,7 +23,7 @@ router.get("/login",(req,res)=>{
 router.post("/register",async (req,res)=>{
     // Validation
     const {error} = registerValidation(req.body);
-
+    console.log(req.body);
     //check user exist 
     const emailExist = await User.findOne({email:req.body.email}).catch(err => console.log(err));
 

@@ -1,7 +1,7 @@
-var defaultUrl = localStorageGetItem("api-url") || "https://judge0-ce.p.rapidapi.com";
+var defaultUrl = localStorageGetItem("api-url") || "https://8580f39aebd7.ngrok.io";
 var apiUrl = defaultUrl;
 var wait = localStorageGetItem("wait") || false;
-var pbUrl = "https://judge0-ce.p.rapidapi.com";
+var pbUrl = "https://8580f39aebd7.ngrok.io";
 var check_timeout = 200;
 
 var blinkStatusLine = ((localStorageGetItem("blink") || "true") === "true");

@@ -291,7 +291,10 @@ function getCodeStream(btn) {
     socket.emit('startStream',data);
     liveBoardAttached(btn);
   }
-  
+  if(!isLiveBoard){
+    $('.live_boards').slideDown();
+    isLiveBoard = true;
+  }
 }
 let studentsourceUserCursor = [];
 let studentBoards = [];

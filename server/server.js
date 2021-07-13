@@ -112,7 +112,7 @@ io.on('connection',  (socket) => {
           users.removeUser(socket.id);
           users.addUser(socket.id, params.name, params.roomId, params.isAdmin);
 
-          console.log("A new user just connected", params);
+          // console.log("A new user just connected", params);
           io.to(params.roomId).emit('updateUsersList', users.getUserList(params.roomId));
           if(params.isAdmin){
             socket.emit("youAreNewAdmin",{ isAdmin : true });
@@ -188,7 +188,7 @@ io.on('connection',  (socket) => {
 
     socket.on('removeUser',(data)=>{
       try{
-        console.log("remove user called");
+        // console.log("remove user called");
         isAdmin = users.checkIsAdmin(data.senderId);
         // console.log(isAdmin);
         // console.log(data.userId);
@@ -196,11 +196,11 @@ io.on('connection',  (socket) => {
           let user = users.getUser(data.userId);
           // console.log(user);
           if(user && !user.isAdmin){
-            console.log(`user ${data.senderId} does have permission to remove user`);
+            // console.log(`user ${data.senderId} does have permission to remove user`);
             io.to(user.roomId).emit('updateUsersList', users.getUserList(user.roomId));
             io.sockets.sockets[user.id].disconnect();
           }else{
-            console.log(`user: ${data.senderId} does not have permission to remove user: ${data.userId}`);
+            // console.log(`user: ${data.senderId} does not have permission to remove user: ${data.userId}`);
           }
         }
       }catch(err){
@@ -294,7 +294,7 @@ io.on('connection',  (socket) => {
             }
           }
         }
-        console.log(user);
+        // console.log(user);
       }catch(err){
         console.log(err);
         socket.emit('connectionError',{error:"connection Error"});
