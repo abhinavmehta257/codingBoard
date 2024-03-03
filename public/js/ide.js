@@ -1,7 +1,7 @@
-var defaultUrl = localStorageGetItem("api-url") || "https://judge0.p.rapidapi.com";
+var defaultUrl = localStorageGetItem("api-url") || "https://judge0-ce.p.rapidapi.com";
 var apiUrl = defaultUrl;
 var wait = localStorageGetItem("wait") || false;
-var pbUrl = "https://judge0.p.rapidapi.com";
+var pbUrl = "https://judge0-ce.p.rapidapi.com";
 var check_timeout = 200;
 
 var blinkStatusLine = ((localStorageGetItem("blink") || "true") === "true");
@@ -360,8 +360,8 @@ function run(assignment = false) {
             type: "POST",
             async: true,
             headers: {
-                "x-rapidapi-host": "judge0.p.rapidapi.com",
-                "x-rapidapi-key": "b02959f027msh6d79ce58f0aee8ep11f50cjsn008a6c0de58b"
+                "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+                "X-RapidAPI-Key": "229acfc0f4msh3e5ca03106c0eb0p1aa5f5jsn617b71a1ef03"
             },
             contentType: "application/json",
             data: JSON.stringify(data),
@@ -388,8 +388,8 @@ function run(assignment = false) {
                 url: `https://minio.judge0.com/public/ide/sqliteAdditionalFiles.base64.txt?${Date.now()}`,
                 type: "GET",
                 headers: {
-                    "x-rapidapi-host": "judge0.p.rapidapi.com",
-                    "x-rapidapi-key": "b02959f027msh6d79ce58f0aee8ep11f50cjsn008a6c0de58b"
+                    "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+                    "X-RapidAPI-Key": "229acfc0f4msh3e5ca03106c0eb0p1aa5f5jsn617b71a1ef03"
                 },
                 async: true,
                 contentType: "text/plain",
@@ -418,8 +418,8 @@ function fetchSubmission(submission_token,assignment = false) {
         url: apiUrl + "/submissions/" + submission_token + "?base64_encoded=true",
         type: "GET",
         headers: {
-            "x-rapidapi-host": "judge0.p.rapidapi.com",
-            "x-rapidapi-key": "b02959f027msh6d79ce58f0aee8ep11f50cjsn008a6c0de58b"
+            "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+            "X-RapidAPI-Key": "229acfc0f4msh3e5ca03106c0eb0p1aa5f5jsn617b71a1ef03"
         },
         async: true,
         success: function (data, textStatus, jqXHR) {
